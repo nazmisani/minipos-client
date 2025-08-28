@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -102,15 +100,6 @@ export default function LoginPage() {
                 Sign In
               </button>
             </form>
-
-            <div className="mt-4 lg:mt-6 text-center">
-              <Link
-                href="#"
-                className="text-xs lg:text-sm text-slate-500 hover:text-emerald-600 hover:underline transition-colors duration-200"
-              >
-                Forgot your password?
-              </Link>
-            </div>
           </div>
 
           <p className="mt-4 lg:mt-6 text-center text-xs text-slate-400">
