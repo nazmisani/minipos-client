@@ -7,15 +7,15 @@ export default function Sidebar() {
   const [activeItem, setActiveItem] = useState("dashboard");
 
   const menuItems = [
-    { id: "dashboard", label: "Dashboard", icon: "📊" },
-    { id: "products", label: "Products", icon: "📦" },
-    { id: "categories", label: "Categories", icon: "🏷️" },
-    { id: "customers", label: "Customers", icon: "👥" },
-    { id: "transactions", label: "Transactions", icon: "💳" },
-    { id: "reports", label: "Reports", icon: "📈" },
-    { id: "users", label: "Users", icon: "👤" },
-    { id: "logs", label: "Logs", icon: "📝" },
-    { id: "settings", label: "Settings", icon: "⚙️" },
+    { id: "dashboard", label: "Dashboard" },
+    { id: "products", label: "Products" },
+    { id: "categories", label: "Categories" },
+    { id: "customers", label: "Customers" },
+    { id: "transactions", label: "Transactions" },
+    { id: "reports", label: "Reports" },
+    { id: "users", label: "Users" },
+    { id: "logs", label: "Logs" },
+    { id: "settings", label: "Settings" },
   ];
 
   return (
@@ -58,8 +58,7 @@ export default function Sidebar() {
                 : "text-slate-300 hover:bg-slate-800 hover:text-white"
             }`}
           >
-            <span className="text-lg">{item.icon}</span>
-            {!isCollapsed && <span className="ml-3 text-sm">{item.label}</span>}
+            {!isCollapsed && <span className="text-sm">{item.label}</span>}
           </button>
         ))}
       </div>
@@ -67,8 +66,7 @@ export default function Sidebar() {
       {/* Logout */}
       <div className="absolute bottom-4 left-3 right-3">
         <button className="w-full flex items-center px-3 py-2 rounded-lg text-red-400 hover:bg-red-900/20 transition-colors">
-          <span className="text-lg">🚪</span>
-          {!isCollapsed && <span className="ml-3 text-sm">Logout</span>}
+          {!isCollapsed && <span className="text-sm">Logout</span>}
         </button>
       </div>
     </div>
