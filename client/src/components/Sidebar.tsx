@@ -176,23 +176,20 @@ export default function Sidebar() {
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: <DashboardIcon /> },
     { id: "products", label: "Products", icon: <ProductsIcon /> },
-    { id: "categories", label: "Categories", icon: <CategoriesIcon /> },
     { id: "customers", label: "Customers", icon: <CustomersIcon /> },
     { id: "transactions", label: "Transactions", icon: <TransactionsIcon /> },
     { id: "reports", label: "Reports", icon: <ReportsIcon /> },
-    { id: "users", label: "Users", icon: <UsersIcon /> },
-    { id: "logs", label: "Logs", icon: <LogsIcon /> },
     { id: "settings", label: "Settings", icon: <SettingsIcon /> },
   ];
 
   return (
     <div
-      className={`h-screen bg-slate-900 border-r border-slate-700 transition-all duration-300 ${
+      className={`h-screen bg-slate-900 border-r border-slate-700 transition-all duration-300 flex flex-col ${
         isCollapsed ? "w-16" : "w-64"
       }`}
     >
       {/* Header */}
-      <div className="p-4 border-b border-slate-700 flex items-center justify-between">
+      <div className="p-4 border-b border-slate-700 flex items-center justify-between flex-shrink-0">
         {!isCollapsed && (
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
@@ -214,7 +211,7 @@ export default function Sidebar() {
       </div>
 
       {/* Menu */}
-      <div className="p-3">
+      <div className="flex-1 overflow-y-auto p-3">
         {menuItems.map((item) => (
           <button
             key={item.id}
@@ -231,13 +228,15 @@ export default function Sidebar() {
         ))}
       </div>
 
-      {/* Logout */}
-      <div className="absolute bottom-4 left-3 right-3">
-        <button className="w-full flex items-center px-3 py-2 rounded-lg text-red-400 hover:bg-red-900/20 transition-colors">
-          <span className="flex-shrink-0">
+      {/* Logout - Professional Design */}
+      <div className="flex-shrink-0 p-3 border-t border-slate-700/50">
+        <button className="w-full flex items-center px-3 py-2.5 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all duration-200 group">
+          <span className="flex-shrink-0 group-hover:scale-110 transition-transform">
             <LogoutIcon />
           </span>
-          {!isCollapsed && <span className="ml-3 text-sm">Logout</span>}
+          {!isCollapsed && (
+            <span className="ml-3 text-sm font-medium">Logout</span>
+          )}
         </button>
       </div>
     </div>
