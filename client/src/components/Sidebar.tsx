@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 
-// Professional ERP Icons
+// Optimized Icons - Only what we need
 const DashboardIcon = () => (
   <svg
     className="w-4 h-4"
@@ -35,38 +36,6 @@ const ProductsIcon = () => (
   </svg>
 );
 
-const CategoriesIcon = () => (
-  <svg
-    className="w-4 h-4"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-    />
-  </svg>
-);
-
-const CustomersIcon = () => (
-  <svg
-    className="w-4 h-4"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-    />
-  </svg>
-);
-
 const TransactionsIcon = () => (
   <svg
     className="w-4 h-4"
@@ -95,38 +64,6 @@ const ReportsIcon = () => (
       strokeLinejoin="round"
       strokeWidth={2}
       d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-    />
-  </svg>
-);
-
-const UsersIcon = () => (
-  <svg
-    className="w-4 h-4"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"
-    />
-  </svg>
-);
-
-const LogsIcon = () => (
-  <svg
-    className="w-4 h-4"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 6h6m-6 2h6m-6 2h6"
     />
   </svg>
 );
@@ -164,23 +101,56 @@ const LogoutIcon = () => (
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={2}
-      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 z3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
     />
   </svg>
 );
 
 export default function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [activeItem, setActiveItem] = useState("dashboard");
+  const router = useRouter();
+  const pathname = usePathname();
 
   const menuItems = [
-    { id: "dashboard", label: "Dashboard", icon: <DashboardIcon /> },
-    { id: "products", label: "Products", icon: <ProductsIcon /> },
-    { id: "customers", label: "Customers", icon: <CustomersIcon /> },
-    { id: "transactions", label: "Transactions", icon: <TransactionsIcon /> },
-    { id: "reports", label: "Reports", icon: <ReportsIcon /> },
-    { id: "settings", label: "Settings", icon: <SettingsIcon /> },
+    {
+      id: "dashboard",
+      label: "Dashboard",
+      icon: <DashboardIcon />,
+      path: "/dashboard",
+    },
+    {
+      id: "products",
+      label: "Products",
+      icon: <ProductsIcon />,
+      path: "/products",
+    },
+    {
+      id: "transactions",
+      label: "Transactions",
+      icon: <TransactionsIcon />,
+      path: "/transactions",
+    },
+    {
+      id: "reports",
+      label: "Reports",
+      icon: <ReportsIcon />,
+      path: "/reports",
+    },
+    {
+      id: "settings",
+      label: "Settings",
+      icon: <SettingsIcon />,
+      path: "/settings",
+    },
   ];
+
+  const handleNavigation = (path: string) => {
+    router.push(path);
+  };
+
+  const handleLogout = () => {
+    router.push("/login");
+  };
 
   return (
     <div
@@ -212,25 +182,33 @@ export default function Sidebar() {
 
       {/* Menu */}
       <div className="flex-1 overflow-y-auto p-3">
-        {menuItems.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => setActiveItem(item.id)}
-            className={`w-full flex items-center px-3 py-2 mb-1 rounded-lg text-left transition-colors ${
-              activeItem === item.id
-                ? "bg-emerald-600 text-white"
-                : "text-slate-300 hover:bg-slate-800 hover:text-white"
-            }`}
-          >
-            <span className="flex-shrink-0">{item.icon}</span>
-            {!isCollapsed && <span className="ml-3 text-sm">{item.label}</span>}
-          </button>
-        ))}
+        {menuItems.map((item) => {
+          const isActive = pathname === item.path;
+          return (
+            <button
+              key={item.id}
+              onClick={() => handleNavigation(item.path)}
+              className={`w-full flex items-center px-3 py-2 mb-1 rounded-lg text-left transition-colors ${
+                isActive
+                  ? "bg-emerald-600 text-white"
+                  : "text-slate-300 hover:bg-slate-800 hover:text-white"
+              }`}
+            >
+              <span className="flex-shrink-0">{item.icon}</span>
+              {!isCollapsed && (
+                <span className="ml-3 text-sm">{item.label}</span>
+              )}
+            </button>
+          );
+        })}
       </div>
 
-      {/* Logout - Professional Design */}
+      {/* Logout */}
       <div className="flex-shrink-0 p-3 border-t border-slate-700/50">
-        <button className="w-full flex items-center px-3 py-2.5 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all duration-200 group">
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center px-3 py-2.5 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all duration-200 group"
+        >
           <span className="flex-shrink-0 group-hover:scale-110 transition-transform">
             <LogoutIcon />
           </span>
