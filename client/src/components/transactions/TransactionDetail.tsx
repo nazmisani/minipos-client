@@ -1,5 +1,4 @@
 import { Transaction } from "./types";
-import { getStatusColor } from "./data";
 
 interface TransactionDetailProps {
   transaction: Transaction;
@@ -38,42 +37,24 @@ export default function TransactionDetail({
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-600 mb-1">
-              Status
-            </label>
-            <span
-              className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${getStatusColor(
-                transaction.status
-              )}`}
-            >
-              {transaction.status}
-            </span>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-slate-600 mb-1">
               User
             </label>
-            <p className="text-lg text-slate-900">{transaction.user}</p>
+            <p className="text-lg text-slate-900">{transaction.user.name}</p>
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-600 mb-1">
-              Amount
+              Customer
             </label>
-            <p className="text-lg font-semibold text-slate-900">
-              Rp {transaction.amount.toLocaleString("id-ID")}
+            <p className="text-lg text-slate-900">
+              {transaction.customer?.name || "-"}
             </p>
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-600 mb-1">
-              Description
+              Total
             </label>
-            <p className="text-lg text-slate-900">{transaction.description}</p>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-slate-600 mb-1">
-              Payment Method
-            </label>
-            <p className="text-lg text-slate-900">
-              {transaction.paymentMethod}
+            <p className="text-lg font-semibold text-slate-900">
+              Rp {transaction.total.toLocaleString("id-ID")}
             </p>
           </div>
           <div className="col-span-2">
@@ -82,6 +63,34 @@ export default function TransactionDetail({
             </label>
             <p className="text-lg text-slate-900">{transaction.createdAt}</p>
           </div>
+        </div>
+        {/* Transaction Details */}
+        <div className="mt-8">
+          <label className="block text-sm font-medium text-slate-600 mb-2">
+            Details
+          </label>
+          <table className="w-full border text-sm">
+            <thead className="bg-slate-50">
+              <tr>
+                <th className="border px-2 py-1">ID</th>
+                <th className="border px-2 py-1">Product ID</th>
+                <th className="border px-2 py-1">Quantity</th>
+                <th className="border px-2 py-1">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {transaction.details.map((d) => (
+                <tr key={d.id}>
+                  <td className="border px-2 py-1">{d.id}</td>
+                  <td className="border px-2 py-1">{d.productId}</td>
+                  <td className="border px-2 py-1">{d.quantity}</td>
+                  <td className="border px-2 py-1">
+                    Rp {d.subTotal.toLocaleString("id-ID")}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

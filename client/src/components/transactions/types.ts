@@ -1,11 +1,31 @@
+export type User = {
+  id: number;
+  name: string;
+};
+
+export type Customer = {
+  id: number;
+  name: string;
+};
+
+export type TransactionDetail = {
+  id: number;
+  quantity: number;
+  subTotal: number;
+  transactionId: number;
+  productId: number;
+  // Optionally, add product info if needed for UI
+};
+
 export type Transaction = {
-  id: string;
-  user: string;
-  amount: number;
-  status: string;
+  id: number;
+  total: number;
   createdAt: string;
-  description: string;
-  paymentMethod: string;
+  userId: number;
+  customerId?: number | null;
+  user: User;
+  customer?: Customer | null;
+  details: TransactionDetail[];
 };
 
 export type ViewMode = "list" | "detail" | "add" | "edit" | "delete";

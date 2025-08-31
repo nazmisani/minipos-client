@@ -34,63 +34,70 @@ export default function TransactionForm({
           <div className="grid grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-slate-600 mb-2">
-                User
-              </label>
-              <input
-                type="text"
-                defaultValue={transaction?.user || ""}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                placeholder="Enter user name"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-600 mb-2">
-                Amount
+                User ID
               </label>
               <input
                 type="number"
-                defaultValue={transaction?.amount || ""}
+                defaultValue={transaction?.userId || ""}
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                placeholder="Enter amount"
+                placeholder="Enter user ID"
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-600 mb-2">
-                Status
+                Customer ID (optional)
               </label>
-              <select
-                defaultValue={transaction?.status || ""}
+              <input
+                type="number"
+                defaultValue={transaction?.customerId || ""}
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                <option value="">Select status</option>
-                <option value="Pending">Pending</option>
-                <option value="Completed">Completed</option>
-                <option value="Failed">Failed</option>
-              </select>
+                placeholder="Enter customer ID"
+              />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-600 mb-2">
-                Payment Method
+                Total
               </label>
-              <select
-                defaultValue={transaction?.paymentMethod || ""}
+              <input
+                type="number"
+                defaultValue={transaction?.total || ""}
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                <option value="">Select payment method</option>
-                <option value="Cash">Cash</option>
-                <option value="Credit Card">Credit Card</option>
-                <option value="Debit Card">Debit Card</option>
-              </select>
+                placeholder="Enter total"
+              />
             </div>
-            <div className="col-span-2">
+          </div>
+          <div className="grid grid-cols-2 gap-6">
+            <div>
               <label className="block text-sm font-medium text-slate-600 mb-2">
-                Description
+                User ID
               </label>
-              <textarea
-                defaultValue={transaction?.description || ""}
-                rows={3}
+              <input
+                type="number"
+                defaultValue={transaction?.userId || ""}
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                placeholder="Enter description"
+                placeholder="Enter user ID"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-600 mb-2">
+                Customer ID (optional)
+              </label>
+              <input
+                type="number"
+                defaultValue={transaction?.customerId || ""}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                placeholder="Enter customer ID"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-600 mb-2">
+                Total
+              </label>
+              <input
+                type="number"
+                defaultValue={transaction?.total || ""}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                placeholder="Enter total"
               />
             </div>
           </div>

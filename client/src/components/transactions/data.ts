@@ -1,60 +1,42 @@
-export const transactions = [
+import { Transaction } from "./types";
+
+export const transactions: Transaction[] = [
   {
-    id: "TRX001",
-    user: "John Doe",
-    amount: 150000,
-    status: "Completed",
+    id: 1,
+    total: 150000,
     createdAt: "2025-08-30 14:30",
-    description: "Coffee and Pastry",
-    paymentMethod: "Credit Card",
+    userId: 1,
+    customerId: 1,
+    user: { id: 1, name: "John Doe" },
+    customer: { id: 1, name: "PT. Sukses Makmur" },
+    details: [
+      { id: 1, quantity: 2, subTotal: 100000, transactionId: 1, productId: 1 },
+      { id: 2, quantity: 1, subTotal: 50000, transactionId: 1, productId: 2 },
+    ],
   },
   {
-    id: "TRX002",
-    user: "Jane Smith",
-    amount: 75000,
-    status: "Pending",
+    id: 2,
+    total: 75000,
     createdAt: "2025-08-30 13:15",
-    description: "Lunch Set",
-    paymentMethod: "Cash",
+    userId: 2,
+    customerId: null,
+    user: { id: 2, name: "Jane Smith" },
+    customer: null,
+    details: [
+      { id: 3, quantity: 3, subTotal: 75000, transactionId: 2, productId: 3 },
+    ],
   },
   {
-    id: "TRX003",
-    user: "Mike Johnson",
-    amount: 220000,
-    status: "Completed",
+    id: 3,
+    total: 220000,
     createdAt: "2025-08-30 12:45",
-    description: "Dinner for Two",
-    paymentMethod: "Debit Card",
-  },
-  {
-    id: "TRX004",
-    user: "Sarah Wilson",
-    amount: 95000,
-    status: "Failed",
-    createdAt: "2025-08-30 11:20",
-    description: "Breakfast Special",
-    paymentMethod: "Credit Card",
-  },
-  {
-    id: "TRX005",
-    user: "David Brown",
-    amount: 180000,
-    status: "Completed",
-    createdAt: "2025-08-30 10:55",
-    description: "Business Lunch",
-    paymentMethod: "Cash",
+    userId: 3,
+    customerId: 2,
+    user: { id: 3, name: "Mike Johnson" },
+    customer: { id: 2, name: "CV. Maju Jaya" },
+    details: [
+      { id: 4, quantity: 2, subTotal: 120000, transactionId: 3, productId: 4 },
+      { id: 5, quantity: 1, subTotal: 100000, transactionId: 3, productId: 5 },
+    ],
   },
 ];
-
-export const getStatusColor = (status: string) => {
-  switch (status) {
-    case "Completed":
-      return "bg-green-100 text-green-800";
-    case "Pending":
-      return "bg-yellow-100 text-yellow-800";
-    case "Failed":
-      return "bg-red-100 text-red-800";
-    default:
-      return "bg-gray-100 text-gray-800";
-  }
-};

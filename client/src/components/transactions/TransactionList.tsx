@@ -1,4 +1,4 @@
-import { getStatusColor, transactions } from "./data";
+import { transactions } from "./data";
 import { Transaction } from "./types";
 
 interface TransactionListProps {
@@ -14,6 +14,9 @@ export default function TransactionList({
   onDelete,
   onAdd,
 }: TransactionListProps) {
+  // Use imported dummy transactions data
+  const dummyTransactions = transactions;
+
   return (
     <div className="p-6 bg-white min-h-screen">
       {/* Header */}
@@ -36,14 +39,6 @@ export default function TransactionList({
             className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
         </div>
-        <div className="w-48">
-          <select className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500">
-            <option value="">All Status</option>
-            <option value="completed">Completed</option>
-            <option value="pending">Pending</option>
-            <option value="failed">Failed</option>
-          </select>
-        </div>
       </div>
 
       {/* Table */}
@@ -58,10 +53,10 @@ export default function TransactionList({
                 User
               </th>
               <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
-                Amount
+                Customer
               </th>
               <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
-                Status
+                Total
               </th>
               <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
                 Created At
@@ -72,45 +67,39 @@ export default function TransactionList({
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-200">
-            {transactions.map((transaction) => (
-              <tr key={transaction.id} className="hover:bg-slate-50">
+            {dummyTransactions.map((trx) => (
+              <tr key={trx.id} className="hover:bg-slate-50">
                 <td className="px-6 py-4 text-sm font-medium text-slate-900">
-                  {transaction.id}
+                  {trx.id}
                 </td>
                 <td className="px-6 py-4 text-sm text-slate-900">
-                  {transaction.user}
+                  {trx.user.name}
                 </td>
                 <td className="px-6 py-4 text-sm text-slate-900">
-                  Rp {transaction.amount.toLocaleString("id-ID")}
+                  {trx.customer?.name || "-"}
                 </td>
-                <td className="px-6 py-4 text-sm">
-                  <span
-                    className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
-                      transaction.status
-                    )}`}
-                  >
-                    {transaction.status}
-                  </span>
+                <td className="px-6 py-4 text-sm text-slate-900">
+                  Rp {trx.total.toLocaleString("id-ID")}
                 </td>
                 <td className="px-6 py-4 text-sm text-slate-500">
-                  {transaction.createdAt}
+                  {trx.createdAt}
                 </td>
                 <td className="px-6 py-4 text-sm">
                   <div className="flex gap-2">
                     <button
-                      onClick={() => onViewDetail(transaction)}
+                      onClick={() => onViewDetail(trx)}
                       className="text-emerald-600 hover:text-emerald-800 font-medium"
                     >
                       View
                     </button>
                     <button
-                      onClick={() => onEdit(transaction)}
+                      onClick={() => onEdit(trx)}
                       className="text-blue-600 hover:text-blue-800 font-medium"
                     >
                       Edit
                     </button>
                     <button
-                      onClick={() => onDelete(transaction)}
+                      onClick={() => onDelete(trx)}
                       className="text-red-600 hover:text-red-800 font-medium"
                     >
                       Delete

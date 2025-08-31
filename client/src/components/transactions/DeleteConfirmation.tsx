@@ -51,6 +51,20 @@ export default function DeleteConfirmation({
             Are you sure you want to delete transaction{" "}
             <strong>{transaction.id}</strong>? This action cannot be undone.
           </p>
+          <div className="mb-4 text-slate-700">
+            <div>
+              <b>ID:</b> {transaction.id}
+            </div>
+            <div>
+              <b>User:</b> {transaction.user.name}
+            </div>
+            <div>
+              <b>Customer:</b> {transaction.customer?.name || "-"}
+            </div>
+            <div>
+              <b>Total:</b> Rp {transaction.total.toLocaleString("id-ID")}
+            </div>
+          </div>
           <div className="flex gap-3 justify-center">
             <button
               onClick={onConfirm}
