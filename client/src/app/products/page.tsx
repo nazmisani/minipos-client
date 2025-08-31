@@ -125,7 +125,6 @@ export default function ProductPage() {
           </button>
         </div>
 
-        {/* Search and Filter */}
         <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm mb-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 md:space-x-4">
             {/* Search Input */}
