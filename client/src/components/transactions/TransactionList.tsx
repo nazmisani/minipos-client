@@ -1,5 +1,5 @@
-import { getStatusColor, transactions } from './data';
-import { Transaction } from './types';
+import { getStatusColor, transactions } from "./data";
+import { Transaction } from "./types";
 
 interface TransactionListProps {
   onViewDetail: (transaction: Transaction) => void;
@@ -8,18 +8,18 @@ interface TransactionListProps {
   onAdd: () => void;
 }
 
-export default function TransactionList({ 
-  onViewDetail, 
-  onEdit, 
-  onDelete, 
-  onAdd 
+export default function TransactionList({
+  onViewDetail,
+  onEdit,
+  onDelete,
+  onAdd,
 }: TransactionListProps) {
   return (
     <div className="p-6 bg-white min-h-screen">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-slate-800">Transactions</h1>
-        <button 
+        <button
           onClick={onAdd}
           className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
         >
@@ -51,12 +51,24 @@ export default function TransactionList({
         <table className="w-full">
           <thead className="bg-slate-50 border-b border-slate-200">
             <tr>
-              <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">ID</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">User</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">Amount</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">Status</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">Created At</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">Actions</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
+                ID
+              </th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
+                User
+              </th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
+                Amount
+              </th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
+                Status
+              </th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
+                Created At
+              </th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-200">
@@ -69,10 +81,14 @@ export default function TransactionList({
                   {transaction.user}
                 </td>
                 <td className="px-6 py-4 text-sm text-slate-900">
-                  Rp {transaction.amount.toLocaleString()}
+                  Rp {transaction.amount.toLocaleString("id-ID")}
                 </td>
                 <td className="px-6 py-4 text-sm">
-                  <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(transaction.status)}`}>
+                  <span
+                    className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
+                      transaction.status
+                    )}`}
+                  >
                     {transaction.status}
                   </span>
                 </td>
@@ -81,19 +97,19 @@ export default function TransactionList({
                 </td>
                 <td className="px-6 py-4 text-sm">
                   <div className="flex gap-2">
-                    <button 
+                    <button
                       onClick={() => onViewDetail(transaction)}
                       className="text-emerald-600 hover:text-emerald-800 font-medium"
                     >
                       View
                     </button>
-                    <button 
+                    <button
                       onClick={() => onEdit(transaction)}
                       className="text-blue-600 hover:text-blue-800 font-medium"
                     >
                       Edit
                     </button>
-                    <button 
+                    <button
                       onClick={() => onDelete(transaction)}
                       className="text-red-600 hover:text-red-800 font-medium"
                     >

@@ -1,4 +1,4 @@
-import { Transaction } from './types';
+import { Transaction } from "./types";
 
 interface TransactionFormProps {
   transaction?: Transaction;
@@ -7,24 +7,24 @@ interface TransactionFormProps {
   onSave: () => void;
 }
 
-export default function TransactionForm({ 
-  transaction, 
-  isEdit, 
-  onBack, 
-  onSave 
+export default function TransactionForm({
+  transaction,
+  isEdit,
+  onBack,
+  onSave,
 }: TransactionFormProps) {
   return (
     <div className="p-6 bg-white min-h-screen">
       {/* Header */}
       <div className="flex items-center mb-6">
-        <button 
+        <button
           onClick={onBack}
           className="mr-4 text-slate-600 hover:text-slate-800"
         >
           ← Back
         </button>
         <h1 className="text-2xl font-bold text-slate-800">
-          {isEdit ? 'Edit Transaction' : 'Add Transaction'}
+          {isEdit ? "Edit Transaction" : "Add Transaction"}
         </h1>
       </div>
 
@@ -33,27 +33,33 @@ export default function TransactionForm({
         <form className="space-y-6">
           <div className="grid grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-2">User</label>
+              <label className="block text-sm font-medium text-slate-600 mb-2">
+                User
+              </label>
               <input
                 type="text"
-                defaultValue={transaction?.user || ''}
+                defaultValue={transaction?.user || ""}
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 placeholder="Enter user name"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-2">Amount</label>
+              <label className="block text-sm font-medium text-slate-600 mb-2">
+                Amount
+              </label>
               <input
                 type="number"
-                defaultValue={transaction?.amount || ''}
+                defaultValue={transaction?.amount || ""}
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 placeholder="Enter amount"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-2">Status</label>
+              <label className="block text-sm font-medium text-slate-600 mb-2">
+                Status
+              </label>
               <select
-                defaultValue={transaction?.status || ''}
+                defaultValue={transaction?.status || ""}
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 <option value="">Select status</option>
@@ -63,9 +69,11 @@ export default function TransactionForm({
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-2">Payment Method</label>
+              <label className="block text-sm font-medium text-slate-600 mb-2">
+                Payment Method
+              </label>
               <select
-                defaultValue={transaction?.paymentMethod || ''}
+                defaultValue={transaction?.paymentMethod || ""}
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 <option value="">Select payment method</option>
@@ -75,9 +83,11 @@ export default function TransactionForm({
               </select>
             </div>
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-slate-600 mb-2">Description</label>
+              <label className="block text-sm font-medium text-slate-600 mb-2">
+                Description
+              </label>
               <textarea
-                defaultValue={transaction?.description || ''}
+                defaultValue={transaction?.description || ""}
                 rows={3}
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 placeholder="Enter description"
@@ -92,7 +102,7 @@ export default function TransactionForm({
               onClick={onSave}
               className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
             >
-              {isEdit ? 'Update' : 'Save'}
+              {isEdit ? "Update" : "Save"}
             </button>
             <button
               type="button"

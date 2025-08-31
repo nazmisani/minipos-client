@@ -6,7 +6,7 @@ export const transactions = [
     status: "Completed",
     createdAt: "2025-08-30 14:30",
     description: "Coffee and Pastry",
-    paymentMethod: "Credit Card"
+    paymentMethod: "Credit Card",
   },
   {
     id: "TRX002",
@@ -15,7 +15,7 @@ export const transactions = [
     status: "Pending",
     createdAt: "2025-08-30 13:15",
     description: "Lunch Set",
-    paymentMethod: "Cash"
+    paymentMethod: "Cash",
   },
   {
     id: "TRX003",
@@ -24,7 +24,7 @@ export const transactions = [
     status: "Completed",
     createdAt: "2025-08-30 12:45",
     description: "Dinner for Two",
-    paymentMethod: "Debit Card"
+    paymentMethod: "Debit Card",
   },
   {
     id: "TRX004",
@@ -33,7 +33,7 @@ export const transactions = [
     status: "Failed",
     createdAt: "2025-08-30 11:20",
     description: "Breakfast Special",
-    paymentMethod: "Credit Card"
+    paymentMethod: "Credit Card",
   },
   {
     id: "TRX005",
@@ -42,8 +42,8 @@ export const transactions = [
     status: "Completed",
     createdAt: "2025-08-30 10:55",
     description: "Business Lunch",
-    paymentMethod: "Cash"
-  }
+    paymentMethod: "Cash",
+  },
 ];
 
 export const getStatusColor = (status: string) => {

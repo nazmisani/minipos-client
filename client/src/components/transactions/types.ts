@@ -8,4 +8,4 @@ export type Transaction = {
   paymentMethod: string;
 };
 
-export type ViewMode = 'list' | 'detail' | 'add' | 'edit' | 'delete';
+export type ViewMode = "list" | "detail" | "add" | "edit" | "delete";
