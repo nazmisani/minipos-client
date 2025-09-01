@@ -14,7 +14,6 @@ export type TransactionDetail = {
   subTotal: number;
   transactionId: number;
   productId: number;
-  // Optionally, add product info if needed for UI
 };
 
 export type Transaction = {

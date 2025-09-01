@@ -88,19 +88,19 @@ export default function TransactionList({
                   <div className="flex gap-2">
                     <button
                       onClick={() => onViewDetail(trx)}
-                      className="text-emerald-600 hover:text-emerald-800 font-medium"
+                      className="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 rounded-lg text-xs font-semibold transition-colors"
                     >
                       View
                     </button>
                     <button
                       onClick={() => onEdit(trx)}
-                      className="text-blue-600 hover:text-blue-800 font-medium"
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-xs font-semibold transition-colors"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => onDelete(trx)}
-                      className="text-red-600 hover:text-red-800 font-medium"
+                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-xs font-semibold transition-colors"
                     >
                       Delete
                     </button>
