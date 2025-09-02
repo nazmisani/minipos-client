@@ -42,21 +42,21 @@ export default function SalesChart({ data }: SalesChartProps) {
   }));
 
   return (
-    <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
+    <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-lg font-semibold text-slate-900">
-            Sales Overview
-          </h3>
-          <p className="text-slate-600 text-sm">Last 7 days revenue</p>
+          <p className="text-slate-600 text-sm">
+            Revenue dalam 7 hari terakhir
+          </p>
         </div>
         <div className="flex items-center space-x-2">
           <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-          <span className="text-sm text-slate-600">Revenue</span>
+          <span className="text-sm text-slate-600 font-medium">Revenue</span>
         </div>
       </div>
 
-      <div className="h-64">
+      <div className="h-72">
+        {/* Tinggi chart diperbesar */}
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />

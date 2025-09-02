@@ -130,17 +130,36 @@ export default function DashboardPage() {
 
   if (dashboardData.loading) {
     return (
-      <div className="min-h-screen bg-slate-50 p-6">
-        <div className="animate-pulse">
-          <div className="h-8 bg-slate-200 rounded w-64 mb-8"></div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-32 bg-slate-200 rounded-lg"></div>
-            ))}
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="h-80 bg-slate-200 rounded-lg"></div>
-            <div className="h-80 bg-slate-200 rounded-lg"></div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 lg:p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="animate-pulse">
+            {/* Header Skeleton */}
+            <div className="mb-8">
+              <div className="h-8 bg-slate-200 rounded-lg w-64 mb-2"></div>
+              <div className="h-4 bg-slate-200 rounded w-96"></div>
+            </div>
+
+            {/* Summary Cards Skeleton */}
+            <div className="mb-10">
+              <div className="h-6 bg-slate-200 rounded w-48 mb-6"></div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="bg-slate-200 rounded-xl h-32"></div>
+                ))}
+              </div>
+            </div>
+
+            {/* Charts Section Skeleton */}
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+              <div>
+                <div className="h-6 bg-slate-200 rounded w-40 mb-4"></div>
+                <div className="h-80 bg-slate-200 rounded-xl"></div>
+              </div>
+              <div>
+                <div className="h-6 bg-slate-200 rounded w-36 mb-4"></div>
+                <div className="h-80 bg-slate-200 rounded-xl"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -148,30 +167,53 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 lg:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-8 space-y-4 lg:space-y-0">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
-            <p className="text-slate-600 mt-1">
-              Welcome back! Here's what's happening with your store today.
+            <h1 className="text-3xl lg:text-4xl font-bold text-slate-900">
+              Dashboard
+            </h1>
+            <p className="text-slate-600 mt-2">
+              Selamat datang kembali! Berikut ringkasan toko Anda hari ini.
             </p>
           </div>
           <UserProfile user={dashboardData.userProfile} />
         </div>
 
         {/* Summary Cards */}
-        <SummaryCards data={dashboardData.summary} />
+        <div className="mb-10">
+          <h2 className="text-xl font-bold text-slate-900 mb-6">
+            Ringkasan Hari Ini
+          </h2>
+          <SummaryCards data={dashboardData.summary} />
+        </div>
 
-        {/* Charts and Activity */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <SalesChart data={dashboardData.salesData} />
-          <RecentActivity transactions={dashboardData.recentTransactions} />
+        {/* Charts and Activity - Responsive Grid */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-10">
+          {/* Sales Chart Section */}
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold text-slate-900">
+              Laporan Penjualan
+            </h2>
+            <SalesChart data={dashboardData.salesData} />
+          </div>
+
+          {/* Recent Activity Section */}
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold text-slate-900">
+              Aktivitas Terbaru
+            </h2>
+            <RecentActivity transactions={dashboardData.recentTransactions} />
+          </div>
         </div>
 
         {/* Quick Actions */}
-        <QuickActions />
+        <div className="mb-8">
+          <h2 className="text-xl font-bold text-slate-900 mb-6">Aksi Cepat</h2>
+          <QuickActions />
+        </div>
       </div>
     </div>
   );

@@ -49,7 +49,6 @@ export default function TransactionPage() {
     setSelectedTransaction(null);
   };
 
-  // Render different views based on current state
   switch (currentView) {
     case "detail":
       return selectedTransaction ? (
