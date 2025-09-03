@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import SummaryCards from "@/components/dashboard/SummaryCards";
 import SalesChart from "@/components/dashboard/SalesChart";
-import RecentActivity from "@/components/dashboard/RecentActivity";
+import ProductChart from "@/components/dashboard/ProductChart";
 import QuickActions from "@/components/dashboard/QuickActions";
 import UserProfile from "@/components/dashboard/UserProfile";
 
@@ -16,13 +16,7 @@ export default function DashboardPage() {
       todayRevenue: number;
     };
     salesData: Array<{ date: string; amount: number }>;
-    recentTransactions: Array<{
-      id: number;
-      amount: number;
-      cashier: string;
-      time: string;
-      customer: string;
-    }>;
+    productData: Array<{ name: string; sold: number; revenue: number }>;
     userProfile: {
       name: string;
       role: string;
@@ -37,7 +31,7 @@ export default function DashboardPage() {
       todayRevenue: 0,
     },
     salesData: [],
-    recentTransactions: [],
+    productData: [],
     userProfile: null,
     loading: true,
   });
@@ -48,16 +42,17 @@ export default function DashboardPage() {
 
   const fetchDashboardData = async () => {
     try {
-      // Simulasi API calls - ganti dengan API endpoints real
-      const [summaryRes, salesRes, transactionsRes, profileRes] =
-        await Promise.all([
+      // Simulasi API calls untuk dashboard baru
+      const [summaryRes, salesRes, productsRes, profileRes] = await Promise.all(
+        [
           fetch("/api/dashboard/summary"),
           fetch("/api/reports/sales?days=7"),
-          fetch("/api/transactions?limit=5"),
+          fetch("/api/reports/products/top?limit=5"),
           fetch("/api/auth/profile"),
-        ]);
+        ]
+      );
 
-      // Untuk development, gunakan mock data
+      // Dummy data sesuai dengan API schema
       const mockData = {
         summary: {
           totalProducts: 156,
@@ -65,6 +60,7 @@ export default function DashboardPage() {
           todayTransactions: 28,
           todayRevenue: 2450000,
         },
+        // Data untuk /reports/sales (7 hari terakhir)
         salesData: [
           { date: "2024-08-24", amount: 1800000 },
           { date: "2024-08-25", amount: 2200000 },
@@ -74,42 +70,13 @@ export default function DashboardPage() {
           { date: "2024-08-29", amount: 3200000 },
           { date: "2024-08-30", amount: 2450000 },
         ],
-        recentTransactions: [
-          {
-            id: 1,
-            amount: 125000,
-            cashier: "John Doe",
-            time: "14:30",
-            customer: "Customer #001",
-          },
-          {
-            id: 2,
-            amount: 89000,
-            cashier: "Jane Smith",
-            time: "14:15",
-            customer: "Customer #002",
-          },
-          {
-            id: 3,
-            amount: 234000,
-            cashier: "Mike Johnson",
-            time: "13:45",
-            customer: "Customer #003",
-          },
-          {
-            id: 4,
-            amount: 156000,
-            cashier: "Sarah Wilson",
-            time: "13:20",
-            customer: "Customer #004",
-          },
-          {
-            id: 5,
-            amount: 78000,
-            cashier: "David Brown",
-            time: "12:55",
-            customer: "Customer #005",
-          },
+        // Data untuk /reports/products/top (5 produk terlaris)
+        productData: [
+          { name: "Kopi Americano", sold: 45, revenue: 450000 },
+          { name: "Nasi Goreng", sold: 32, revenue: 480000 },
+          { name: "Ayam Bakar", sold: 28, revenue: 560000 },
+          { name: "Jus Jeruk", sold: 25, revenue: 200000 },
+          { name: "Roti Bakar", sold: 22, revenue: 220000 },
         ],
         userProfile: {
           name: "Admin User",
@@ -149,8 +116,8 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Charts Section Skeleton */}
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+            {/* Charts Section Skeleton - 2 kolom */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
                 <div className="h-6 bg-slate-200 rounded w-40 mb-4"></div>
                 <div className="h-80 bg-slate-200 rounded-xl"></div>
@@ -183,35 +150,38 @@ export default function DashboardPage() {
         </div>
 
         {/* Summary Cards */}
-        <div className="mb-10">
-          <h2 className="text-xl font-bold text-slate-900 mb-6">
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold text-slate-900 mb-6">
             Ringkasan Hari Ini
           </h2>
           <SummaryCards data={dashboardData.summary} />
         </div>
 
-        {/* Charts and Activity - Responsive Grid */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-10">
-          {/* Sales Chart Section */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-bold text-slate-900">
+        {/* Charts Grid - 2x2 Layout */}
+        {/* Charts Section - 2 kolom (desktop) atau 1 kolom (mobile) */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          {/* Sales Chart - Laporan Penjualan */}
+          <div className="space-y-6">
+            <h2 className="text-lg font-semibold text-slate-900">
               Laporan Penjualan
             </h2>
             <SalesChart data={dashboardData.salesData} />
           </div>
 
-          {/* Recent Activity Section */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-bold text-slate-900">
-              Aktivitas Terbaru
+          {/* Product Chart - Produk Terlaris */}
+          <div className="space-y-6">
+            <h2 className="text-lg font-semibold text-slate-900">
+              Produk Terlaris
             </h2>
-            <RecentActivity transactions={dashboardData.recentTransactions} />
+            <ProductChart data={dashboardData.productData} />
           </div>
         </div>
 
         {/* Quick Actions */}
-        <div className="mb-8">
-          <h2 className="text-xl font-bold text-slate-900 mb-6">Aksi Cepat</h2>
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold text-slate-900 mb-6">
+            Aksi Cepat
+          </h2>
           <QuickActions />
         </div>
       </div>
