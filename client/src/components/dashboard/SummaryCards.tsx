@@ -14,7 +14,7 @@ export default function SummaryCards({ data }: SummaryCardsProps) {
     // Format currency in a more compact way for large numbers
     if (amount >= 1000000) {
       const millions = amount / 1000000;
-      return `Rp ${millions.toFixed(1).replace('.0', '')}M`;
+      return `Rp ${millions.toFixed(1).replace(".0", "")}M`;
     } else if (amount >= 1000) {
       const thousands = amount / 1000;
       return `Rp ${thousands.toFixed(0)}K`;
