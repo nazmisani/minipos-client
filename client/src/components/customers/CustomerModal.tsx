@@ -94,41 +94,50 @@ export default function CustomerModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-hidden flex flex-col border border-slate-200">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-200">
-          <h3 className="text-lg font-semibold text-slate-900">
-            {mode === "add" ? "Tambah Customer Baru" : "Edit Customer"}
-          </h3>
-          <button
-            onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 transition-colors"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+        <div className="flex-shrink-0 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-xl font-semibold">
+                {mode === "add" ? "Tambah Customer Baru" : "Edit Customer"}
+              </h3>
+              <p className="text-emerald-100 text-sm mt-1">
+                {mode === "add"
+                  ? "Masukkan informasi customer baru"
+                  : "Perbarui informasi customer"}
+              </p>
+            </div>
+            <button
+              onClick={onClose}
+              className="text-emerald-200 hover:text-white hover:bg-emerald-600 p-2 rounded-lg transition-colors"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6">
-          <div className="space-y-4">
+        <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
+          <div className="flex-1 overflow-y-auto p-6 space-y-5">
             {/* Name Field */}
-            <div>
+            <div className="space-y-2">
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-slate-700 mb-2"
+                className="block text-sm font-semibold text-slate-700"
               >
                 Nama Customer <span className="text-red-500">*</span>
               </label>
@@ -138,21 +147,38 @@ export default function CustomerModal({
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent ${
-                  errors.name ? "border-red-300" : "border-slate-300"
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all ${
+                  errors.name
+                    ? "border-red-300 bg-red-50"
+                    : "border-slate-300 hover:border-slate-400"
                 }`}
-                placeholder="Masukkan nama customer"
+                placeholder="Masukkan nama lengkap customer"
               />
               {errors.name && (
-                <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                <p className="text-sm text-red-600 flex items-center">
+                  <svg
+                    className="w-4 h-4 mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  {errors.name}
+                </p>
               )}
             </div>
 
             {/* Phone Field */}
-            <div>
+            <div className="space-y-2">
               <label
                 htmlFor="phone"
-                className="block text-sm font-medium text-slate-700 mb-2"
+                className="block text-sm font-semibold text-slate-700"
               >
                 Nomor Telepon
               </label>
@@ -162,16 +188,16 @@ export default function CustomerModal({
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent hover:border-slate-400 transition-all"
                 placeholder="+62 812-3456-7890"
               />
             </div>
 
             {/* Email Field */}
-            <div>
+            <div className="space-y-2">
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-slate-700 mb-2"
+                className="block text-sm font-semibold text-slate-700"
               >
                 Email
               </label>
@@ -181,21 +207,38 @@ export default function CustomerModal({
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent ${
-                  errors.email ? "border-red-300" : "border-slate-300"
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all ${
+                  errors.email
+                    ? "border-red-300 bg-red-50"
+                    : "border-slate-300 hover:border-slate-400"
                 }`}
                 placeholder="customer@email.com"
               />
               {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                <p className="text-sm text-red-600 flex items-center">
+                  <svg
+                    className="w-4 h-4 mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  {errors.email}
+                </p>
               )}
             </div>
 
             {/* Address Field */}
-            <div>
+            <div className="space-y-2">
               <label
                 htmlFor="address"
-                className="block text-sm font-medium text-slate-700 mb-2"
+                className="block text-sm font-semibold text-slate-700"
               >
                 Alamat
               </label>
@@ -205,27 +248,29 @@ export default function CustomerModal({
                 value={formData.address}
                 onChange={handleChange}
                 rows={3}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none"
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none hover:border-slate-400 transition-all"
                 placeholder="Alamat lengkap customer"
               />
             </div>
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-end space-x-3 mt-6 pt-6 border-t border-slate-200">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors"
-            >
-              Batal
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
-            >
-              {mode === "add" ? "Tambah Customer" : "Simpan Perubahan"}
-            </button>
+          <div className="flex-shrink-0 bg-slate-50 p-6 border-t border-slate-200">
+            <div className="flex items-center justify-end space-x-3">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 hover:border-slate-400 transition-colors font-medium"
+              >
+                Batal
+              </button>
+              <button
+                type="submit"
+                className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium shadow-md hover:shadow-lg"
+              >
+                {mode === "add" ? "Tambah Customer" : "Simpan Perubahan"}
+              </button>
+            </div>
           </div>
         </form>
       </div>

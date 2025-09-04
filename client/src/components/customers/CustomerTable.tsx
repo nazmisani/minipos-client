@@ -1,19 +1,9 @@
-interface Customer {
-  id: number;
-  name: string;
-  phone: string;
-  totalTransactions: number;
-  totalSpent: number;
-  email: string;
-  address: string;
-  joinDate: string;
-  lastTransaction: string;
-}
+import { Customer } from "./types";
 
 interface CustomerTableProps {
   customers: Customer[];
   onEdit: (customer: Customer) => void;
-  onDelete: (customerId: number) => void;
+  onDelete: (customer: Customer) => void;
   onViewDetail: (customer: Customer) => void;
 }
 
@@ -140,7 +130,7 @@ export default function CustomerTable({
 
                   {/* Delete Button */}
                   <button
-                    onClick={() => onDelete(customer.id)}
+                    onClick={() => onDelete(customer)}
                     className="text-red-600 hover:text-red-700 p-1 rounded hover:bg-red-50 transition-colors"
                     title="Hapus Customer"
                   >
