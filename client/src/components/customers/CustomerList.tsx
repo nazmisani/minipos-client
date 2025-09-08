@@ -76,51 +76,30 @@ export default function CustomerList({
   onAdd,
 }: CustomerListProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 lg:p-6">
+    <div className="p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-2">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">
             Customer Management
           </h1>
-          <p className="text-slate-600">
-            Kelola data customer dan lihat riwayat transaksi mereka.
+          <p className="text-gray-600">
+            Kelola data customer dan riwayat transaksi.
           </p>
         </div>
 
-        {/* Quick Actions */}
-        <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-          <h2 className="text-lg font-semibold text-slate-900 mb-4">
-            Quick Actions
-          </h2>
-          <div className="flex flex-wrap gap-3">
-            <button
-              onClick={onAdd}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2"
-            >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-              <span>Tambah Customer Baru</span>
-            </button>
-          </div>
+        {/* Add Button */}
+        <div className="mb-6">
+          <button
+            onClick={onAdd}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+          >
+            + Tambah Customer
+          </button>
         </div>
 
         {/* Customer Table */}
-        <div className="bg-white rounded-xl shadow-md p-6">
-          <h2 className="text-lg font-semibold text-slate-900 mb-6">
-            Daftar Customer
-          </h2>
+        <div className="bg-white rounded-lg shadow">
           <CustomerTable
             customers={dummyCustomers}
             onEdit={onEdit}
