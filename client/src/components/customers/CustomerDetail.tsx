@@ -56,37 +56,42 @@ export default function CustomerDetail({
   };
 
   return (
-    <div className="p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 lg:p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="mb-6 flex items-center space-x-4">
+        <div className="flex items-center gap-4 mb-8">
           <button
             onClick={onBack}
-            className="text-gray-600 hover:text-gray-800"
+            className="text-slate-600 hover:text-slate-900 transition-colors"
           >
             ← Kembali
           </button>
-          <h1 className="text-2xl font-bold text-gray-900">Detail Customer</h1>
+          <div>
+            <h1 className="text-3xl font-bold text-slate-900">Detail Customer</h1>
+            <p className="text-slate-600 mt-1">
+              Informasi lengkap dan riwayat transaksi customer
+            </p>
+          </div>
         </div>
 
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Customer Info */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow">
-              <div className="bg-blue-600 text-white p-4 rounded-t-lg">
-                <h2 className="text-lg font-semibold">{customer.name}</h2>
-                <p className="text-blue-100">ID: #{customer.id}</p>
+            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+              <div className="bg-emerald-600 text-white p-6">
+                <h2 className="text-xl font-semibold">{customer.name}</h2>
+                <p className="text-emerald-100 mt-1">ID: #{customer.id}</p>
               </div>
 
-              <div className="p-4 space-y-3">
+              <div className="p-6 space-y-4">
                 <div>
-                  <label className="text-sm text-gray-500">Phone</label>
-                  <p className="font-medium">{customer.phone || "Tidak ada"}</p>
+                  <label className="text-sm font-medium text-slate-600">Phone</label>
+                  <p className="text-slate-900 mt-1">{customer.phone || "Tidak ada"}</p>
                 </div>
                 <div>
-                  <label className="text-sm text-gray-500">Email</label>
-                  <p className="font-medium">{customer.email || "Tidak ada"}</p>
+                  <label className="text-sm font-medium text-slate-600">Email</label>
+                  <p className="text-slate-900 mt-1">{customer.email || "Tidak ada"}</p>
                 </div>
                 <div>
                   <label className="text-sm text-gray-500">Alamat</label>

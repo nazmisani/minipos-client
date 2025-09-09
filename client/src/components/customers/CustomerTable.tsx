@@ -24,64 +24,64 @@ export default function CustomerTable({
   return (
     <div className="overflow-x-auto">
       <table className="w-full">
-        <thead className="bg-gray-50">
+        <thead className="bg-slate-50 border-b border-slate-200">
           <tr>
-            <th className="text-left py-3 px-4 font-semibold text-gray-700">
+            <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
               Nama
             </th>
-            <th className="text-left py-3 px-4 font-semibold text-gray-700">
+            <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
               Phone
             </th>
-            <th className="text-left py-3 px-4 font-semibold text-gray-700">
+            <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
               Transaksi
             </th>
-            <th className="text-left py-3 px-4 font-semibold text-gray-700">
+            <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
               Total Belanja
             </th>
-            <th className="text-left py-3 px-4 font-semibold text-gray-700">
+            <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
               Aksi
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-slate-200">
           {customers.map((customer) => (
-            <tr key={customer.id} className="border-b hover:bg-gray-50">
-              <td className="py-3 px-4">
+            <tr key={customer.id} className="hover:bg-slate-50">
+              <td className="px-6 py-4">
                 <div>
-                  <div className="font-medium text-gray-900">
+                  <div className="text-sm font-medium text-slate-900">
                     {customer.name}
                   </div>
-                  <div className="text-sm text-gray-500">{customer.email}</div>
+                  <div className="text-sm text-slate-500">{customer.email}</div>
                 </div>
               </td>
-              <td className="py-3 px-4 text-gray-900">
+              <td className="px-6 py-4 text-sm text-slate-900">
                 {customer.phone || "-"}
               </td>
-              <td className="py-3 px-4 text-gray-900">
+              <td className="px-6 py-4 text-sm text-slate-900">
                 {customer.totalTransactions}
               </td>
-              <td className="py-3 px-4 text-gray-900">
+              <td className="px-6 py-4 text-sm text-slate-900">
                 {formatCurrency(customer.totalSpent)}
               </td>
-              <td className="py-3 px-4">
-                <div className="flex space-x-2">
+              <td className="px-6 py-4 text-sm">
+                <div className="flex gap-2">
                   <button
                     onClick={() => onViewDetail(customer)}
-                    className="text-blue-600 hover:text-blue-800 text-sm"
+                    className="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 rounded-lg text-xs font-semibold transition-colors"
                   >
-                    Detail
+                    View
                   </button>
                   <button
                     onClick={() => onEdit(customer)}
-                    className="text-green-600 hover:text-green-800 text-sm"
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-xs font-semibold transition-colors"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => onDelete(customer)}
-                    className="text-red-600 hover:text-red-800 text-sm"
+                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-xs font-semibold transition-colors"
                   >
-                    Hapus
+                    Delete
                   </button>
                 </div>
               </td>
@@ -91,8 +91,8 @@ export default function CustomerTable({
       </table>
 
       {customers.length === 0 && (
-        <div className="text-center py-8">
-          <p className="text-gray-500">Tidak ada data customer</p>
+        <div className="text-center py-12">
+          <p className="text-slate-500">Tidak ada data customer</p>
         </div>
       )}
     </div>

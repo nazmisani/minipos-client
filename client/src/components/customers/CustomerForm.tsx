@@ -37,40 +37,61 @@ export default function CustomerForm({
   };
 
   return (
-    <div className="p-6">
-      <div className="max-w-2xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 lg:p-6">
+      <div className="max-w-3xl mx-auto">
         {/* Header */}
-        <div className="mb-6 flex items-center space-x-4">
+        <div className="flex items-center gap-4 mb-8">
           <button
             onClick={onBack}
-            className="text-gray-600 hover:text-gray-800"
+            className="text-slate-600 hover:text-slate-900 transition-colors"
           >
             ← Kembali
           </button>
-          <h1 className="text-2xl font-bold text-gray-900">
-            {isEdit ? "Edit Customer" : "Tambah Customer"}
-          </h1>
+          <div>
+            <h1 className="text-3xl font-bold text-slate-900">
+              {isEdit ? "Edit Customer" : "Tambah Customer"}
+            </h1>
+            <p className="text-slate-600 mt-1">
+              {isEdit ? "Ubah informasi customer" : "Tambahkan customer baru ke sistem"}
+            </p>
+          </div>
         </div>
 
         {/* Form */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Nama Customer *
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                required
-              />
+        <div className="bg-white rounded-lg border border-slate-200 p-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Nama Customer *
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  placeholder="customer@email.com"
+                />
+              </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 mb-2">
                 Nomor Telepon
               </label>
               <input
@@ -78,25 +99,12 @@ export default function CustomerForm({
                 name="phone"
                 value={formData.phone}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 mb-2">
                 Alamat
               </label>
               <textarea
@@ -104,23 +112,23 @@ export default function CustomerForm({
                 value={formData.address}
                 onChange={handleInputChange}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
 
-            <div className="flex justify-end space-x-3 pt-4">
+            <div className="flex gap-3 pt-4">
+              <button
+                type="submit"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+              >
+                {isEdit ? "Simpan Perubahan" : "Tambah Customer"}
+              </button>
               <button
                 type="button"
                 onClick={onBack}
-                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                className="bg-slate-200 hover:bg-slate-300 text-slate-700 px-6 py-2 rounded-lg font-medium transition-colors"
               >
                 Batal
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
-              >
-                {isEdit ? "Simpan Perubahan" : "Tambah Customer"}
               </button>
             </div>
           </form>
