@@ -67,7 +67,9 @@ export default function CustomerDetail({
             ← Kembali
           </button>
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">Detail Customer</h1>
+            <h1 className="text-3xl font-bold text-slate-900">
+              Detail Customer
+            </h1>
             <p className="text-slate-600 mt-1">
               Informasi lengkap dan riwayat transaksi customer
             </p>
@@ -86,12 +88,20 @@ export default function CustomerDetail({
 
               <div className="p-6 space-y-4">
                 <div>
-                  <label className="text-sm font-medium text-slate-600">Phone</label>
-                  <p className="text-slate-900 mt-1">{customer.phone || "Tidak ada"}</p>
+                  <label className="text-sm font-medium text-slate-600">
+                    Phone
+                  </label>
+                  <p className="text-slate-900 mt-1">
+                    {customer.phone || "Tidak ada"}
+                  </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-600">Email</label>
-                  <p className="text-slate-900 mt-1">{customer.email || "Tidak ada"}</p>
+                  <label className="text-sm font-medium text-slate-600">
+                    Email
+                  </label>
+                  <p className="text-slate-900 mt-1">
+                    {customer.email || "Tidak ada"}
+                  </p>
                 </div>
                 <div>
                   <label className="text-sm text-gray-500">Alamat</label>

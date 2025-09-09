@@ -52,7 +52,9 @@ export default function CustomerForm({
               {isEdit ? "Edit Customer" : "Tambah Customer"}
             </h1>
             <p className="text-slate-600 mt-1">
-              {isEdit ? "Ubah informasi customer" : "Tambahkan customer baru ke sistem"}
+              {isEdit
+                ? "Ubah informasi customer"
+                : "Tambahkan customer baru ke sistem"}
             </p>
           </div>
         </div>
