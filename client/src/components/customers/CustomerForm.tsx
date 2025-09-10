@@ -40,21 +40,26 @@ export default function CustomerForm({
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 lg:p-6">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
-          <button
-            onClick={onBack}
-            className="text-slate-600 hover:text-slate-900 transition-colors"
-          >
-            ← Kembali
-          </button>
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <button
+              onClick={onBack}
+              className="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Kembali ke Customer
+            </button>
+          </div>
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">
+            <h1 className="text-3xl lg:text-4xl font-bold text-slate-900">
               {isEdit ? "Edit Customer" : "Tambah Customer"}
             </h1>
-            <p className="text-slate-600 mt-1">
+            <p className="text-slate-600 mt-2">
               {isEdit
-                ? "Ubah informasi customer"
-                : "Tambahkan customer baru ke sistem"}
+                ? "Ubah informasi customer yang dipilih"
+                : "Tambahkan customer baru ke dalam sistem"}
             </p>
           </div>
         </div>

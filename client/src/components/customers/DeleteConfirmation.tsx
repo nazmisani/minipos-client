@@ -14,25 +14,37 @@ export default function DeleteConfirmation({
   onConfirm,
 }: DeleteConfirmationProps) {
   return (
-    <div className="p-6">
-      <div className="max-w-lg mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 lg:p-6">
+      <div className="max-w-2xl mx-auto">
         {/* Header */}
-        <div className="mb-6 flex items-center space-x-4">
-          <button
-            onClick={onBack}
-            className="text-gray-600 hover:text-gray-800"
-          >
-            ← Kembali
-          </button>
-          <h1 className="text-2xl font-bold text-gray-900">Hapus Customer</h1>
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <button
+              onClick={onBack}
+              className="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Kembali ke Customer
+            </button>
+          </div>
+          <div>
+            <h1 className="text-3xl lg:text-4xl font-bold text-slate-900">
+              Hapus Customer
+            </h1>
+            <p className="text-slate-600 mt-2">
+              Konfirmasi penghapusan data customer dari sistem
+            </p>
+          </div>
         </div>
 
         {/* Confirmation Card */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="text-center mb-6">
-            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="bg-white rounded-lg border border-slate-200 p-8">
+          <div className="text-center mb-8">
+            <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <svg
-                className="w-8 h-8 text-red-600"
+                className="w-10 h-10 text-red-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -45,8 +57,8 @@ export default function DeleteConfirmation({
                 />
               </svg>
             </div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
-              Hapus Customer?
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
+              Apakah Anda yakin ingin menghapus customer ini?
             </h2>
             <p className="text-gray-600">
               Anda akan menghapus customer <strong>{customer.name}</strong>.
@@ -73,18 +85,18 @@ export default function DeleteConfirmation({
             </div>
           </div>
 
-          <div className="flex justify-end space-x-3">
+          <div className="flex gap-3 justify-end">
             <button
               onClick={onBack}
-              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+              className="px-6 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 font-medium transition-colors"
             >
               Batal
             </button>
             <button
               onClick={onConfirm}
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg"
+              className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors"
             >
-              Hapus Customer
+              Ya, Hapus Customer
             </button>
           </div>
         </div>
