@@ -1,6 +1,6 @@
 import Sidebar from "@/components/Sidebar";
 
-export default function CustomersLayout({
+export default function SettingsLayout({
   children,
 }: {
   children: React.ReactNode;
