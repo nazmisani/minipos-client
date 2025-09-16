@@ -1,24 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { User, UserFormData, UserViewMode } from "@/components/users/types";
+import UserList from "@/components/users/UserList";
+import UserDetail from "@/components/users/UserDetail";
+import UserForm from "@/components/users/UserForm";
+import DeleteConfirmation from "@/components/users/DeleteConfirmation";
 
 type TabType = "general" | "logs" | "users";
-
-// Types for User
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-  createdAt: string;
-}
-
-interface UserFormData {
-  name: string;
-  email: string;
-  role: string;
-  password?: string;
-}
 
 // Dummy log data
 const dummyLogs = [
@@ -80,50 +69,10 @@ const dummyLogs = [
   },
 ];
 
-// Dummy users data
-const dummyUsers: User[] = [
-  {
-    id: 1,
-    name: "Admin User",
-    email: "admin@minipos.com",
-    role: "admin",
-    createdAt: "2024-09-01 10:00:00",
-  },
-  {
-    id: 2,
-    name: "Staff User",
-    email: "staff@minipos.com",
-    role: "staff",
-    createdAt: "2024-09-05 14:30:00",
-  },
-  {
-    id: 3,
-    name: "Manager User",
-    email: "manager@minipos.com",
-    role: "manager",
-    createdAt: "2024-09-03 09:15:00",
-  },
-];
-
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<TabType>("general");
-  const [users, setUsers] = useState<User[]>(dummyUsers);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [userViewMode, setUserViewMode] = useState<UserViewMode>("list");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-
-  const getActionBadgeColor = (action: string) => {
-    switch (action) {
-      case "CREATE":
-        return "bg-emerald-100 text-emerald-800";
-      case "UPDATE":
-        return "bg-blue-100 text-blue-800";
-      case "DELETE":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-slate-100 text-slate-800";
-    }
-  };
 
   const formatDateTime = (dateString: string) => {
     return new Date(dateString).toLocaleString("id-ID", {
@@ -135,55 +84,14 @@ export default function SettingsPage() {
     });
   };
 
-  // User Management Functions
-  const handleAddUser = (userData: UserFormData) => {
-    const newUser: User = {
-      id: users.length + 1,
-      name: userData.name,
-      email: userData.email,
-      role: userData.role,
-      createdAt: new Date().toISOString(),
-    };
-    setUsers([...users, newUser]);
-    setIsAddModalOpen(false);
-  };
-
-  const handleEditUser = (userData: UserFormData) => {
-    if (!selectedUser) return;
-    const updatedUsers = users.map((user) =>
-      user.id === selectedUser.id
-        ? {
-            ...user,
-            name: userData.name,
-            email: userData.email,
-            role: userData.role,
-          }
-        : user
-    );
-    setUsers(updatedUsers);
-    setIsEditModalOpen(false);
-    setSelectedUser(null);
-  };
-
-  const handleDeleteUser = (userId: number) => {
-    if (window.confirm("Apakah Anda yakin ingin menghapus user ini?")) {
-      setUsers(users.filter((user) => user.id !== userId));
-    }
-  };
-
-  const openEditModal = (user: User) => {
-    setSelectedUser(user);
-    setIsEditModalOpen(true);
-  };
-
-  const getRoleBadgeColor = (role: string) => {
-    switch (role) {
-      case "admin":
-        return "bg-red-100 text-red-800";
-      case "manager":
-        return "bg-blue-100 text-blue-800";
-      case "staff":
+  const getActionBadgeColor = (action: string) => {
+    switch (action) {
+      case "CREATE":
         return "bg-emerald-100 text-emerald-800";
+      case "UPDATE":
+        return "bg-blue-100 text-blue-800";
+      case "DELETE":
+        return "bg-red-100 text-red-800";
       default:
         return "bg-slate-100 text-slate-800";
     }
@@ -378,272 +286,67 @@ export default function SettingsPage() {
 
         {activeTab === "users" && (
           <div className="space-y-6">
-            {/* Users Management Card */}
-            <div className="bg-white rounded-xl shadow-md overflow-hidden">
-              <div className="p-6 border-b border-slate-200">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h2 className="text-lg font-semibold text-slate-900">
-                      User Management
-                    </h2>
-                    <p className="text-slate-600 mt-1">
-                      Kelola pengguna dan hak akses sistem.
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => setIsAddModalOpen(true)}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                  >
-                    Tambah User
-                  </button>
-                </div>
-              </div>
-
-              {/* Users Table */}
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-slate-50 border-b border-slate-200">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
-                        ID
-                      </th>
-                      <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
-                        Name
-                      </th>
-                      <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
-                        Email
-                      </th>
-                      <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
-                        Role
-                      </th>
-                      <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
-                        Created At
-                      </th>
-                      <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-200">
-                    {users.map((user) => (
-                      <tr key={user.id} className="hover:bg-slate-50">
-                        <td className="px-6 py-4 text-sm font-medium text-slate-900">
-                          #{user.id.toString().padStart(3, "0")}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-slate-900">
-                          {user.name}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-slate-900">
-                          {user.email}
-                        </td>
-                        <td className="px-6 py-4 text-sm">
-                          <span
-                            className={`px-2 py-1 rounded-full text-xs font-medium ${getRoleBadgeColor(
-                              user.role
-                            )}`}
-                          >
-                            {user.role.toUpperCase()}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-slate-500">
-                          {formatDateTime(user.createdAt)}
-                        </td>
-                        <td className="px-6 py-4 text-sm">
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => openEditModal(user)}
-                              className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-xs font-semibold transition-colors"
-                            >
-                              Edit
-                            </button>
-                            <button
-                              onClick={() => handleDeleteUser(user.id)}
-                              className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-xs font-semibold transition-colors"
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-
-                {/* Empty State */}
-                {users.length === 0 && (
-                  <div className="text-center py-12">
-                    <div className="text-slate-400 mb-4">
-                      <svg
-                        className="w-16 h-16 mx-auto"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={1}
-                          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 className="text-lg font-medium text-slate-900 mb-2">
-                      Belum Ada User
-                    </h3>
-                    <p className="text-slate-500">
-                      User yang terdaftar dalam sistem akan muncul di sini.
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
+            {(() => {
+              switch (userViewMode) {
+                case "list":
+                  return (
+                    <UserList
+                      onViewModeChange={setUserViewMode}
+                      onSelectUser={setSelectedUser}
+                    />
+                  );
+                case "detail":
+                  return selectedUser ? (
+                    <UserDetail
+                      user={selectedUser}
+                      onViewModeChange={setUserViewMode}
+                    />
+                  ) : (
+                    <UserList
+                      onViewModeChange={setUserViewMode}
+                      onSelectUser={setSelectedUser}
+                    />
+                  );
+                case "add":
+                  return (
+                    <UserForm mode="add" onViewModeChange={setUserViewMode} />
+                  );
+                case "edit":
+                  return selectedUser ? (
+                    <UserForm
+                      mode="edit"
+                      user={selectedUser}
+                      onViewModeChange={setUserViewMode}
+                    />
+                  ) : (
+                    <UserList
+                      onViewModeChange={setUserViewMode}
+                      onSelectUser={setSelectedUser}
+                    />
+                  );
+                case "delete":
+                  return selectedUser ? (
+                    <DeleteConfirmation
+                      user={selectedUser}
+                      onViewModeChange={setUserViewMode}
+                    />
+                  ) : (
+                    <UserList
+                      onViewModeChange={setUserViewMode}
+                      onSelectUser={setSelectedUser}
+                    />
+                  );
+                default:
+                  return (
+                    <UserList
+                      onViewModeChange={setUserViewMode}
+                      onSelectUser={setSelectedUser}
+                    />
+                  );
+              }
+            })()}
           </div>
         )}
-
-        {/* Add User Modal */}
-        {isAddModalOpen && (
-          <UserModal
-            title="Tambah User"
-            onClose={() => setIsAddModalOpen(false)}
-            onSave={handleAddUser}
-            showPasswordField={true}
-          />
-        )}
-
-        {/* Edit User Modal */}
-        {isEditModalOpen && selectedUser && (
-          <UserModal
-            title="Edit User"
-            user={selectedUser}
-            onClose={() => {
-              setIsEditModalOpen(false);
-              setSelectedUser(null);
-            }}
-            onSave={handleEditUser}
-            showPasswordField={false}
-          />
-        )}
-      </div>
-    </div>
-  );
-}
-
-// User Modal Component
-interface UserModalProps {
-  title: string;
-  user?: User;
-  onClose: () => void;
-  onSave: (userData: UserFormData) => void;
-  showPasswordField: boolean;
-}
-
-function UserModal({
-  title,
-  user,
-  onClose,
-  onSave,
-  showPasswordField,
-}: UserModalProps) {
-  const [formData, setFormData] = useState<UserFormData>({
-    name: user?.name || "",
-    email: user?.email || "",
-    role: user?.role || "staff",
-    password: "",
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.name || !formData.email) return;
-    if (showPasswordField && !formData.password) return;
-    onSave(formData);
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md">
-        <h3 className="text-lg font-semibold text-slate-900 mb-4">{title}</h3>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
-              Nama
-            </label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
-              Role
-            </label>
-            <select
-              value={formData.role}
-              onChange={(e) =>
-                setFormData({ ...formData, role: e.target.value })
-              }
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            >
-              <option value="staff">Staff</option>
-              <option value="manager">Manager</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-
-          {showPasswordField && (
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
-                Password
-              </label>
-              <input
-                type="password"
-                value={formData.password}
-                onChange={(e) =>
-                  setFormData({ ...formData, password: e.target.value })
-                }
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                required
-              />
-            </div>
-          )}
-
-          <div className="flex gap-3 pt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors"
-            >
-              Batal
-            </button>
-            <button
-              type="submit"
-              className="flex-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors"
-            >
-              Simpan
-            </button>
-          </div>
-        </form>
       </div>
     </div>
   );

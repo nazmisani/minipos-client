@@ -1,0 +1,116 @@
+import { User, UserViewMode } from "./types";
+
+interface DeleteConfirmationProps {
+  user: User;
+  onViewModeChange: (mode: UserViewMode) => void;
+}
+
+export default function DeleteConfirmation({
+  user,
+  onViewModeChange,
+}: DeleteConfirmationProps) {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 lg:p-6">
+      <div className="max-w-2xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <button
+              onClick={() => onViewModeChange("list")}
+              className="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium transition-colors"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              Kembali ke User Management
+            </button>
+          </div>
+          <div>
+            <h1 className="text-3xl lg:text-4xl font-bold text-slate-900">
+              Hapus User
+            </h1>
+            <p className="text-slate-600 mt-2">
+              Konfirmasi penghapusan data user dari sistem
+            </p>
+          </div>
+        </div>
+
+        {/* Confirmation Card */}
+        <div className="bg-white rounded-lg border border-slate-200 p-8">
+          <div className="text-center mb-8">
+            <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg
+                className="w-10 h-10 text-red-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.232 16.5c-.77.833.192 2.5 1.732 2.5z"
+                />
+              </svg>
+            </div>
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
+              Apakah Anda yakin ingin menghapus user ini?
+            </h2>
+            <p className="text-slate-600">
+              Anda akan menghapus user <strong>{user.name}</strong>. Tindakan
+              ini tidak dapat dibatalkan.
+            </p>
+          </div>
+
+          <div className="bg-slate-50 rounded-lg p-6 mb-8">
+            <div className="space-y-3 text-sm">
+              <div className="flex justify-between">
+                <span className="text-slate-600">Nama:</span>
+                <span className="font-medium text-slate-900">{user.name}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-600">Email:</span>
+                <span className="font-medium text-slate-900">{user.email}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-600">Role:</span>
+                <span className="font-medium text-slate-900">
+                  {user.role.toUpperCase()}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-3 justify-end">
+            <button
+              onClick={() => onViewModeChange("list")}
+              className="px-6 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 font-medium transition-colors"
+            >
+              Batal
+            </button>
+            <button
+              onClick={() => {
+                // TODO: Implement actual delete logic here
+                console.log("Deleting user:", user);
+                onViewModeChange("list");
+              }}
+              className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors"
+            >
+              Ya, Hapus User
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
