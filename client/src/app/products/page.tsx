@@ -3,79 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 
-// Dummy data products
-const dummyProducts = [
-  {
-    id: 1,
-    name: "Laptop ASUS VivoBook",
-    price: 8500000,
-    stock: 15,
-    category: "Electronics",
-  },
-  {
-    id: 2,
-    name: "Mouse Wireless Logitech",
-    price: 250000,
-    stock: 45,
-    category: "Electronics",
-  },
-  {
-    id: 3,
-    name: "Keyboard Mechanical",
-    price: 750000,
-    stock: 22,
-    category: "Electronics",
-  },
-  {
-    id: 4,
-    name: "Monitor LED 24 inch",
-    price: 2200000,
-    stock: 8,
-    category: "Electronics",
-  },
-  {
-    id: 5,
-    name: "Smartphone Samsung Galaxy",
-    price: 4500000,
-    stock: 12,
-    category: "Electronics",
-  },
-  {
-    id: 6,
-    name: "Headphone Sony WH-1000XM4",
-    price: 3200000,
-    stock: 6,
-    category: "Electronics",
-  },
-  {
-    id: 7,
-    name: "Tablet iPad Air",
-    price: 7500000,
-    stock: 9,
-    category: "Electronics",
-  },
-  {
-    id: 8,
-    name: "Charger USB-C",
-    price: 150000,
-    stock: 35,
-    category: "Accessories",
-  },
-  {
-    id: 9,
-    name: "Power Bank 20000mAh",
-    price: 400000,
-    stock: 18,
-    category: "Accessories",
-  },
-  {
-    id: 10,
-    name: "Speaker Bluetooth JBL",
-    price: 1200000,
-    stock: 14,
-    category: "Electronics",
-  },
-];
+// TODO: Replace with API call
+const dummyProducts: any[] = [];
 
 const categories = ["All", "Electronics", "Accessories", "Computer", "Mobile"];
 

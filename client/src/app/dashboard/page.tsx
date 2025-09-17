@@ -52,36 +52,20 @@ export default function DashboardPage() {
         ]
       );
 
-      // Dummy data sesuai dengan API schema
+      // TODO: Replace with actual API responses
       const mockData = {
         summary: {
-          totalProducts: 156,
-          totalUsers: 12,
-          todayTransactions: 28,
-          todayRevenue: 2450000,
+          totalProducts: 0,
+          totalUsers: 0,
+          todayTransactions: 0,
+          todayRevenue: 0,
         },
-        // Data untuk /reports/sales (7 hari terakhir)
-        salesData: [
-          { date: "2024-08-24", amount: 1800000 },
-          { date: "2024-08-25", amount: 2200000 },
-          { date: "2024-08-26", amount: 1950000 },
-          { date: "2024-08-27", amount: 2800000 },
-          { date: "2024-08-28", amount: 2100000 },
-          { date: "2024-08-29", amount: 3200000 },
-          { date: "2024-08-30", amount: 2450000 },
-        ],
-        // Data untuk /reports/products/top (5 produk terlaris)
-        productData: [
-          { name: "Kopi Americano", sold: 45, revenue: 450000 },
-          { name: "Nasi Goreng", sold: 32, revenue: 480000 },
-          { name: "Ayam Bakar", sold: 28, revenue: 560000 },
-          { name: "Jus Jeruk", sold: 25, revenue: 200000 },
-          { name: "Roti Bakar", sold: 22, revenue: 220000 },
-        ],
+        salesData: [],
+        productData: [],
         userProfile: {
-          name: "Admin User",
-          role: "Administrator",
-          lastLogin: "2024-08-30 09:00:00",
+          name: "",
+          role: "",
+          lastLogin: "",
         },
       };
 

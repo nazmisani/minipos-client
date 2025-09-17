@@ -8,30 +8,7 @@ import {
   Card,
 } from "@/components/shared";
 
-// Dummy users data
-const dummyUsers: User[] = [
-  {
-    id: 1,
-    name: "Admin User",
-    email: "admin@minipos.com",
-    role: "admin",
-    createdAt: "2024-09-01 10:00:00",
-  },
-  {
-    id: 2,
-    name: "Staff User",
-    email: "staff@minipos.com",
-    role: "staff",
-    createdAt: "2024-09-05 14:30:00",
-  },
-  {
-    id: 3,
-    name: "Manager User",
-    email: "manager@minipos.com",
-    role: "manager",
-    createdAt: "2024-09-03 09:15:00",
-  },
-];
+// TODO: Replace with API call
 
 interface UserListProps {
   onViewModeChange: (mode: UserViewMode) => void;
@@ -56,7 +33,7 @@ export default function UserList({
 
       <Card>
         <UserTable
-          users={dummyUsers}
+          users={[]}
           onViewDetail={(user: User) => {
             onSelectUser(user);
             onViewModeChange("detail");

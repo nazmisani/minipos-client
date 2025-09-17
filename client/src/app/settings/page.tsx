@@ -9,65 +9,8 @@ import DeleteConfirmation from "@/components/users/DeleteConfirmation";
 
 type TabType = "general" | "logs" | "users";
 
-// Dummy log data
-const dummyLogs = [
-  {
-    id: 1,
-    user: "Admin User",
-    action: "CREATE",
-    entity: "Customer",
-    createdAt: "2024-09-11 14:30:25",
-  },
-  {
-    id: 2,
-    user: "Staff User",
-    action: "UPDATE",
-    entity: "Product",
-    createdAt: "2024-09-11 13:15:10",
-  },
-  {
-    id: 3,
-    user: "Admin User",
-    action: "DELETE",
-    entity: "Transaction",
-    createdAt: "2024-09-11 12:45:33",
-  },
-  {
-    id: 4,
-    user: "Staff User",
-    action: "CREATE",
-    entity: "Customer",
-    createdAt: "2024-09-11 11:20:15",
-  },
-  {
-    id: 5,
-    user: "Manager User",
-    action: "UPDATE",
-    entity: "Settings",
-    createdAt: "2024-09-11 10:30:40",
-  },
-  {
-    id: 6,
-    user: "Admin User",
-    action: "CREATE",
-    entity: "Product",
-    createdAt: "2024-09-11 09:15:22",
-  },
-  {
-    id: 7,
-    user: "Staff User",
-    action: "DELETE",
-    entity: "Customer",
-    createdAt: "2024-09-11 08:45:11",
-  },
-  {
-    id: 8,
-    user: "Manager User",
-    action: "UPDATE",
-    entity: "Transaction",
-    createdAt: "2024-09-10 16:30:55",
-  },
-];
+// TODO: Replace with API call
+const dummyLogs: any[] = [];
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<TabType>("general");

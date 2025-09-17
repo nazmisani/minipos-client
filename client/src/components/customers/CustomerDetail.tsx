@@ -7,33 +7,8 @@ interface CustomerDetailProps {
   onBack: () => void;
 }
 
-// Dummy transaction data
-const dummyTransactions = [
-  {
-    id: 1,
-    date: "2024-08-30",
-    time: "14:30",
-    items: ["Kopi Americano", "Roti Bakar"],
-    total: 35000,
-    paymentMethod: "Cash",
-  },
-  {
-    id: 2,
-    date: "2024-08-29",
-    time: "10:15",
-    items: ["Cappuccino", "Croissant"],
-    total: 42000,
-    paymentMethod: "QRIS",
-  },
-  {
-    id: 3,
-    date: "2024-08-28",
-    time: "16:45",
-    items: ["Espresso", "Muffin Blueberry"],
-    total: 28000,
-    paymentMethod: "Debit",
-  },
-];
+// TODO: Replace with API call
+const dummyTransactions: any[] = [];
 
 export default function CustomerDetail({
   customer,

@@ -8,27 +8,8 @@ import {
 } from "@/components/shared";
 import ProductTable from "@/components/products/ProductTable";
 
-// Dummy products data
-const dummyProducts: Product[] = [
-  {
-    id: 1,
-    name: "Kopi Arabica",
-    price: 25000,
-    category: "Minuman",
-    stock: 100,
-    description: "Kopi premium dari Aceh",
-    createdAt: "2024-09-01 10:00:00",
-  },
-  {
-    id: 2,
-    name: "Nasi Gudeg",
-    price: 15000,
-    category: "Makanan",
-    stock: 50,
-    description: "Gudeg khas Yogyakarta",
-    createdAt: "2024-09-02 11:30:00",
-  },
-];
+// TODO: Replace with API call
+const dummyProducts: Product[] = [];
 
 interface ProductListProps {
   onViewModeChange: (mode: ProductViewMode) => void;

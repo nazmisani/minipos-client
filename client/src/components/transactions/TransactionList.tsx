@@ -22,8 +22,8 @@ export default function TransactionList({
   onDelete,
   onAdd,
 }: TransactionListProps) {
-  // Use imported dummy transactions data
-  const dummyTransactions = transactions;
+  // TODO: Replace with API call
+  const dummyTransactions: any[] = [];
 
   return (
     <CrudLayout>
