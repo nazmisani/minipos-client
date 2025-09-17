@@ -1,5 +1,6 @@
-export type User = {
-  id: number;
+import { BaseEntity } from "@/components/shared/types";
+
+export type User = BaseEntity & {
   name: string;
   email: string;
   role: string;

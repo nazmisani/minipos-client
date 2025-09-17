@@ -1,5 +1,12 @@
 import { User, UserViewMode } from "./types";
 import UserTable from "@/components/users/UserTable";
+import {
+  CrudLayout,
+  PageHeader,
+  SearchBar,
+  Button,
+  Card,
+} from "@/components/shared";
 
 // Dummy users data
 const dummyUsers: User[] = [
@@ -36,56 +43,34 @@ export default function UserList({
   onSelectUser,
 }: UserListProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 lg:p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl lg:text-4xl font-bold text-slate-900">
-              User Management
-            </h1>
-            <p className="text-slate-600 mt-2">
-              Kelola pengguna dan hak akses sistem.
-            </p>
-          </div>
-          <button
-            onClick={() => onViewModeChange("add")}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-          >
-            Tambah User
-          </button>
-        </div>
+    <CrudLayout>
+      <PageHeader
+        title="User Management"
+        subtitle="Kelola pengguna dan hak akses sistem."
+        action={
+          <Button onClick={() => onViewModeChange("add")}>Tambah User</Button>
+        }
+      />
 
-        {/* Search & Filter */}
-        <div className="flex gap-4 mb-6">
-          <div className="flex-1">
-            <input
-              type="text"
-              placeholder="Cari user..."
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            />
-          </div>
-        </div>
+      <SearchBar placeholder="Cari user..." />
 
-        {/* Table */}
-        <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-          <UserTable
-            users={dummyUsers}
-            onViewDetail={(user: User) => {
-              onSelectUser(user);
-              onViewModeChange("detail");
-            }}
-            onEdit={(user: User) => {
-              onSelectUser(user);
-              onViewModeChange("edit");
-            }}
-            onDelete={(user: User) => {
-              onSelectUser(user);
-              onViewModeChange("delete");
-            }}
-          />
-        </div>
-      </div>
-    </div>
+      <Card>
+        <UserTable
+          users={dummyUsers}
+          onViewDetail={(user: User) => {
+            onSelectUser(user);
+            onViewModeChange("detail");
+          }}
+          onEdit={(user: User) => {
+            onSelectUser(user);
+            onViewModeChange("edit");
+          }}
+          onDelete={(user: User) => {
+            onSelectUser(user);
+            onViewModeChange("delete");
+          }}
+        />
+      </Card>
+    </CrudLayout>
   );
 }

@@ -1,4 +1,5 @@
 import { User, UserViewMode } from "./types";
+import { CrudLayout, BackButton, PageHeader, Card } from "@/components/shared";
 
 interface UserDetailProps {
   user: User;
@@ -33,41 +34,22 @@ export default function UserDetail({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 lg:p-6">
+    <CrudLayout>
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <button
+          <div className="mb-4">
+            <BackButton
               onClick={() => onViewModeChange("list")}
-              className="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium transition-colors"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-              Kembali ke User Management
-            </button>
+              label="Kembali ke User Management"
+            />
           </div>
-          <div>
-            <h1 className="text-3xl lg:text-4xl font-bold text-slate-900">
-              Detail User
-            </h1>
-            <p className="text-slate-600 mt-2">Informasi lengkap user sistem</p>
-          </div>
+          <PageHeader
+            title="Detail User"
+            subtitle="Informasi lengkap user sistem"
+          />
         </div>
 
-        {/* User Information */}
-        <div className="bg-white rounded-lg border border-slate-200 p-6 mb-6">
+        <Card className="p-6 mb-6">
           <h2 className="text-lg font-semibold text-slate-900 mb-4">
             Informasi User
           </h2>
@@ -125,10 +107,9 @@ export default function UserDetail({
               </span>
             </div>
           </div>
-        </div>
+        </Card>
 
-        {/* Activity Log Placeholder */}
-        <div className="bg-white rounded-lg border border-slate-200 p-6">
+        <Card className="p-6">
           <h2 className="text-lg font-semibold text-slate-900 mb-4">
             Log Aktivitas
           </h2>
@@ -156,8 +137,8 @@ export default function UserDetail({
               Log aktivitas user akan ditampilkan di sini.
             </p>
           </div>
-        </div>
+        </Card>
       </div>
-    </div>
+    </CrudLayout>
   );
 }

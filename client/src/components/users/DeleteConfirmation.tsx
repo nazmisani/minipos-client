@@ -1,4 +1,11 @@
 import { User, UserViewMode } from "./types";
+import {
+  CrudLayout,
+  BackButton,
+  PageHeader,
+  Card,
+  Button,
+} from "@/components/shared";
 
 interface DeleteConfirmationProps {
   user: User;
@@ -10,43 +17,22 @@ export default function DeleteConfirmation({
   onViewModeChange,
 }: DeleteConfirmationProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 lg:p-6">
+    <CrudLayout>
       <div className="max-w-2xl mx-auto">
-        {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <button
+          <div className="mb-4">
+            <BackButton
               onClick={() => onViewModeChange("list")}
-              className="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium transition-colors"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-              Kembali ke User Management
-            </button>
+              label="Kembali ke User Management"
+            />
           </div>
-          <div>
-            <h1 className="text-3xl lg:text-4xl font-bold text-slate-900">
-              Hapus User
-            </h1>
-            <p className="text-slate-600 mt-2">
-              Konfirmasi penghapusan data user dari sistem
-            </p>
-          </div>
+          <PageHeader
+            title="Hapus User"
+            subtitle="Konfirmasi penghapusan data user dari sistem"
+          />
         </div>
 
-        {/* Confirmation Card */}
-        <div className="bg-white rounded-lg border border-slate-200 p-8">
+        <Card className="p-8">
           <div className="text-center mb-8">
             <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <svg
@@ -92,25 +78,25 @@ export default function DeleteConfirmation({
           </div>
 
           <div className="flex gap-3 justify-end">
-            <button
+            <Button
+              variant="secondary"
               onClick={() => onViewModeChange("list")}
-              className="px-6 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 font-medium transition-colors"
             >
               Batal
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="danger"
               onClick={() => {
                 // TODO: Implement actual delete logic here
                 console.log("Deleting user:", user);
                 onViewModeChange("list");
               }}
-              className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors"
             >
               Ya, Hapus User
-            </button>
+            </Button>
           </div>
-        </div>
+        </Card>
       </div>
-    </div>
+    </CrudLayout>
   );
 }

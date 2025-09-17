@@ -1,11 +1,26 @@
 import { useState } from "react";
 import { User, UserFormData, UserViewMode } from "./types";
+import {
+  CrudLayout,
+  BackButton,
+  PageHeader,
+  Card,
+  Input,
+  Select,
+  Button,
+} from "@/components/shared";
 
 interface UserFormProps {
   mode: "add" | "edit";
   user?: User;
   onViewModeChange: (mode: UserViewMode) => void;
 }
+
+const roleOptions = [
+  { value: "staff", label: "Staff" },
+  { value: "manager", label: "Manager" },
+  { value: "admin", label: "Admin" },
+];
 
 export default function UserForm({
   mode,
@@ -39,127 +54,81 @@ export default function UserForm({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 lg:p-6">
+    <CrudLayout>
       <div className="max-w-3xl mx-auto">
-        {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <button
+          <div className="mb-4">
+            <BackButton
               onClick={() => onViewModeChange("list")}
-              className="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium transition-colors"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-              Kembali ke User Management
-            </button>
+              label="Kembali ke User Management"
+            />
           </div>
-          <div>
-            <h1 className="text-3xl lg:text-4xl font-bold text-slate-900">
-              {mode === "edit" ? "Edit User" : "Tambah User"}
-            </h1>
-            <p className="text-slate-600 mt-2">
-              {mode === "edit"
+          <PageHeader
+            title={mode === "edit" ? "Edit User" : "Tambah User"}
+            subtitle={
+              mode === "edit"
                 ? "Ubah informasi user yang dipilih"
-                : "Tambahkan user baru ke dalam sistem"}
-            </p>
-          </div>
+                : "Tambahkan user baru ke dalam sistem"
+            }
+          />
         </div>
 
-        {/* Form */}
-        <div className="bg-white rounded-lg border border-slate-200 p-6">
+        <Card className="p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Nama User *
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  required
-                />
-              </div>
+              <Input
+                label="Nama User"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                required
+              />
 
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  placeholder="user@email.com"
-                  required
-                />
-              </div>
+              <Input
+                label="Email"
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="user@email.com"
+                required
+              />
 
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Role
-                </label>
-                <select
-                  name="role"
-                  value={formData.role}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                >
-                  <option value="staff">Staff</option>
-                  <option value="manager">Manager</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </div>
+              <Select
+                label="Role"
+                name="role"
+                value={formData.role}
+                onChange={handleInputChange}
+                options={roleOptions}
+              />
 
               {mode === "add" && (
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Password *
-                  </label>
-                  <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    required
-                  />
-                </div>
+                <Input
+                  label="Password"
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  required
+                />
               )}
             </div>
 
             <div className="flex gap-3 pt-4">
-              <button
-                type="submit"
-                className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
-              >
+              <Button type="submit">
                 {mode === "edit" ? "Simpan Perubahan" : "Tambah User"}
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
+                variant="secondary"
                 onClick={() => onViewModeChange("list")}
-                className="bg-slate-200 hover:bg-slate-300 text-slate-700 px-6 py-2 rounded-lg font-medium transition-colors"
               >
                 Batal
-              </button>
+              </Button>
             </div>
           </form>
-        </div>
+        </Card>
       </div>
-    </div>
+    </CrudLayout>
   );
 }
