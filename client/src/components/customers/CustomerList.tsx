@@ -2,6 +2,13 @@
 
 import { Customer } from "./types";
 import CustomerTable from "./CustomerTable";
+import {
+  CrudLayout,
+  PageHeader,
+  SearchBar,
+  Button,
+  Card,
+} from "@/components/shared";
 
 interface CustomerListProps {
   onViewDetail: (customer: Customer) => void;
@@ -76,47 +83,23 @@ export default function CustomerList({
   onAdd,
 }: CustomerListProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 lg:p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl lg:text-4xl font-bold text-slate-900">
-              Customers
-            </h1>
-            <p className="text-slate-600 mt-2">
-              Kelola data customer dan lihat riwayat transaksi mereka.
-            </p>
-          </div>
-          <button
-            onClick={onAdd}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-          >
-            Tambah Customer
-          </button>
-        </div>
+    <CrudLayout>
+      <PageHeader
+        title="Customer Management"
+        subtitle="Kelola data customer dan lihat riwayat transaksi mereka."
+        action={<Button onClick={onAdd}>Tambah Customer</Button>}
+      />
 
-        {/* Search & Filter */}
-        <div className="flex gap-4 mb-6">
-          <div className="flex-1">
-            <input
-              type="text"
-              placeholder="Cari customer..."
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            />
-          </div>
-        </div>
+      <SearchBar placeholder="Cari customer..." />
 
-        {/* Customer Table */}
-        <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-          <CustomerTable
-            customers={dummyCustomers}
-            onEdit={onEdit}
-            onDelete={onDelete}
-            onViewDetail={onViewDetail}
-          />
-        </div>
-      </div>
-    </div>
+      <Card>
+        <CustomerTable
+          customers={dummyCustomers}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          onViewDetail={onViewDetail}
+        />
+      </Card>
+    </CrudLayout>
   );
 }
