@@ -41,42 +41,8 @@ export default function DashboardPage() {
   }, []);
 
   const fetchDashboardData = async () => {
-    try {
-      // Simulasi API calls untuk dashboard baru
-      const [summaryRes, salesRes, productsRes, profileRes] = await Promise.all(
-        [
-          fetch("/api/dashboard/summary"),
-          fetch("/api/reports/sales?days=7"),
-          fetch("/api/reports/products/top?limit=5"),
-          fetch("/api/auth/profile"),
-        ]
-      );
-
-      // TODO: Replace with actual API responses
-      const mockData = {
-        summary: {
-          totalProducts: 0,
-          totalUsers: 0,
-          todayTransactions: 0,
-          todayRevenue: 0,
-        },
-        salesData: [],
-        productData: [],
-        userProfile: {
-          name: "",
-          role: "",
-          lastLogin: "",
-        },
-      };
-
-      setDashboardData({
-        ...mockData,
-        loading: false,
-      });
-    } catch (error) {
-      console.error("Error fetching dashboard data:", error);
-      setDashboardData((prev) => ({ ...prev, loading: false }));
-    }
+    // TODO: Implement actual API calls
+    setDashboardData((prev) => ({ ...prev, loading: false }));
   };
 
   if (dashboardData.loading) {
