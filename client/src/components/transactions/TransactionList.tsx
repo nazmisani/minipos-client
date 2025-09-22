@@ -1,4 +1,3 @@
-import { transactions } from "./data";
 import { Transaction } from "./types";
 import TransactionTable from "./TransactionTable";
 import {

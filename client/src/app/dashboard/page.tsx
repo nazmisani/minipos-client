@@ -6,46 +6,59 @@ import SalesChart from "@/components/dashboard/SalesChart";
 import ProductChart from "@/components/dashboard/ProductChart";
 import QuickActions from "@/components/dashboard/QuickActions";
 import UserProfile from "@/components/dashboard/UserProfile";
+import apiClient from "@/service/apiClient";
+import Cookies from "js-cookie";
 
 export default function DashboardPage() {
-  const [dashboardData, setDashboardData] = useState<{
-    summary: {
-      totalProducts: number;
-      totalUsers: number;
-      todayTransactions: number;
-      todayRevenue: number;
-    };
-    salesData: Array<{ date: string; amount: number }>;
-    productData: Array<{ name: string; sold: number; revenue: number }>;
-    userProfile: {
-      name: string;
-      role: string;
-      lastLogin: string;
-    } | null;
-    loading: boolean;
-  }>({
-    summary: {
-      totalProducts: 0,
-      totalUsers: 0,
-      todayTransactions: 0,
-      todayRevenue: 0,
-    },
-    salesData: [],
-    productData: [],
-    userProfile: null,
-    loading: true,
+  // Loading state - simple boolean
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Summary data - simple flat object
+  const [summary, setSummary] = useState({
+    totalProducts: 0,
+    totalUsers: 0,
+    todayTransactions: 0,
+    todayRevenue: 0,
   });
 
+  // Charts data - simple arrays
+  const [salesData, setSalesData] = useState<
+    Array<{ date: string; amount: number }>
+  >([]);
+  const [productData, setProductData] = useState<
+    Array<{ name: string; sold: number; revenue: number }>
+  >([]);
+
+  // User profile - simple object or null
+  const [userProfile, setUserProfile] = useState<{
+    name: string;
+    role: string;
+    lastLogin: string;
+  } | null>(null);
+
+  async function fetchTotalProducts() {
+    try {
+      const { data } = await apiClient.get("/products/total");
+
+      setSummary((prev) => ({
+        ...prev,
+        totalProducts: data?.data?.totalProducts || 0,
+      }));
+
+      setIsLoading(false);
+    } catch (error) {
+      console.log("API Error:", error);
+      setIsLoading(false);
+    }
+  }
+
   useEffect(() => {
-    fetchDashboardData();
+    const token = Cookies.get("token");
+    console.log("Token dari cookie:", token);
+    fetchTotalProducts();
   }, []);
 
-  const fetchDashboardData = async () => {
-    // TODO: Implement actual API calls
-    setDashboardData((prev) => ({ ...prev, loading: false }));
-  };
-
-  if (dashboardData.loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 lg:p-6">
         <div className="max-w-7xl mx-auto">
@@ -96,7 +109,7 @@ export default function DashboardPage() {
               Selamat datang kembali! Berikut ringkasan toko Anda hari ini.
             </p>
           </div>
-          <UserProfile user={dashboardData.userProfile} />
+          <UserProfile user={userProfile} />
         </div>
 
         {/* Summary Cards */}
@@ -104,7 +117,7 @@ export default function DashboardPage() {
           <h2 className="text-lg font-semibold text-slate-900 mb-6">
             Ringkasan Hari Ini
           </h2>
-          <SummaryCards data={dashboardData.summary} />
+          <SummaryCards data={summary} />
         </div>
 
         {/* Charts Grid - 2x2 Layout */}
@@ -115,7 +128,7 @@ export default function DashboardPage() {
             <h2 className="text-lg font-semibold text-slate-900">
               Laporan Penjualan
             </h2>
-            <SalesChart data={dashboardData.salesData} />
+            <SalesChart data={salesData} />
           </div>
 
           {/* Product Chart - Produk Terlaris */}
@@ -123,7 +136,7 @@ export default function DashboardPage() {
             <h2 className="text-lg font-semibold text-slate-900">
               Produk Terlaris
             </h2>
-            <ProductChart data={dashboardData.productData} />
+            <ProductChart data={productData} />
           </div>
         </div>
 

@@ -1,18 +1,41 @@
 "use client";
 
 import { useState } from "react";
+import { baseUrl } from "@/service/api";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    try {
+      const { data } = await axios.post(
+        `${baseUrl}/auth/login`,
+        {
+          email,
+          password,
+        },
+        { withCredentials: true }
+      );
+      console.log(data.token);
+
+      localStorage.setItem("token", data.token);
+
+      if (data.token) {
+        router.push("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <div className="h-screen overflow-hidden grid grid-cols-1 lg:grid-cols-2 bg-gradient-to-br from-slate-50 to-slate-100">
-      {/* LEFT: Hero + Illustration */}
       <section className="relative hidden lg:flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
         <div className="w-full max-w-3xl px-8 xl:px-12">
           <div className="mb-6">
