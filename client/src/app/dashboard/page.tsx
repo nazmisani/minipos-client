@@ -52,10 +52,27 @@ export default function DashboardPage() {
     }
   }
 
+  async function fetchTotalStaff() {
+    try {
+      const { data } = await apiClient.get("/users/total");
+
+      setSummary((prev) => ({
+        ...prev,
+        totalUsers: data?.data?.totalUsers || 0,
+      }));
+
+      setIsLoading(false);
+    } catch (error) {
+      console.log("API Error:", error);
+      setIsLoading(false);
+    }
+  }
+
   useEffect(() => {
     const token = Cookies.get("token");
     console.log("Token dari cookie:", token);
     fetchTotalProducts();
+    fetchTotalStaff();
   }, []);
 
   if (isLoading) {
