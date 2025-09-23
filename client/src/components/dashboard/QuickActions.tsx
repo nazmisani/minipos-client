@@ -1,29 +1,29 @@
 export default function QuickActions() {
   const actions = [
     {
-      title: "Tambah Produk",
-      description: "Tambahkan produk ke inventori",
+      title: "Add Product",
+      description: "Add product to inventory",
       icon: "📦",
       color: "bg-blue-500 hover:bg-blue-600",
       href: "/products/new",
     },
     {
-      title: "Transaksi Baru",
-      description: "Proses penjualan baru",
+      title: "New Transaction",
+      description: "Process new sale",
       icon: "💳",
       color: "bg-emerald-500 hover:bg-emerald-600",
       href: "/transactions/new",
     },
     {
-      title: "Lihat Laporan",
-      description: "Cek analitik penjualan",
+      title: "View Reports",
+      description: "Check sales analytics",
       icon: "📊",
       color: "bg-purple-500 hover:bg-purple-600",
       href: "/reports",
     },
     {
-      title: "Kelola Staff",
-      description: "Tambah atau edit anggota tim",
+      title: "Manage Staff",
+      description: "Add or edit team members",
       icon: "👥",
       color: "bg-orange-500 hover:bg-orange-600",
       href: "/users",
@@ -33,7 +33,7 @@ export default function QuickActions() {
   return (
     <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-lg">
       <div className="mb-6">
-        <p className="text-slate-600 text-sm">Akses cepat ke fitur utama</p>
+        <p className="text-slate-600 text-sm">Quick access to main features</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -42,7 +42,7 @@ export default function QuickActions() {
             key={index}
             className={`${action.color} text-white p-6 rounded-xl transition-all duration-300 text-left group hover:scale-105 hover:shadow-xl`}
             onClick={() => {
-              // Untuk development, log href. Nanti bisa diganti dengan router.push
+              // For development, log href. Can be replaced with router.push later
               console.log(`Navigate to: ${action.href}`);
             }}
           >

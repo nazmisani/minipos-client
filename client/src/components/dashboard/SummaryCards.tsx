@@ -29,7 +29,7 @@ export default function SummaryCards({ data }: SummaryCardsProps) {
 
   const cards = [
     {
-      title: "Total Produk",
+      title: "Total Products",
       value: data.totalProducts.toLocaleString(),
       icon: "📦",
       color: "bg-blue-500",
@@ -45,7 +45,7 @@ export default function SummaryCards({ data }: SummaryCardsProps) {
       borderColor: "border-green-200",
     },
     {
-      title: "Transaksi Hari Ini",
+      title: "Today's Transactions",
       value: data.todayTransactions.toLocaleString(),
       icon: "💳",
       color: "bg-purple-500",
@@ -53,7 +53,7 @@ export default function SummaryCards({ data }: SummaryCardsProps) {
       borderColor: "border-purple-200",
     },
     {
-      title: "Pendapatan Hari Ini",
+      title: "Today's Revenue",
       value: formatCurrency(data.todayRevenue),
       icon: "💰",
       color: "bg-emerald-500",

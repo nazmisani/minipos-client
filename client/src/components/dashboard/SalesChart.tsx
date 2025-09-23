@@ -45,7 +45,7 @@ export default function SalesChart({ data }: SalesChartProps) {
     <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-md hover:shadow-lg transition-shadow duration-300">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <p className="text-slate-600 text-sm">Revenue 7 hari terakhir</p>
+          <p className="text-slate-600 text-sm">Revenue for the last 7 days</p>
         </div>
         <div className="flex items-center space-x-2">
           <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>

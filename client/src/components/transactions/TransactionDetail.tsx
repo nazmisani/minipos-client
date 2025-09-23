@@ -29,8 +29,8 @@ export default function TransactionDetail({
             <BackButton onClick={onBack} />
           </div>
           <PageHeader
-            title="Detail Transaksi"
-            subtitle={`Informasi lengkap transaksi #${transaction.id}`}
+            title="Transaction Detail"
+            subtitle={`Complete information for transaction #${transaction.id}`}
           />
         </div>
 
@@ -38,7 +38,7 @@ export default function TransactionDetail({
           {/* Transaction Info */}
           <Card className="p-6">
             <h3 className="text-lg font-semibold text-slate-900 mb-4">
-              Informasi Transaksi
+              Transaction Information
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>

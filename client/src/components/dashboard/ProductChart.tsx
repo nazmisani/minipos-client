@@ -33,11 +33,13 @@ export default function ProductChart({ data }: ProductChartProps) {
     <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-md hover:shadow-lg transition-shadow duration-300">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <p className="text-slate-600 text-sm">5 produk terlaris minggu ini</p>
+          <p className="text-slate-600 text-sm">
+            Top 5 best selling products this week
+          </p>
         </div>
         <div className="flex items-center space-x-2">
           <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-          <span className="text-sm text-slate-600 font-medium">Terjual</span>
+          <span className="text-sm text-slate-600 font-medium">Sold</span>
         </div>
       </div>
 
@@ -68,9 +70,9 @@ export default function ProductChart({ data }: ProductChartProps) {
               }}
               formatter={(value: number, name: string) => [
                 name === "sold" ? `${value} pcs` : formatCurrency(value),
-                name === "sold" ? "Terjual" : "Revenue",
+                name === "sold" ? "Sold" : "Revenue",
               ]}
-              labelFormatter={(label: any) => `Produk: ${label}`}
+              labelFormatter={(label: any) => `Product: ${label}`}
             />
             <Bar
               dataKey="sold"

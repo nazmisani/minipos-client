@@ -61,7 +61,7 @@ export default function CustomerDetail({
               Detail Customer
             </h1>
             <p className="text-slate-600 mt-2">
-              Informasi lengkap dan riwayat transaksi customer
+              Complete information and customer transaction history
             </p>
           </div>
         </div>
@@ -111,7 +111,7 @@ export default function CustomerDetail({
               <div className="bg-white rounded-lg shadow p-4">
                 <div className="flex justify-between items-center">
                   <div>
-                    <p className="text-sm text-gray-500">Total Transaksi</p>
+                    <p className="text-sm text-gray-500">Total Transactions</p>
                     <p className="text-xl font-bold text-blue-600">
                       {customer.totalTransactions}
                     </p>
@@ -122,7 +122,7 @@ export default function CustomerDetail({
               <div className="bg-white rounded-lg shadow p-4">
                 <div className="flex justify-between items-center">
                   <div>
-                    <p className="text-sm text-gray-500">Total Pengeluaran</p>
+                    <p className="text-sm text-gray-500">Total Spending</p>
                     <p className="text-xl font-bold text-green-600">
                       {formatCurrency(customer.totalSpent)}
                     </p>
@@ -136,7 +136,7 @@ export default function CustomerDetail({
           <div className="lg:col-span-2">
             <div className="bg-white rounded-lg shadow">
               <div className="p-4 border-b border-gray-200">
-                <h3 className="text-lg font-semibold">Riwayat Transaksi</h3>
+                <h3 className="text-lg font-semibold">Transaction History</h3>
               </div>
               <div className="p-4">
                 <div className="space-y-3">
@@ -173,7 +173,7 @@ export default function CustomerDetail({
 
                 {dummyTransactions.length === 0 && (
                   <div className="text-center py-8">
-                    <p className="text-gray-500">Belum ada riwayat transaksi</p>
+                    <p className="text-gray-500">No transaction history yet</p>
                   </div>
                 )}
               </div>

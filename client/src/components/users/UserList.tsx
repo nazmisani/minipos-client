@@ -23,13 +23,13 @@ export default function UserList({
     <CrudLayout>
       <PageHeader
         title="User Management"
-        subtitle="Kelola pengguna dan hak akses sistem."
+        subtitle="Manage users and system access rights."
         action={
-          <Button onClick={() => onViewModeChange("add")}>Tambah User</Button>
+          <Button onClick={() => onViewModeChange("add")}>Add User</Button>
         }
       />
 
-      <SearchBar placeholder="Cari user..." />
+      <SearchBar placeholder="Search users..." />
 
       <Card>
         <UserTable

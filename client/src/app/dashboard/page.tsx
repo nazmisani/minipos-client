@@ -92,7 +92,7 @@ export default function DashboardPage() {
       }
     } catch (error) {
       console.log("User Profile API Error:", error);
-      // Set fallback data jika API gagal
+      // Set fallback data if API fails
       console.log("Setting fallback user profile data");
       setUserProfile({
         name: "Demo User",
@@ -104,7 +104,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const token = Cookies.get("token");
-    console.log("Token dari cookie:", token);
+    console.log("Token from cookie:", token);
 
     // Always set user profile fallback data
     setUserProfile({
@@ -113,7 +113,7 @@ export default function DashboardPage() {
       lastLogin: new Date().toISOString(),
     });
 
-    // Set demo token jika belum ada (untuk testing UserProfile)
+    // Set demo token if not exists (for UserProfile testing)
     if (!token) {
       console.log("No token found, setting demo token for UserProfile testing");
       Cookies.set("token", "demo-token-for-testing", { expires: 1 });
@@ -149,7 +149,7 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Charts Section Skeleton - 2 kolom */}
+            {/* Charts Section Skeleton - 2 columns */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
                 <div className="h-6 bg-slate-200 rounded w-40 mb-4"></div>
@@ -176,7 +176,7 @@ export default function DashboardPage() {
               Dashboard
             </h1>
             <p className="text-slate-600 mt-2">
-              Selamat datang kembali! Berikut ringkasan toko Anda hari ini.
+              Welcome back! Here's a summary of your store today.
             </p>
           </div>
           <UserProfile user={userProfile} />
@@ -185,26 +185,26 @@ export default function DashboardPage() {
         {/* Summary Cards */}
         <div className="mb-6">
           <h2 className="text-lg font-semibold text-slate-900 mb-6">
-            Ringkasan Hari Ini
+            Today's Summary
           </h2>
           <SummaryCards data={summary} />
         </div>
 
         {/* Charts Grid - 2x2 Layout */}
-        {/* Charts Section - 2 kolom (desktop) atau 1 kolom (mobile) */}
+        {/* Charts Section - 2 columns (desktop) or 1 column (mobile) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          {/* Sales Chart - Laporan Penjualan */}
+          {/* Sales Chart - Sales Report */}
           <div className="space-y-6">
             <h2 className="text-lg font-semibold text-slate-900">
-              Laporan Penjualan
+              Sales Report
             </h2>
             <SalesChart data={salesData} />
           </div>
 
-          {/* Product Chart - Produk Terlaris */}
+          {/* Product Chart - Best Selling Products */}
           <div className="space-y-6">
             <h2 className="text-lg font-semibold text-slate-900">
-              Produk Terlaris
+              Best Selling Products
             </h2>
             <ProductChart data={productData} />
           </div>
@@ -213,7 +213,7 @@ export default function DashboardPage() {
         {/* Quick Actions */}
         <div className="mb-6">
           <h2 className="text-lg font-semibold text-slate-900 mb-6">
-            Aksi Cepat
+            Quick Actions
           </h2>
           <QuickActions />
         </div>

@@ -60,15 +60,15 @@ export default function UserForm({
           <div className="mb-4">
             <BackButton
               onClick={() => onViewModeChange("list")}
-              label="Kembali ke User Management"
+              label="Back to User Management"
             />
           </div>
           <PageHeader
-            title={mode === "edit" ? "Edit User" : "Tambah User"}
+            title={mode === "edit" ? "Edit User" : "Add User"}
             subtitle={
               mode === "edit"
-                ? "Ubah informasi user yang dipilih"
-                : "Tambahkan user baru ke dalam sistem"
+                ? "Edit selected user information"
+                : "Add new user to the system"
             }
           />
         </div>
@@ -116,7 +116,7 @@ export default function UserForm({
 
             <div className="flex gap-3 pt-4">
               <Button type="submit">
-                {mode === "edit" ? "Simpan Perubahan" : "Tambah User"}
+                {mode === "edit" ? "Save Changes" : "Add User"}
               </Button>
               <Button
                 type="button"

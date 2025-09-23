@@ -29,8 +29,8 @@ export default function TransactionForm({
             <BackButton onClick={onBack} />
           </div>
           <PageHeader
-            title={isEdit ? "Edit Transaction" : "Tambah Transaksi"}
-            subtitle="Kelola data transaksi penjualan."
+            title={isEdit ? "Edit Transaction" : "Add Transaction"}
+            subtitle="Manage sales transaction data."
           />
         </div>
 
@@ -55,15 +55,15 @@ export default function TransactionForm({
               label="Total"
               type="number"
               defaultValue={transaction?.total?.toString() || ""}
-              placeholder="Masukkan total transaksi"
+              placeholder="Enter transaction total"
             />
 
             <div className="flex gap-3 pt-4">
               <Button type="button" onClick={onSave}>
-                {isEdit ? "Update" : "Simpan"}
+                {isEdit ? "Update" : "Save"}
               </Button>
               <Button variant="secondary" type="button" onClick={onBack}>
-                Batal
+                Cancel
               </Button>
             </div>
           </form>
