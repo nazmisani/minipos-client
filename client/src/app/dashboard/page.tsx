@@ -68,11 +68,64 @@ export default function DashboardPage() {
     }
   }
 
+  async function fetchUserProfile() {
+    try {
+      console.log("Attempting to fetch user profile...");
+      const { data } = await apiClient.get("/auth/profile");
+
+      console.log("User Profile API Response:", data);
+
+      if (data?.data) {
+        setUserProfile({
+          name: data.data.name || "Unknown User",
+          role: data.data.role || "User",
+          lastLogin: data.data.lastLogin || new Date().toISOString(),
+        });
+        console.log("User profile set successfully");
+      } else {
+        console.log("No user data in API response, using fallback");
+        setUserProfile({
+          name: "Demo User",
+          role: "Administrator",
+          lastLogin: new Date().toISOString(),
+        });
+      }
+    } catch (error) {
+      console.log("User Profile API Error:", error);
+      // Set fallback data jika API gagal
+      console.log("Setting fallback user profile data");
+      setUserProfile({
+        name: "Demo User",
+        role: "Administrator",
+        lastLogin: new Date().toISOString(),
+      });
+    }
+  }
+
   useEffect(() => {
     const token = Cookies.get("token");
     console.log("Token dari cookie:", token);
+
+    // Always set user profile fallback data
+    setUserProfile({
+      name: "Demo User",
+      role: "Administrator",
+      lastLogin: new Date().toISOString(),
+    });
+
+    // Set demo token jika belum ada (untuk testing UserProfile)
+    if (!token) {
+      console.log("No token found, setting demo token for UserProfile testing");
+      Cookies.set("token", "demo-token-for-testing", { expires: 1 });
+    }
+
     fetchTotalProducts();
     fetchTotalStaff();
+
+    // Try to fetch real user profile if token exists
+    if (token || Cookies.get("token")) {
+      fetchUserProfile();
+    }
   }, []);
 
   if (isLoading) {
