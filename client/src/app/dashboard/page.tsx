@@ -21,15 +21,14 @@ export default function DashboardPage() {
     todayRevenue: 0,
   });
 
-  // Charts data - simple arrays
   const [salesData, setSalesData] = useState<
     Array<{ date: string; amount: number }>
   >([]);
+
   const [productData, setProductData] = useState<
     Array<{ name: string; sold: number; revenue: number }>
   >([]);
 
-  // User profile - simple object or null
   const [userProfile, setUserProfile] = useState<{
     name: string;
     role: string;
@@ -92,7 +91,6 @@ export default function DashboardPage() {
       }
     } catch (error) {
       console.log("User Profile API Error:", error);
-      // Set fallback data if API fails
       console.log("Setting fallback user profile data");
       setUserProfile({
         name: "Demo User",
@@ -102,30 +100,34 @@ export default function DashboardPage() {
     }
   }
 
-  useEffect(() => {
-    const token = Cookies.get("token");
-    console.log("Token from cookie:", token);
+  async function fetchTodayTrans() {
+    try {
+      const { data } = await apiClient.get("/transactions/today");
 
-    // Always set user profile fallback data
+      setSummary((prev) => ({
+        ...prev,
+        todayTransactions: data?.data?.summary?.totalCount || 0,
+      }));
+
+      console.log("dari trans", data);
+
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
     setUserProfile({
       name: "Demo User",
       role: "Administrator",
       lastLogin: new Date().toISOString(),
     });
 
-    // Set demo token if not exists (for UserProfile testing)
-    if (!token) {
-      console.log("No token found, setting demo token for UserProfile testing");
-      Cookies.set("token", "demo-token-for-testing", { expires: 1 });
-    }
+    fetchTodayTrans();
 
     fetchTotalProducts();
     fetchTotalStaff();
-
-    // Try to fetch real user profile if token exists
-    if (token || Cookies.get("token")) {
-      fetchUserProfile();
-    }
   }, []);
 
   if (isLoading) {
