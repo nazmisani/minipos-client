@@ -7,13 +7,9 @@ import ProductChart from "@/components/dashboard/ProductChart";
 import QuickActions from "@/components/dashboard/QuickActions";
 import UserProfile from "@/components/dashboard/UserProfile";
 import apiClient from "@/service/apiClient";
-import Cookies from "js-cookie";
 
 export default function DashboardPage() {
-  // Loading state - simple boolean
   const [isLoading, setIsLoading] = useState(true);
-
-  // Summary data - simple flat object
   const [summary, setSummary] = useState({
     totalProducts: 0,
     totalUsers: 0,
