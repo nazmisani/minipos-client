@@ -109,7 +109,20 @@ export default function DashboardPage() {
         todayTransactions: data?.data?.summary?.totalCount || 0,
       }));
 
-      console.log("dari trans", data);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function fetchTodayRev() {
+    try {
+      const { data } = await apiClient.get("/transactions/today");
+
+      setSummary((prev) => ({
+        ...prev,
+        todayRevenue: data?.data?.summary?.totalAmount || 0,
+      }));
 
       setIsLoading(false);
     } catch (error) {
@@ -125,7 +138,7 @@ export default function DashboardPage() {
     });
 
     fetchTodayTrans();
-
+    fetchTodayRev();
     fetchTotalProducts();
     fetchTotalStaff();
   }, []);
