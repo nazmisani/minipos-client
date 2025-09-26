@@ -64,30 +64,17 @@ export default function DashboardPage() {
 
   async function fetchUserProfile() {
     try {
-      console.log("Attempting to fetch user profile...");
       const { data } = await apiClient.get("/auth/profile");
-
-      console.log("User Profile API Response:", data);
-
-      if (data?.data) {
-        setUserProfile({
-          name: data.data.name || "Unknown User",
-          role: data.data.role || "User",
-        });
-        console.log("User profile set successfully");
-      } else {
-        console.log("No user data in API response, using fallback");
-        setUserProfile({
-          name: "Demo User",
-          role: "Administrator",
-        });
-      }
-    } catch (error) {
-      console.log("User Profile API Error:", error);
-      console.log("Setting fallback user profile data");
       setUserProfile({
-        name: "Demo User",
-        role: "Administrator",
+        name: data.user.name || "Unknown User",
+        role: data.user.role || "User",
+      });
+    } catch (error) {
+      console.log(error);
+      // Set fallback data for demo purposes
+      setUserProfile({
+        name: "John Doe",
+        role: "admin",
       });
     }
   }
@@ -123,11 +110,7 @@ export default function DashboardPage() {
   }
 
   useEffect(() => {
-    setUserProfile({
-      name: "Demo User",
-      role: "Administrator",
-    });
-
+    fetchUserProfile();
     fetchTodayTrans();
     fetchTodayRev();
     fetchTotalProducts();
