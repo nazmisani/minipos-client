@@ -10,20 +10,13 @@ import apiClient from "@/service/apiClient";
 
 export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
+
   const [summary, setSummary] = useState({
     totalProducts: 0,
     totalUsers: 0,
     todayTransactions: 0,
     todayRevenue: 0,
   });
-
-  const [salesData, setSalesData] = useState<
-    Array<{ date: string; amount: number }>
-  >([]);
-
-  const [productData, setProductData] = useState<
-    Array<{ name: string; sold: number; revenue: number }>
-  >([]);
 
   const [userProfile, setUserProfile] = useState<{
     name: string;
@@ -138,15 +131,17 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Charts Section Skeleton - 2 columns */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div>
-                <div className="h-6 bg-slate-200 rounded w-40 mb-4"></div>
-                <div className="h-80 bg-slate-200 rounded-xl"></div>
+            {/* Charts Section Skeleton */}
+            <div className="mb-8">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+                <div className="h-7 bg-slate-200 rounded-lg w-48 mb-2 sm:mb-0"></div>
+                <div className="h-4 bg-slate-200 rounded w-64"></div>
               </div>
-              <div>
-                <div className="h-6 bg-slate-200 rounded w-36 mb-4"></div>
-                <div className="h-80 bg-slate-200 rounded-xl"></div>
+
+              {/* Charts Grid Skeleton */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="bg-slate-200 rounded-xl h-96"></div>
+                <div className="bg-slate-200 rounded-xl h-96"></div>
               </div>
             </div>
           </div>
@@ -179,23 +174,28 @@ export default function DashboardPage() {
           <SummaryCards data={summary} />
         </div>
 
-        {/* Charts Grid - 2x2 Layout */}
-        {/* Charts Section - 2 columns (desktop) or 1 column (mobile) */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          {/* Sales Chart - Sales Report */}
-          <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-slate-900">
-              Sales Report
+        {/* Charts Section */}
+        <div className="mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+            <h2 className="text-xl font-bold text-slate-900 mb-2 sm:mb-0">
+              Analytics Overview
             </h2>
-            <SalesChart data={salesData} />
+            <p className="text-sm text-slate-500">
+              Real-time insights and performance metrics
+            </p>
           </div>
 
-          {/* Product Chart - Best Selling Products */}
-          <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-slate-900">
-              Best Selling Products
-            </h2>
-            <ProductChart data={productData} />
+          {/* Charts Grid - Responsive Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Sales Chart Container */}
+            <div className="w-full">
+              <SalesChart />
+            </div>
+
+            {/* Product Chart Container */}
+            <div className="w-full">
+              <ProductChart />
+            </div>
           </div>
         </div>
 
