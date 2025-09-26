@@ -1,7 +1,6 @@
 interface User {
   name: string;
   role: string;
-  lastLogin: string;
 }
 
 interface UserProfileProps {
@@ -10,17 +9,6 @@ interface UserProfileProps {
 
 export default function UserProfile({ user }: UserProfileProps) {
   if (!user) return null;
-
-  const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString("id-ID", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
 
   const getRoleColor = (role: string) => {
     switch (role.toLowerCase()) {
@@ -54,9 +42,6 @@ export default function UserProfile({ user }: UserProfileProps) {
               {user.role}
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
-            Last login: {formatDate(user.lastLogin)}
-          </p>
         </div>
       </div>
     </div>

@@ -28,7 +28,6 @@ export default function DashboardPage() {
   const [userProfile, setUserProfile] = useState<{
     name: string;
     role: string;
-    lastLogin: string;
   } | null>(null);
 
   async function fetchTotalProducts() {
@@ -74,7 +73,6 @@ export default function DashboardPage() {
         setUserProfile({
           name: data.data.name || "Unknown User",
           role: data.data.role || "User",
-          lastLogin: data.data.lastLogin || new Date().toISOString(),
         });
         console.log("User profile set successfully");
       } else {
@@ -82,7 +80,6 @@ export default function DashboardPage() {
         setUserProfile({
           name: "Demo User",
           role: "Administrator",
-          lastLogin: new Date().toISOString(),
         });
       }
     } catch (error) {
@@ -91,7 +88,6 @@ export default function DashboardPage() {
       setUserProfile({
         name: "Demo User",
         role: "Administrator",
-        lastLogin: new Date().toISOString(),
       });
     }
   }
@@ -130,7 +126,6 @@ export default function DashboardPage() {
     setUserProfile({
       name: "Demo User",
       role: "Administrator",
-      lastLogin: new Date().toISOString(),
     });
 
     fetchTodayTrans();
