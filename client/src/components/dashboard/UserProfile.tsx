@@ -91,14 +91,6 @@ export default function UserProfile({ user }: UserProfileProps) {
             </span>
           </div>
         </div>
-
-        {/* Status indicator */}
-        <div className="flex flex-col items-center">
-          <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse shadow-lg"></div>
-          <span className="text-xs text-slate-500 mt-1 font-medium">
-            Online
-          </span>
-        </div>
       </div>
     </div>
   );
