@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import apiClient from "@/service/apiClient";
 
 // Optimized Icons - Only what we need
 const DashboardIcon = () => (
@@ -148,9 +149,14 @@ export default function Sidebar() {
     router.push(path);
   };
 
-  const handleLogout = () => {
-    router.push("/login");
-  };
+  async function handleLogout() {
+    try {
+      await apiClient.post("/auth/logout");
+      handleNavigation("/");
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div

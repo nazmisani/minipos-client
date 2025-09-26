@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { baseUrl } from "@/service/api";
-import axios from "axios";
 import { useRouter } from "next/navigation";
+import apiClient from "@/service/apiClient";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -12,16 +11,11 @@ export default function LoginPage() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
-      const { data } = await axios.post(
-        `${baseUrl}/auth/login`,
-        {
-          email,
-          password,
-        },
-        { withCredentials: true }
-      );
+      const { data } = await apiClient.post(`/auth/login`, {
+        email,
+        password,
+      });
 
       if (data.token) {
         router.push("/");
