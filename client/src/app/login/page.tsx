@@ -22,9 +22,6 @@ export default function LoginPage() {
         },
         { withCredentials: true }
       );
-      console.log(data.token);
-
-      localStorage.setItem("token", data.token);
 
       if (data.token) {
         router.push("/");
