@@ -6,6 +6,7 @@ import SalesChart from "@/components/dashboard/SalesChart";
 import ProductChart from "@/components/dashboard/ProductChart";
 import QuickActions from "@/components/dashboard/QuickActions";
 import UserProfile from "@/components/dashboard/UserProfile";
+import CashierHelpers from "@/components/dashboard/CashierHelpers";
 import apiClient from "@/service/apiClient";
 
 export default function DashboardPage() {
@@ -131,14 +132,14 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Charts Section Skeleton */}
+            {/* Content Section Skeleton */}
             <div className="mb-8">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
                 <div className="h-7 bg-slate-200 rounded-lg w-48 mb-2 sm:mb-0"></div>
                 <div className="h-4 bg-slate-200 rounded w-64"></div>
               </div>
 
-              {/* Charts Grid Skeleton */}
+              {/* Generic Grid Skeleton */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="bg-slate-200 rounded-xl h-96"></div>
                 <div className="bg-slate-200 rounded-xl h-96"></div>
@@ -174,37 +175,54 @@ export default function DashboardPage() {
           <SummaryCards data={summary} />
         </div>
 
-        {/* Charts Section */}
-        <div className="mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-            <h2 className="text-xl font-bold text-slate-900 mb-2 sm:mb-0">
-              Analytics Overview
-            </h2>
-            <p className="text-sm text-slate-500">
-              Real-time insights and performance metrics
-            </p>
-          </div>
-
-          {/* Charts Grid - Responsive Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Sales Chart Container */}
-            <div className="w-full">
-              <SalesChart />
+        {/* Conditional Content Based on Role */}
+        {userProfile?.role?.toLowerCase() === "cashier" ? (
+          // Cashier-specific content
+          <div className="mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+              <h2 className="text-xl font-bold text-slate-900 mb-2 sm:mb-0">
+                Work Overview
+              </h2>
+              <p className="text-sm text-slate-500">
+                Recent transactions and inventory alerts
+              </p>
             </div>
 
-            {/* Product Chart Container */}
-            <div className="w-full">
-              <ProductChart />
+            <CashierHelpers />
+          </div>
+        ) : (
+          // Admin & Manager analytics content
+          <div className="mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+              <h2 className="text-xl font-bold text-slate-900 mb-2 sm:mb-0">
+                Analytics Overview
+              </h2>
+              <p className="text-sm text-slate-500">
+                Real-time insights and performance metrics
+              </p>
+            </div>
+
+            {/* Charts Grid - Responsive Layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Sales Chart Container */}
+              <div className="w-full">
+                <SalesChart />
+              </div>
+
+              {/* Product Chart Container */}
+              <div className="w-full">
+                <ProductChart />
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Quick Actions */}
         <div className="mb-6">
           <h2 className="text-lg font-semibold text-slate-900 mb-6">
             Quick Actions
           </h2>
-          <QuickActions />
+          <QuickActions userRole={userProfile?.role || "cashier"} />
         </div>
       </div>
     </div>
