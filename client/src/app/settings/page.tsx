@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import apiClient from "@/service/apiClient";
 import { User, UserFormData, UserViewMode } from "@/components/users/types";
 import UserList from "@/components/users/UserList";
 import UserDetail from "@/components/users/UserDetail";
@@ -9,34 +11,86 @@ import DeleteConfirmation from "@/components/users/DeleteConfirmation";
 
 type TabType = "general" | "logs" | "users";
 
-// TODO: Replace with API call
-const dummyLogs: any[] = [];
+interface LogData {
+  id: number;
+  action: string;
+  entity: string;
+  createdAt: string;
+  userId: number;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    role: string;
+  };
+}
 
 export default function SettingsPage() {
+  const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<TabType>("general");
   const [userViewMode, setUserViewMode] = useState<UserViewMode>("list");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
+  // Logs state
+  const [logs, setLogs] = useState<LogData[]>([]);
+  const [logsLoading, setLogsLoading] = useState(false);
+  const [logsError, setLogsError] = useState<string | null>(null);
+
+  // Auto-switch to specified tab from query parameters
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab === "users" || tab === "logs" || tab === "general") {
+      setActiveTab(tab as TabType);
+    }
+  }, [searchParams]);
+
+  // Fetch logs when logs tab is active
+  useEffect(() => {
+    if (activeTab === "logs") {
+      fetchLogs();
+    }
+  }, [activeTab]);
+
+  const fetchLogs = async () => {
+    try {
+      setLogsLoading(true);
+      setLogsError(null);
+      const { data } = await apiClient.get("/logs");
+
+      setLogs(data.data);
+    } catch (error) {
+      console.log("Logs API Error:", error);
+      setLogsError("Gagal memuat data logs");
+    } finally {
+      setLogsLoading(false);
+    }
+  };
+
   const formatDateTime = (dateString: string) => {
-    return new Date(dateString).toLocaleString("id-ID", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    const date = new Date(dateString);
+    return (
+      date.toLocaleDateString("id-ID", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      }) +
+      ", " +
+      date.toLocaleTimeString("id-ID", {
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    );
   };
 
   const getActionBadgeColor = (action: string) => {
-    switch (action) {
-      case "CREATE":
-        return "bg-emerald-100 text-emerald-800";
-      case "UPDATE":
-        return "bg-blue-100 text-blue-800";
-      case "DELETE":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-slate-100 text-slate-800";
+    if (action.includes("CREATE")) {
+      return "bg-emerald-100 text-emerald-800";
+    } else if (action.includes("UPDATE")) {
+      return "bg-blue-100 text-blue-800";
+    } else if (action.includes("DELETE")) {
+      return "bg-red-100 text-red-800";
+    } else {
+      return "bg-slate-100 text-slate-800";
     }
   };
 
@@ -168,37 +222,100 @@ export default function SettingsPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-200">
-                    {dummyLogs.map((log) => (
-                      <tr key={log.id} className="hover:bg-slate-50">
-                        <td className="px-6 py-4 text-sm font-medium text-slate-900">
-                          #{log.id.toString().padStart(3, "0")}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-slate-900">
-                          {log.user}
-                        </td>
-                        <td className="px-6 py-4 text-sm">
-                          <span
-                            className={`px-2 py-1 rounded-full text-xs font-medium ${getActionBadgeColor(
-                              log.action
-                            )}`}
-                          >
-                            {log.action}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-slate-900">
-                          {log.entity}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-slate-500">
-                          {formatDateTime(log.createdAt)}
-                        </td>
-                      </tr>
-                    ))}
+                    {/* Loading State */}
+                    {logsLoading && (
+                      <>
+                        {[...Array(5)].map((_, index) => (
+                          <tr key={index} className="animate-pulse">
+                            <td className="px-6 py-4">
+                              <div className="h-4 w-12 bg-slate-200 rounded"></div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="h-4 w-32 bg-slate-200 rounded"></div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="h-6 w-20 bg-slate-200 rounded-full"></div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="h-4 w-16 bg-slate-200 rounded"></div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="h-4 w-28 bg-slate-200 rounded"></div>
+                            </td>
+                          </tr>
+                        ))}
+                      </>
+                    )}
+
+                    {/* Actual Data */}
+                    {!logsLoading &&
+                      logs.map((log) => (
+                        <tr key={log.id} className="hover:bg-slate-50">
+                          <td className="px-6 py-4 text-sm font-medium text-slate-900">
+                            #{log.id.toString().padStart(3, "0")}
+                          </td>
+                          <td className="px-6 py-4 text-sm text-slate-900">
+                            <div>
+                              <div className="font-medium">{log.user.name}</div>
+                              <div className="text-xs text-slate-500 capitalize">
+                                {log.user.role}
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 text-sm">
+                            <span
+                              className={`px-2 py-1 rounded-full text-xs font-medium ${getActionBadgeColor(
+                                log.action
+                              )}`}
+                            >
+                              {log.action}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-slate-900 capitalize">
+                            {log.entity}
+                          </td>
+                          <td className="px-6 py-4 text-sm text-slate-500">
+                            {formatDateTime(log.createdAt)}
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </div>
 
+              {/* Error State */}
+              {logsError && (
+                <div className="text-center py-12">
+                  <div className="text-red-400 mb-4">
+                    <svg
+                      className="w-16 h-16 mx-auto"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1}
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 18.5c-.77.833.192 2.5 1.732 2.5z"
+                      />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-medium text-slate-900 mb-2">
+                    Error Loading Logs
+                  </h3>
+                  <p className="text-slate-500 mb-4">{logsError}</p>
+                  <button
+                    onClick={fetchLogs}
+                    className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors"
+                  >
+                    Try Again
+                  </button>
+                </div>
+              )}
+
               {/* Empty State (jika tidak ada data) */}
-              {dummyLogs.length === 0 && (
+              {!logsLoading && !logsError && logs.length === 0 && (
                 <div className="text-center py-12">
                   <div className="text-slate-400 mb-4">
                     <svg

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { Transaction, ViewMode } from "@/components/transactions/types";
 import TransactionList from "@/components/transactions/TransactionList";
 import TransactionDetail from "@/components/transactions/TransactionDetail";
@@ -8,9 +9,18 @@ import TransactionForm from "@/components/transactions/TransactionForm";
 import DeleteConfirmation from "@/components/transactions/DeleteConfirmation";
 
 export default function TransactionPage() {
+  const searchParams = useSearchParams();
   const [currentView, setCurrentView] = useState<ViewMode>("list");
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
+
+  // Check if there's a "new" query parameter to trigger add mode
+  useEffect(() => {
+    const newParam = searchParams.get("new");
+    if (newParam === "true") {
+      setCurrentView("add");
+    }
+  }, [searchParams]);
 
   const handleViewDetail = (transaction: Transaction) => {
     setSelectedTransaction(transaction);

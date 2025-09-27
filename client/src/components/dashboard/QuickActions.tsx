@@ -1,3 +1,7 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
 interface QuickActionsProps {
   userRole?: string;
 }
@@ -5,6 +9,7 @@ interface QuickActionsProps {
 export default function QuickActions({
   userRole = "cashier",
 }: QuickActionsProps) {
+  const router = useRouter();
   // Base actions available to all roles
   const baseActions = [
     {
@@ -12,7 +17,7 @@ export default function QuickActions({
       description: "Add product to inventory",
       icon: "📦",
       color: "bg-blue-500 hover:bg-blue-600",
-      href: "/products/new",
+      href: "/products?new=true", // Trigger add mode dengan query parameter
       roles: ["admin", "manager"],
     },
     {
@@ -20,7 +25,7 @@ export default function QuickActions({
       description: "Process new sale",
       icon: "💳",
       color: "bg-emerald-500 hover:bg-emerald-600",
-      href: "/transactions/new",
+      href: "/transactions?new=true", // Trigger add mode dengan query parameter
       roles: ["admin", "manager", "cashier"],
     },
     {
@@ -28,7 +33,7 @@ export default function QuickActions({
       description: "Add or edit team members",
       icon: "👥",
       color: "bg-orange-500 hover:bg-orange-600",
-      href: "/users",
+      href: "/settings?tab=users", // Langsung ke users tab di settings
       roles: ["admin"],
     },
   ];
@@ -122,8 +127,7 @@ export default function QuickActions({
             key={index}
             className={`${action.color} text-white p-6 rounded-xl transition-all duration-300 text-left group hover:scale-105 hover:shadow-xl`}
             onClick={() => {
-              // For development, log href. Can be replaced with router.push later
-              console.log(`Navigate to: ${action.href}`);
+              router.push(action.href);
             }}
           >
             <div className="flex items-center justify-between mb-4">
