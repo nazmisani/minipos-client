@@ -71,7 +71,6 @@ export default function ProductPage() {
       setCategories(data.data);
     } catch (error) {
       console.log("Categories API Error:", error);
-      // Don't set error state for categories as it's not critical
     }
   };
 
@@ -91,7 +90,6 @@ export default function ProductPage() {
     return { color: "bg-red-100 text-red-800", text: "Out of Stock" };
   };
 
-  // Filter products based on search term and category
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.name
       .toLowerCase()

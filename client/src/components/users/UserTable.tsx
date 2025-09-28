@@ -24,13 +24,8 @@ export default function UserTable({
   onDelete,
 }: UserTableProps) {
   const formatDateTime = (dateString: string) => {
-    return new Date(dateString).toLocaleString("id-ID", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    // API sudah memberikan format yang siap pakai seperti "26 Agustus 2025"
+    return dateString;
   };
 
   const getRoleBadgeColor = (role: string) => {
@@ -39,6 +34,8 @@ export default function UserTable({
         return "bg-red-100 text-red-800";
       case "manager":
         return "bg-blue-100 text-blue-800";
+      case "cashier":
+        return "bg-green-100 text-green-800";
       case "staff":
         return "bg-emerald-100 text-emerald-800";
       default:

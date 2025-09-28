@@ -39,13 +39,11 @@ export default function CustomerPage() {
   };
 
   const handleSave = () => {
-    // Save logic would go here
     setCurrentView("list");
     setSelectedCustomer(null);
   };
 
   const handleConfirmDelete = () => {
-    // Delete logic would go here
     setCurrentView("list");
     setSelectedCustomer(null);
   };
