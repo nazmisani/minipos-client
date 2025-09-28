@@ -27,11 +27,6 @@ export default function TransactionPage() {
     setCurrentView("detail");
   };
 
-  const handleEdit = (transaction: Transaction) => {
-    setSelectedTransaction(transaction);
-    setCurrentView("edit");
-  };
-
   const handleDelete = (transaction: Transaction) => {
     setSelectedTransaction(transaction);
     setCurrentView("delete");
@@ -77,16 +72,6 @@ export default function TransactionPage() {
         />
       );
 
-    case "edit":
-      return selectedTransaction ? (
-        <TransactionForm
-          transaction={selectedTransaction}
-          isEdit={true}
-          onBack={handleBack}
-          onSave={handleSave}
-        />
-      ) : null;
-
     case "delete":
       return selectedTransaction ? (
         <DeleteConfirmation
@@ -100,7 +85,6 @@ export default function TransactionPage() {
       return (
         <TransactionList
           onViewDetail={handleViewDetail}
-          onEdit={handleEdit}
           onDelete={handleDelete}
           onAdd={handleAdd}
         />

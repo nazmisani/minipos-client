@@ -13,14 +13,12 @@ import {
 interface TransactionTableProps {
   transactions: Transaction[];
   onViewDetail: (transaction: Transaction) => void;
-  onEdit: (transaction: Transaction) => void;
   onDelete: (transaction: Transaction) => void;
 }
 
 export default function TransactionTable({
   transactions,
   onViewDetail,
-  onEdit,
   onDelete,
 }: TransactionTableProps) {
   if (transactions.length === 0) {
@@ -59,13 +57,6 @@ export default function TransactionTable({
                   onClick={() => onViewDetail(transaction)}
                 >
                   View
-                </Button>
-                <Button
-                  size="sm"
-                  variant="info"
-                  onClick={() => onEdit(transaction)}
-                >
-                  Edit
                 </Button>
                 <Button
                   size="sm"

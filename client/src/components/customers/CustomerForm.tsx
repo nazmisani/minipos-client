@@ -19,8 +19,6 @@ export default function CustomerForm({
   const [formData, setFormData] = useState({
     name: customer?.name || "",
     phone: customer?.phone || "",
-    email: customer?.email || "",
-    address: customer?.address || "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -77,34 +75,18 @@ export default function CustomerForm({
         {/* Form */}
         <div className="bg-white rounded-lg border border-slate-200 p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Nama Customer *
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  placeholder="customer@email.com"
-                />
-              </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Nama Customer *
+              </label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                required
+              />
             </div>
 
             <div>
@@ -116,19 +98,6 @@ export default function CustomerForm({
                 name="phone"
                 value={formData.phone}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                Alamat
-              </label>
-              <textarea
-                name="address"
-                value={formData.address}
-                onChange={handleInputChange}
-                rows={3}
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>

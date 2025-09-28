@@ -53,17 +53,31 @@ export default function TransactionDetail({
                 <label className="block text-sm font-medium text-slate-600 mb-1">
                   User
                 </label>
-                <p className="text-lg text-slate-900">
-                  {transaction.user.name}
-                </p>
+                <div>
+                  <p className="text-lg text-slate-900">
+                    {transaction.user.name}
+                  </p>
+                  <p className="text-sm text-slate-500 capitalize">
+                    {transaction.user.role}
+                  </p>
+                </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-600 mb-1">
                   Customer
                 </label>
-                <p className="text-lg text-slate-900">
-                  {transaction.customer?.name || "-"}
-                </p>
+                {transaction.customer ? (
+                  <div>
+                    <p className="text-lg text-slate-900">
+                      {transaction.customer.name}
+                    </p>
+                    <p className="text-sm text-slate-500">
+                      {transaction.customer.phone}
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-lg text-slate-900">-</p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-600 mb-1">
@@ -92,7 +106,8 @@ export default function TransactionDetail({
             <DataTable>
               <TableHeader>
                 <TableHeaderCell>ID</TableHeaderCell>
-                <TableHeaderCell>Product ID</TableHeaderCell>
+                <TableHeaderCell>Product</TableHeaderCell>
+                <TableHeaderCell>Price</TableHeaderCell>
                 <TableHeaderCell>Quantity</TableHeaderCell>
                 <TableHeaderCell>Subtotal</TableHeaderCell>
               </TableHeader>
@@ -100,7 +115,19 @@ export default function TransactionDetail({
                 {transaction.details.map((detail) => (
                   <TableRow key={detail.id}>
                     <TableCell className="font-medium">{detail.id}</TableCell>
-                    <TableCell>{detail.productId}</TableCell>
+                    <TableCell>
+                      <div>
+                        <div className="font-medium text-slate-900">
+                          {detail.product.name}
+                        </div>
+                        <div className="text-sm text-slate-500">
+                          ID: {detail.productId}
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      Rp {detail.product.price.toLocaleString("id-ID")}
+                    </TableCell>
                     <TableCell>{detail.quantity}</TableCell>
                     <TableCell>
                       <span className="font-semibold text-emerald-600">

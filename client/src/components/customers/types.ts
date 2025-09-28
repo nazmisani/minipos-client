@@ -1,13 +1,17 @@
+export type Transaction = {
+  id: number;
+  total: number;
+  createdAt: string;
+};
+
 export type Customer = {
   id: number;
   name: string;
   phone: string;
-  email: string;
-  address: string;
-  totalTransactions: number;
-  totalSpent: number;
-  joinDate: string;
-  lastTransaction: string;
+  transactions: Transaction[];
+  _count: {
+    transactions: number;
+  };
 };
 
 export type ViewMode = "list" | "detail" | "add" | "edit" | "delete";

@@ -7,9 +7,6 @@ interface CustomerDetailProps {
   onBack: () => void;
 }
 
-// TODO: Replace with API call
-const dummyTransactions: any[] = [];
-
 export default function CustomerDetail({
   customer,
   onBack,
@@ -29,6 +26,18 @@ export default function CustomerDetail({
       year: "numeric",
     });
   };
+
+  // Calculate total spent from transactions
+  const totalSpent = customer.transactions.reduce(
+    (sum, transaction) => sum + transaction.total,
+    0
+  );
+
+  // Get latest transaction date
+  const latestTransaction =
+    customer.transactions.length > 0
+      ? customer.transactions[0].createdAt
+      : null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 lg:p-6">
@@ -86,22 +95,22 @@ export default function CustomerDetail({
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-600">
-                    Email
+                  <label className="text-sm text-gray-500">
+                    Total Transaksi
                   </label>
-                  <p className="text-slate-900 mt-1">
-                    {customer.email || "Tidak ada"}
-                  </p>
-                </div>
-                <div>
-                  <label className="text-sm text-gray-500">Alamat</label>
                   <p className="font-medium">
-                    {customer.address || "Tidak ada"}
+                    {customer._count.transactions} transaksi
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm text-gray-500">Bergabung</label>
-                  <p className="font-medium">{formatDate(customer.joinDate)}</p>
+                  <label className="text-sm text-gray-500">
+                    Total Pengeluaran
+                  </label>
+                  <p className="font-medium text-green-600">
+                    {formatCurrency(
+                      customer.transactions.reduce((sum, t) => sum + t.total, 0)
+                    )}
+                  </p>
                 </div>
               </div>
             </div>
@@ -113,7 +122,7 @@ export default function CustomerDetail({
                   <div>
                     <p className="text-sm text-gray-500">Total Transactions</p>
                     <p className="text-xl font-bold text-blue-600">
-                      {customer.totalTransactions}
+                      {customer._count.transactions}
                     </p>
                   </div>
                 </div>
@@ -124,7 +133,12 @@ export default function CustomerDetail({
                   <div>
                     <p className="text-sm text-gray-500">Total Spending</p>
                     <p className="text-xl font-bold text-green-600">
-                      {formatCurrency(customer.totalSpent)}
+                      {formatCurrency(
+                        customer.transactions.reduce(
+                          (sum, t) => sum + t.total,
+                          0
+                        )
+                      )}
                     </p>
                   </div>
                 </div>
@@ -140,7 +154,7 @@ export default function CustomerDetail({
               </div>
               <div className="p-4">
                 <div className="space-y-3">
-                  {dummyTransactions.map((transaction) => (
+                  {customer.transactions.map((transaction) => (
                     <div
                       key={transaction.id}
                       className="border border-gray-200 rounded-lg p-3"
@@ -152,16 +166,9 @@ export default function CustomerDetail({
                               #{transaction.id}
                             </span>
                             <span className="text-sm text-gray-500">
-                              {formatDate(transaction.date)} •{" "}
-                              {transaction.time}
-                            </span>
-                            <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                              {transaction.paymentMethod}
+                              {formatDate(transaction.createdAt)}
                             </span>
                           </div>
-                          <p className="text-sm text-gray-600 mb-2">
-                            {transaction.items.join(", ")}
-                          </p>
                           <p className="font-semibold text-green-600">
                             {formatCurrency(transaction.total)}
                           </p>
@@ -171,7 +178,7 @@ export default function CustomerDetail({
                   ))}
                 </div>
 
-                {dummyTransactions.length === 0 && (
+                {customer.transactions.length === 0 && (
                   <div className="text-center py-8">
                     <p className="text-gray-500">No transaction history yet</p>
                   </div>

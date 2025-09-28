@@ -27,6 +27,9 @@ export default function CustomerTable({
         <thead className="bg-slate-50 border-b border-slate-200">
           <tr>
             <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
+              ID
+            </th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
               Nama
             </th>
             <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
@@ -44,49 +47,62 @@ export default function CustomerTable({
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-200">
-          {customers.map((customer) => (
-            <tr key={customer.id} className="hover:bg-slate-50">
-              <td className="px-6 py-4">
-                <div>
+          {customers.map((customer) => {
+            // Calculate total spent from transactions
+            const totalSpent = customer.transactions.reduce(
+              (sum, transaction) => sum + transaction.total,
+              0
+            );
+
+            return (
+              <tr key={customer.id} className="hover:bg-slate-50">
+                <td className="px-6 py-4 text-sm font-medium text-slate-600">
+                  #{customer.id}
+                </td>
+                <td className="px-6 py-4">
                   <div className="text-sm font-medium text-slate-900">
                     {customer.name}
                   </div>
-                  <div className="text-sm text-slate-500">{customer.email}</div>
-                </div>
-              </td>
-              <td className="px-6 py-4 text-sm text-slate-900">
-                {customer.phone || "-"}
-              </td>
-              <td className="px-6 py-4 text-sm text-slate-900">
-                {customer.totalTransactions}
-              </td>
-              <td className="px-6 py-4 text-sm text-slate-900">
-                {formatCurrency(customer.totalSpent)}
-              </td>
-              <td className="px-6 py-4 text-sm">
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => onViewDetail(customer)}
-                    className="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 rounded-lg text-xs font-semibold transition-colors"
-                  >
-                    View
-                  </button>
-                  <button
-                    onClick={() => onEdit(customer)}
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-xs font-semibold transition-colors"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => onDelete(customer)}
-                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-xs font-semibold transition-colors"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
+                </td>
+                <td className="px-6 py-4 text-sm text-slate-900">
+                  {customer.phone || "-"}
+                </td>
+                <td className="px-6 py-4 text-sm text-slate-900">
+                  <div className="flex flex-col">
+                    <span className="font-medium">
+                      {customer._count.transactions}
+                    </span>
+                    <span className="text-xs text-slate-500">transactions</span>
+                  </div>
+                </td>
+                <td className="px-6 py-4 text-sm text-slate-900">
+                  {formatCurrency(totalSpent)}
+                </td>
+                <td className="px-6 py-4 text-sm">
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => onViewDetail(customer)}
+                      className="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 rounded-lg text-xs font-semibold transition-colors"
+                    >
+                      View
+                    </button>
+                    <button
+                      onClick={() => onEdit(customer)}
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-xs font-semibold transition-colors"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => onDelete(customer)}
+                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-xs font-semibold transition-colors"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
 
