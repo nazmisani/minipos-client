@@ -189,7 +189,15 @@ export default function Sidebar() {
       {/* Menu */}
       <div className="flex-1 overflow-y-auto p-3">
         {menuItems.map((item) => {
-          const isActive = pathname === item.path;
+          // Enhanced active logic for better route matching
+          let isActive =
+            pathname === item.path || pathname.startsWith(item.path + "/");
+
+          // Special handling for products menu to include categories
+          if (item.id === "products" && pathname.startsWith("/categories")) {
+            isActive = true;
+          }
+
           return (
             <button
               key={item.id}
