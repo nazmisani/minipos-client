@@ -22,7 +22,7 @@ export default function LoginPage() {
       });
 
       if (data.token) {
-        toast.success("Login berhasil!");
+        toast.success("Login Success!");
         router.push("/");
       }
     } catch (error: any) {
