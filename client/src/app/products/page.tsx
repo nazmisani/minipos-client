@@ -99,6 +99,10 @@ export default function ProductPage() {
     router.push("/products/add");
   };
 
+  const handleEdit = (productId: number) => {
+    router.push(`/products/${productId}/edit`);
+  };
+
   const handleBack = () => {
     setCurrentView("list");
     setSelectedProduct(null);
@@ -373,24 +377,28 @@ export default function ProductPage() {
                         <td className="px-6 py-4">
                           <div className="flex items-center justify-center space-x-2">
                             {/* Edit Button */}
-                            <button
-                              className="text-blue-600 hover:text-blue-800 p-1 rounded transition-colors"
-                              title="Edit"
-                            >
-                              <svg
-                                className="w-4 h-4"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                                />
-                              </svg>
-                            </button>
+                            {user &&
+                              ["admin", "manager"].includes(user.role) && (
+                                <button
+                                  onClick={() => handleEdit(product.id)}
+                                  className="text-blue-600 hover:text-blue-800 p-1 rounded transition-colors"
+                                  title="Edit"
+                                >
+                                  <svg
+                                    className="w-4 h-4"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                    />
+                                  </svg>
+                                </button>
+                              )}
                             {/* Delete Button */}
                             <button
                               className="text-red-600 hover:text-red-800 p-1 rounded transition-colors"

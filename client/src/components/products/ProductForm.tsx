@@ -17,7 +17,7 @@ interface Category {
 }
 
 interface ProductFormProps {
-  product?: Product;
+  product?: Product | any; // Allow any product structure for flexibility
   isEdit: boolean;
   onBack: () => void;
   onSave: () => void;
@@ -35,13 +35,31 @@ export default function ProductForm({
   const [formData, setFormData] = useState({
     name: product?.name || "",
     price: product?.price?.toString() || "",
-    categoryId: "",
+    categoryId:
+      product?.categoryId?.toString() ||
+      product?.category?.id?.toString() ||
+      "",
     stock: product?.stock?.toString() || "",
   });
 
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  // Update form data when product prop changes (for edit mode)
+  useEffect(() => {
+    if (product && isEdit) {
+      setFormData({
+        name: product.name || "",
+        price: product.price?.toString() || "",
+        categoryId:
+          product.categoryId?.toString() ||
+          product.category?.id?.toString() ||
+          "",
+        stock: product.stock?.toString() || "",
+      });
+    }
+  }, [product, isEdit]);
 
   const fetchCategories = async () => {
     try {
