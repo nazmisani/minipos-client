@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import apiClient from "@/service/apiClient";
 import { Product, ProductViewMode } from "@/components/products/types";
-import ProductForm from "@/components/products/ProductForm";
 import { useAuth } from "@/contexts/authContext";
 
 interface ProductData {
@@ -33,6 +32,7 @@ interface CategoryData {
 
 export default function ProductPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [currentView, setCurrentView] = useState<ProductViewMode>("list");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -96,8 +96,7 @@ export default function ProductPage() {
 
   // View management handlers
   const handleAdd = () => {
-    setSelectedProduct(null);
-    setCurrentView("add");
+    router.push("/products/add");
   };
 
   const handleBack = () => {
@@ -137,13 +136,6 @@ export default function ProductPage() {
           ),
         ]
       : availableCategories;
-
-  // View switching logic
-  if (currentView === "add") {
-    return (
-      <ProductForm isEdit={false} onBack={handleBack} onSave={handleSave} />
-    );
-  }
 
   return (
     <div className="min-h-screen bg-slate-50 p-6">
