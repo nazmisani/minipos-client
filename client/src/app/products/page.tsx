@@ -106,7 +106,8 @@ export default function ProductPage() {
   };
 
   const handleSave = () => {
-    // Save logic would go here
+    // Refresh the product list after successful save
+    fetchProducts();
     setCurrentView("list");
     setSelectedProduct(null);
   };

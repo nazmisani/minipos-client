@@ -9,6 +9,7 @@ import {
   Button,
 } from "@/components/shared";
 import apiClient from "@/service/apiClient";
+import { toast } from "react-toastify";
 
 interface Category {
   id: number;
@@ -30,6 +31,7 @@ export default function ProductForm({
 }: ProductFormProps) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: product?.name || "",
     price: product?.price?.toString() || "",
@@ -63,9 +65,74 @@ export default function ProductForm({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validateForm = () => {
+    // Validate required fields
+    if (!formData.name.trim()) {
+      toast.error("Product name is required");
+      return false;
+    }
+
+    if (!formData.categoryId) {
+      toast.error("Category is required");
+      return false;
+    }
+
+    // Validate price > 0
+    const price = parseFloat(formData.price);
+    if (isNaN(price) || price <= 0) {
+      toast.error("Price must be greater than 0");
+      return false;
+    }
+
+    // Validate stock >= 0
+    const stock = parseInt(formData.stock);
+    if (isNaN(stock) || stock < 0) {
+      toast.error("Stock must be 0 or greater");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSave();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const requestData = {
+        name: formData.name.trim(),
+        price: parseFloat(formData.price),
+        stock: parseInt(formData.stock),
+        categoryId: parseInt(formData.categoryId),
+      };
+
+      if (isEdit && product?.id) {
+        // Update existing product (if needed later)
+        await apiClient.put(`/products/${product.id}`, requestData);
+        toast.success("Product updated successfully!");
+      } else {
+        // Create new product
+        await apiClient.post("/products", requestData);
+        toast.success("Product created successfully!");
+      }
+
+      // Call the onSave callback to trigger parent component actions (like navigation)
+      onSave();
+    } catch (error: any) {
+      console.error("API Error:", error);
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Failed to save product. Please try again.");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   return (
     <CrudLayout>
@@ -155,8 +222,21 @@ export default function ProductForm({
             </div>
 
             <div className="flex gap-3 pt-4">
-              <Button type="submit">{isEdit ? "Update" : "Save"}</Button>
-              <Button variant="secondary" type="button" onClick={onBack}>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting
+                  ? isEdit
+                    ? "Updating..."
+                    : "Saving..."
+                  : isEdit
+                  ? "Update"
+                  : "Save"}
+              </Button>
+              <Button
+                variant="secondary"
+                type="button"
+                onClick={onBack}
+                disabled={isSubmitting}
+              >
                 Cancel
               </Button>
             </div>
