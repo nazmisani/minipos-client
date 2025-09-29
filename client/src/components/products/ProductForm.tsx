@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Product } from "./types";
 import {
   CrudLayout,
@@ -7,6 +8,12 @@ import {
   Input,
   Button,
 } from "@/components/shared";
+import apiClient from "@/service/apiClient";
+
+interface Category {
+  id: number;
+  name: string;
+}
 
 interface ProductFormProps {
   product?: Product;
@@ -21,6 +28,45 @@ export default function ProductForm({
   onBack,
   onSave,
 }: ProductFormProps) {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [formData, setFormData] = useState({
+    name: product?.name || "",
+    price: product?.price?.toString() || "",
+    categoryId: "",
+    stock: product?.stock?.toString() || "",
+    description: product?.description || "",
+  });
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      setLoading(true);
+      const { data } = await apiClient.get("/categories");
+      setCategories(data.data);
+    } catch (error) {
+      console.log("Categories API Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSave();
+  };
   return (
     <CrudLayout>
       <div className="max-w-3xl mx-auto">
@@ -35,48 +81,81 @@ export default function ProductForm({
         </div>
 
         <Card className="p-6">
-          <form className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Input
                 label="Product Name"
                 type="text"
-                defaultValue={product?.name || ""}
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
                 placeholder="Masukkan nama produk"
+                required
               />
               <Input
                 label="Price"
                 type="number"
-                defaultValue={product?.price?.toString() || ""}
+                name="price"
+                value={formData.price}
+                onChange={handleInputChange}
                 placeholder="Masukkan harga produk"
+                required
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Input
-                label="Category"
-                type="text"
-                defaultValue={product?.category || ""}
-                placeholder="Masukkan kategori produk"
-              />
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Category *
+                </label>
+                {loading ? (
+                  <div className="w-full px-3 py-2 border border-slate-300 rounded-lg bg-slate-50 text-slate-500">
+                    Loading categories...
+                  </div>
+                ) : (
+                  <select
+                    name="categoryId"
+                    value={formData.categoryId}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                    required
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map((category) => (
+                      <option key={category.id} value={category.id}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
               <Input
                 label="Stock"
                 type="number"
-                defaultValue={product?.stock?.toString() || ""}
+                name="stock"
+                value={formData.stock}
+                onChange={handleInputChange}
                 placeholder="Masukkan jumlah stok"
+                required
               />
             </div>
 
-            <Input
-              label="Description (Optional)"
-              type="text"
-              defaultValue={product?.description || ""}
-              placeholder="Enter product description"
-            />
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Description (Optional)
+              </label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
+                rows={3}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                placeholder="Enter product description"
+              />
+            </div>
 
             <div className="flex gap-3 pt-4">
-              <Button type="button" onClick={onSave}>
-                {isEdit ? "Update" : "Save"}
-              </Button>
+              <Button type="submit">{isEdit ? "Update" : "Save"}</Button>
               <Button variant="secondary" type="button" onClick={onBack}>
                 Cancel
               </Button>
