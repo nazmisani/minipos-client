@@ -1,21 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Customer, ViewMode } from "@/components/customers/types";
 import CustomerList from "@/components/customers/CustomerList";
-import CustomerDetail from "@/components/customers/CustomerDetail";
 import CustomerForm from "@/components/customers/CustomerForm";
 import DeleteConfirmation from "@/components/customers/DeleteConfirmation";
 
 export default function CustomerPage() {
+  const router = useRouter();
   const [currentView, setCurrentView] = useState<ViewMode>("list");
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
     null
   );
 
   const handleViewDetail = (customer: Customer) => {
-    setSelectedCustomer(customer);
-    setCurrentView("detail");
+    router.push(`/customers/${customer.id}`);
   };
 
   const handleEdit = (customer: Customer) => {
@@ -29,8 +29,7 @@ export default function CustomerPage() {
   };
 
   const handleAdd = () => {
-    setSelectedCustomer(null);
-    setCurrentView("add");
+    router.push("/customers/add");
   };
 
   const handleBack = () => {
@@ -49,16 +48,6 @@ export default function CustomerPage() {
   };
 
   switch (currentView) {
-    case "detail":
-      return selectedCustomer ? (
-        <CustomerDetail customer={selectedCustomer} onBack={handleBack} />
-      ) : null;
-
-    case "add":
-      return (
-        <CustomerForm isEdit={false} onBack={handleBack} onSave={handleSave} />
-      );
-
     case "edit":
       return selectedCustomer ? (
         <CustomerForm
