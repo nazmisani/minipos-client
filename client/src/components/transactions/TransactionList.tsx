@@ -8,6 +8,7 @@ import {
   Card,
 } from "@/components/shared";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import apiClient from "@/service/apiClient";
 
 interface TransactionListProps {
@@ -21,6 +22,7 @@ export default function TransactionList({
   onDelete,
   onAdd,
 }: TransactionListProps) {
+  const router = useRouter();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -48,7 +50,11 @@ export default function TransactionList({
       <PageHeader
         title="Transaction Management"
         subtitle="Kelola semua transaksi dan riwayat penjualan."
-        action={<Button onClick={onAdd}>Tambah Transaksi</Button>}
+        action={
+          <Button onClick={() => router.push("/transactions/add")}>
+            Tambah Transaksi
+          </Button>
+        }
       />
 
       <SearchBar placeholder="Cari transaksi..." />

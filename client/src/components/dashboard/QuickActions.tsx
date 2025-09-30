@@ -25,7 +25,7 @@ export default function QuickActions({
       description: "Process new sale",
       icon: "💳",
       color: "bg-emerald-500 hover:bg-emerald-600",
-      href: "/transactions?new=true", // Trigger add mode dengan query parameter
+      href: "/transactions/add", // Direct navigation to add transaction page
       roles: ["admin", "manager", "cashier"],
     },
     {

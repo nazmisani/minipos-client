@@ -1,93 +1,33 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import { Transaction, ViewMode } from "@/components/transactions/types";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Transaction } from "@/components/transactions/types";
 import TransactionList from "@/components/transactions/TransactionList";
-import TransactionDetail from "@/components/transactions/TransactionDetail";
-import TransactionForm from "@/components/transactions/TransactionForm";
-import DeleteConfirmation from "@/components/transactions/DeleteConfirmation";
 
 export default function TransactionPage() {
-  const searchParams = useSearchParams();
-  const [currentView, setCurrentView] = useState<ViewMode>("list");
-  const [selectedTransaction, setSelectedTransaction] =
-    useState<Transaction | null>(null);
-
-  // Check if there's a "new" query parameter to trigger add mode
-  useEffect(() => {
-    const newParam = searchParams.get("new");
-    if (newParam === "true") {
-      setCurrentView("add");
-    }
-  }, [searchParams]);
+  const router = useRouter();
 
   const handleViewDetail = (transaction: Transaction) => {
-    setSelectedTransaction(transaction);
-    setCurrentView("detail");
+    router.push(`/transactions/${transaction.id}`);
   };
 
   const handleDelete = (transaction: Transaction) => {
-    setSelectedTransaction(transaction);
-    setCurrentView("delete");
+    // For now, just show alert. You can implement delete logic later
+    alert(
+      `Delete transaction ${transaction.id} - This feature will be implemented later`
+    );
   };
 
   const handleAdd = () => {
-    setSelectedTransaction(null);
-    setCurrentView("add");
+    router.push("/transactions/add");
   };
 
-  const handleBack = () => {
-    setCurrentView("list");
-    setSelectedTransaction(null);
-  };
-
-  const handleSave = () => {
-    // Save logic would go here
-    setCurrentView("list");
-    setSelectedTransaction(null);
-  };
-
-  const handleConfirmDelete = () => {
-    // Delete logic would go here
-    setCurrentView("list");
-    setSelectedTransaction(null);
-  };
-
-  switch (currentView) {
-    case "detail":
-      return selectedTransaction ? (
-        <TransactionDetail
-          transaction={selectedTransaction}
-          onBack={handleBack}
-        />
-      ) : null;
-
-    case "add":
-      return (
-        <TransactionForm
-          isEdit={false}
-          onBack={handleBack}
-          onSave={handleSave}
-        />
-      );
-
-    case "delete":
-      return selectedTransaction ? (
-        <DeleteConfirmation
-          transaction={selectedTransaction}
-          onBack={handleBack}
-          onConfirm={handleConfirmDelete}
-        />
-      ) : null;
-
-    default:
-      return (
-        <TransactionList
-          onViewDetail={handleViewDetail}
-          onDelete={handleDelete}
-          onAdd={handleAdd}
-        />
-      );
-  }
+  return (
+    <TransactionList
+      onViewDetail={handleViewDetail}
+      onDelete={handleDelete}
+      onAdd={handleAdd}
+    />
+  );
 }
