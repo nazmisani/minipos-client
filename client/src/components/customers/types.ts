@@ -14,4 +14,4 @@ export type Customer = {
   };
 };
 
-export type ViewMode = "list" | "edit" | "delete";
+export type ViewMode = "list" | "delete";

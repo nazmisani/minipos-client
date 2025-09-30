@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Customer, ViewMode } from "@/components/customers/types";
 import CustomerList from "@/components/customers/CustomerList";
-import CustomerForm from "@/components/customers/CustomerForm";
 import DeleteConfirmation from "@/components/customers/DeleteConfirmation";
 
 export default function CustomerPage() {
@@ -19,8 +18,7 @@ export default function CustomerPage() {
   };
 
   const handleEdit = (customer: Customer) => {
-    setSelectedCustomer(customer);
-    setCurrentView("edit");
+    router.push(`/customers/${customer.id}/edit`);
   };
 
   const handleDelete = (customer: Customer) => {
@@ -48,16 +46,6 @@ export default function CustomerPage() {
   };
 
   switch (currentView) {
-    case "edit":
-      return selectedCustomer ? (
-        <CustomerForm
-          customer={selectedCustomer}
-          isEdit={true}
-          onBack={handleBack}
-          onSave={handleSave}
-        />
-      ) : null;
-
     case "delete":
       return selectedCustomer ? (
         <DeleteConfirmation
