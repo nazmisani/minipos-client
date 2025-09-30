@@ -568,7 +568,7 @@ export default function CategoriesPage() {
                           {user && ["admin", "manager"].includes(user.role) && (
                             <button
                               onClick={() => handleEdit(category)}
-                              className="text-blue-600 hover:text-blue-800 p-1 rounded transition-colors"
+                              className="inline-flex items-center justify-center w-8 h-8 text-blue-600 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 rounded-md transition-all duration-200"
                               title="Edit"
                             >
                               <svg
@@ -595,10 +595,10 @@ export default function CategoriesPage() {
                               disabled={
                                 isDeleting || pendingDelete?.id === category.id
                               }
-                              className={`p-1 rounded transition-colors ${
+                              className={`inline-flex items-center justify-center w-8 h-8 rounded-md transition-all duration-200 ${
                                 isDeleting || pendingDelete?.id === category.id
-                                  ? "text-gray-400 cursor-not-allowed"
-                                  : "text-red-600 hover:text-red-800"
+                                  ? "text-gray-400 bg-gray-100 cursor-not-allowed"
+                                  : "text-red-600 bg-red-50 hover:bg-red-100 hover:text-red-700"
                               }`}
                               title="Delete"
                             >
