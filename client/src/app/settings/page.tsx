@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 import apiClient from "@/service/apiClient";
 import { User, UserFormData, UserViewMode } from "@/components/users/types";
 import UserList from "@/components/users/UserList";
-import UserDetail from "@/components/users/UserDetail";
 import UserForm from "@/components/users/UserForm";
 import DeleteConfirmation from "@/components/users/DeleteConfirmation";
 
@@ -350,18 +349,6 @@ export default function SettingsPage() {
               switch (userViewMode) {
                 case "list":
                   return (
-                    <UserList
-                      onViewModeChange={setUserViewMode}
-                      onSelectUser={setSelectedUser}
-                    />
-                  );
-                case "detail":
-                  return selectedUser ? (
-                    <UserDetail
-                      user={selectedUser}
-                      onViewModeChange={setUserViewMode}
-                    />
-                  ) : (
                     <UserList
                       onViewModeChange={setUserViewMode}
                       onSelectUser={setSelectedUser}

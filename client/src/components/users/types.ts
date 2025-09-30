@@ -14,4 +14,4 @@ export type UserFormData = {
   password?: string;
 };
 
-export type UserViewMode = "list" | "detail" | "add" | "edit" | "delete";
+export type UserViewMode = "list" | "add" | "edit" | "delete";

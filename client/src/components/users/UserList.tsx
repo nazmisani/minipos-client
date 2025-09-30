@@ -90,10 +90,6 @@ export default function UserList({
         ) : (
           <UserTable
             users={users}
-            onViewDetail={(user: User) => {
-              onSelectUser(user);
-              onViewModeChange("detail");
-            }}
             onEdit={(user: User) => {
               onSelectUser(user);
               onViewModeChange("edit");
