@@ -437,8 +437,8 @@ function ProductPageContent() {
             <h1 className="text-3xl font-bold text-slate-900">Products</h1>
             <p className="text-slate-600 mt-1">Manage your product inventory</p>
           </div>
-          {user?.role === "admin" || user?.role === "manager" ? (
-            <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3">
+            <Protected permission="categories.manage" fallback={null}>
               <button
                 onClick={() => router.push("/categories")}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
@@ -458,7 +458,9 @@ function ProductPageContent() {
                 </svg>
                 <span>Manage Category</span>
               </button>
+            </Protected>
 
+            <Protected permission="products.create" fallback={null}>
               <button
                 onClick={handleAdd}
                 className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
@@ -478,30 +480,8 @@ function ProductPageContent() {
                 </svg>
                 <span>Add Product</span>
               </button>
-            </div>
-          ) : null}
-
-          <Protected permission="products.create">
-            <button
-              onClick={handleAdd}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
-            >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-              <span>Add Product</span>
-            </button>
-          </Protected>
+            </Protected>
+          </div>
         </div>
 
         <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm mb-6">
@@ -708,53 +688,58 @@ function ProductPageContent() {
                         <td className="px-6 py-4">
                           <div className="flex items-center justify-center space-x-2">
                             {/* Edit Button */}
-                            {user &&
-                              ["admin", "manager"].includes(user.role) && (
-                                <button
-                                  onClick={() => handleEdit(product.id)}
-                                  className="text-blue-600 hover:text-blue-800 p-1 rounded transition-colors"
-                                  title="Edit"
+                            <Protected
+                              permission="products.update"
+                              fallback={null}
+                            >
+                              <button
+                                onClick={() => handleEdit(product.id)}
+                                className="text-blue-600 hover:text-blue-800 p-1 rounded transition-colors"
+                                title="Edit"
+                              >
+                                <svg
+                                  className="w-4 h-4"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
                                 >
-                                  <svg
-                                    className="w-4 h-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                                    />
-                                  </svg>
-                                </button>
-                              )}
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                  />
+                                </svg>
+                              </button>
+                            </Protected>
+
                             {/* Delete Button */}
-                            {user &&
-                              ["admin", "manager"].includes(user.role) && (
-                                <button
-                                  className="text-red-600 hover:text-red-800 p-1 rounded transition-colors"
-                                  title="Delete"
-                                  onClick={() =>
-                                    handleDelete(product.id, product.name)
-                                  }
+                            <Protected
+                              permission="products.delete"
+                              fallback={null}
+                            >
+                              <button
+                                className="text-red-600 hover:text-red-800 p-1 rounded transition-colors"
+                                title="Delete"
+                                onClick={() =>
+                                  handleDelete(product.id, product.name)
+                                }
+                              >
+                                <svg
+                                  className="w-4 h-4"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
                                 >
-                                  <svg
-                                    className="w-4 h-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                    />
-                                  </svg>
-                                </button>
-                              )}
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                  />
+                                </svg>
+                              </button>
+                            </Protected>
                           </div>
                         </td>
                       </tr>
@@ -793,7 +778,17 @@ function ProductPageContent() {
 
 export default function ProductPage() {
   return (
-    <RouteGuard permission="pages.products">
+    <RouteGuard
+      permission="pages.products"
+      loading={
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-slate-600">Loading products...</p>
+          </div>
+        </div>
+      }
+    >
       <ProductPageContent />
     </RouteGuard>
   );
