@@ -5,17 +5,10 @@ import ProductForm from "@/components/products/ProductForm";
 import { useAuth } from "@/contexts/authContext";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import RouteGuard from "@/components/auth/RouteGuard";
 
-export default function AddProductPage() {
+function AddProductPageContent() {
   const router = useRouter();
-  const { user } = useAuth();
-
-  useEffect(() => {
-    if (user && !["admin", "manager"].includes(user.role)) {
-      router.push("/products");
-      return;
-    }
-  }, [user, router]);
 
   const handleBack = () => {
     router.push("/products");
@@ -28,9 +21,13 @@ export default function AddProductPage() {
     }, 1000);
   };
 
-  if (user && !["admin", "manager"].includes(user.role)) {
-    return null;
-  }
-
   return <ProductForm isEdit={false} onBack={handleBack} onSave={handleSave} />;
+}
+
+export default function AddProductPage() {
+  return (
+    <RouteGuard permission="products.create">
+      <AddProductPageContent />
+    </RouteGuard>
+  );
 }

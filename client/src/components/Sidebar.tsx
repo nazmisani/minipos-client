@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import apiClient from "@/service/apiClient";
+import { usePermissions } from "@/hooks/usePermissions";
+import Protected from "@/components/auth/Protected";
 
 // Optimized Icons - Only what we need
 const DashboardIcon = () => (
@@ -118,30 +120,35 @@ export default function Sidebar() {
       label: "Dashboard",
       icon: <DashboardIcon />,
       path: "/dashboard",
+      permission: "pages.dashboard",
     },
     {
       id: "products",
       label: "Products",
       icon: <ProductsIcon />,
       path: "/products",
+      permission: "pages.products",
     },
     {
       id: "transactions",
       label: "Transactions",
       icon: <TransactionsIcon />,
       path: "/transactions",
+      permission: "pages.transactions",
     },
     {
       id: "customers",
       label: "Customers",
       icon: <CustomersIcon />,
       path: "/customers",
+      permission: "pages.customers",
     },
     {
       id: "settings",
       label: "Settings",
       icon: <SettingsIcon />,
       path: "/settings",
+      permission: "pages.settings",
     },
   ];
 
@@ -199,20 +206,21 @@ export default function Sidebar() {
           }
 
           return (
-            <button
-              key={item.id}
-              onClick={() => handleNavigation(item.path)}
-              className={`w-full flex items-center px-3 py-2 mb-1 rounded-lg text-left transition-colors ${
-                isActive
-                  ? "bg-emerald-600 text-white"
-                  : "text-slate-300 hover:bg-slate-800 hover:text-white"
-              }`}
-            >
-              <span className="flex-shrink-0">{item.icon}</span>
-              {!isCollapsed && (
-                <span className="ml-3 text-sm">{item.label}</span>
-              )}
-            </button>
+            <Protected key={item.id} permission={item.permission}>
+              <button
+                onClick={() => handleNavigation(item.path)}
+                className={`w-full flex items-center px-3 py-2 mb-1 rounded-lg text-left transition-colors ${
+                  isActive
+                    ? "bg-emerald-600 text-white"
+                    : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                }`}
+              >
+                <span className="flex-shrink-0">{item.icon}</span>
+                {!isCollapsed && (
+                  <span className="ml-3 text-sm">{item.label}</span>
+                )}
+              </button>
+            </Protected>
           );
         })}
       </div>

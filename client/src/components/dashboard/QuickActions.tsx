@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { usePermissions } from "@/hooks/usePermissions";
 
 interface QuickActionsProps {
   userRole?: string;
@@ -10,43 +11,41 @@ export default function QuickActions({
   userRole = "cashier",
 }: QuickActionsProps) {
   const router = useRouter();
-  // Base actions available to all roles
-  const baseActions = [
+  const { hasPermission } = usePermissions();
+
+  // All actions with permission-based access control
+  const allActions = [
     {
       title: "Add Product",
       description: "Add product to inventory",
       icon: "📦",
       color: "bg-blue-500 hover:bg-blue-600",
-      href: "/products?new=true", // Trigger add mode dengan query parameter
-      roles: ["admin", "manager"],
+      href: "/products/add",
+      permission: "products.create",
     },
     {
       title: "New Transaction",
       description: "Process new sale",
       icon: "💳",
       color: "bg-emerald-500 hover:bg-emerald-600",
-      href: "/transactions/add", // Direct navigation to add transaction page
-      roles: ["admin", "manager", "cashier"],
+      href: "/transactions/add",
+      permission: "transactions.create",
     },
     {
       title: "Manage Staff",
       description: "Add or edit team members",
       icon: "👥",
       color: "bg-orange-500 hover:bg-orange-600",
-      href: "/settings?tab=users", // Langsung ke users tab di settings
-      roles: ["admin"],
+      href: "/settings?tab=users",
+      permission: "settings.users",
     },
-  ];
-
-  // Alternative actions for non-admin users
-  const alternativeActions = [
     {
       title: "View Products",
       description: "Browse product catalog",
       icon: "🏪",
       color: "bg-indigo-500 hover:bg-indigo-600",
       href: "/products",
-      roles: ["cashier", "manager", "admin"],
+      permission: "products.view",
     },
     {
       title: "Customer Service",
@@ -54,15 +53,15 @@ export default function QuickActions({
       icon: "🎯",
       color: "bg-teal-500 hover:bg-teal-600",
       href: "/customers",
-      roles: ["cashier", "manager", "admin"],
+      permission: "customers.view",
     },
     {
-      title: "Inventory Check",
-      description: "Check stock levels",
-      icon: "📋",
-      color: "bg-cyan-500 hover:bg-cyan-600",
-      href: "/inventory",
-      roles: ["manager", "cashier", "admin"],
+      title: "Add Customer",
+      description: "Register new customer",
+      icon: "�",
+      color: "bg-green-500 hover:bg-green-600",
+      href: "/customers/add",
+      permission: "customers.create",
     },
     {
       title: "Transaction History",
@@ -70,29 +69,26 @@ export default function QuickActions({
       icon: "📜",
       color: "bg-purple-500 hover:bg-purple-600",
       href: "/transactions",
-      roles: ["admin", "manager", "cashier"],
+      permission: "transactions.view",
+    },
+    {
+      title: "Reports & Analytics",
+      description: "View business reports",
+      icon: "📊",
+      color: "bg-red-500 hover:bg-red-600",
+      href: "/dashboard#analytics",
+      permission: "dashboard.analytics",
     },
   ];
 
-  // Filter actions based on user role
-  const getActionsForRole = (role: string) => {
-    let filteredActions = baseActions.filter((action) =>
-      action.roles.includes(role.toLowerCase())
-    );
-
-    // If less than 4 actions, add alternatives
-    if (filteredActions.length < 4) {
-      const additionalActions = alternativeActions.filter((action) =>
-        action.roles.includes(role.toLowerCase())
-      );
-
-      filteredActions = [...filteredActions, ...additionalActions].slice(0, 4);
-    }
-
-    return filteredActions;
+  // Filter actions based on permissions
+  const getActionsForUser = () => {
+    return allActions
+      .filter((action) => hasPermission(action.permission))
+      .slice(0, 4); // Limit to 4 actions
   };
 
-  const actions = getActionsForRole(userRole);
+  const actions = getActionsForUser();
 
   // Role-specific descriptions
   const getRoleDescription = (role: string) => {

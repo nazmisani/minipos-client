@@ -9,6 +9,7 @@ import {
 } from "@/components/shared";
 import { useState, useEffect } from "react";
 import apiClient from "@/service/apiClient";
+import Protected from "@/components/auth/Protected";
 
 interface UserListProps {
   onViewModeChange: (mode: UserViewMode) => void;
@@ -49,7 +50,9 @@ export default function UserList({
         title="User Management"
         subtitle="Manage users and system access rights."
         action={
-          <Button onClick={() => onViewModeChange("add")}>Add User</Button>
+          <Protected permission="users.create">
+            <Button onClick={() => onViewModeChange("add")}>Add User</Button>
+          </Protected>
         }
       />
 

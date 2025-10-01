@@ -4,17 +4,10 @@ import { useRouter } from "next/navigation";
 import CustomerForm from "@/components/customers/CustomerForm";
 import { useAuth } from "@/contexts/authContext";
 import { useEffect } from "react";
+import RouteGuard from "@/components/auth/RouteGuard";
 
-export default function AddCustomerPage() {
+function AddCustomerPageContent() {
   const router = useRouter();
-  const { user } = useAuth();
-
-  useEffect(() => {
-    if (user && !["admin", "manager"].includes(user.role)) {
-      router.push("/customers");
-      return;
-    }
-  }, [user, router]);
 
   const handleBack = () => {
     router.push("/customers");
@@ -26,11 +19,15 @@ export default function AddCustomerPage() {
     }, 1000);
   };
 
-  if (user && !["admin", "manager"].includes(user.role)) {
-    return null;
-  }
-
   return (
     <CustomerForm isEdit={false} onBack={handleBack} onSave={handleSave} />
+  );
+}
+
+export default function AddCustomerPage() {
+  return (
+    <RouteGuard permission="customers.create">
+      <AddCustomerPageContent />
+    </RouteGuard>
   );
 }

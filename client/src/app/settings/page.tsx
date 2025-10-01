@@ -8,6 +8,8 @@ import UserList from "@/components/users/UserList";
 import UserForm from "@/components/users/UserForm";
 import DeleteConfirmation from "@/components/users/DeleteConfirmation";
 import ChangePasswordForm from "@/components/settings/ChangePasswordForm";
+import Protected from "@/components/auth/Protected";
+import RouteGuard from "@/components/auth/RouteGuard";
 
 type TabType = "general" | "logs" | "users";
 
@@ -25,7 +27,7 @@ interface LogData {
   };
 }
 
-export default function SettingsPage() {
+function SettingsPageContent() {
   const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<TabType>("general");
   const [userViewMode, setUserViewMode] = useState<UserViewMode>("list");
@@ -126,26 +128,30 @@ export default function SettingsPage() {
               >
                 General
               </button>
-              <button
-                onClick={() => setActiveTab("users")}
-                className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-                  activeTab === "users"
-                    ? "border-emerald-500 text-emerald-600"
-                    : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
-                }`}
-              >
-                Users
-              </button>
-              <button
-                onClick={() => setActiveTab("logs")}
-                className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-                  activeTab === "logs"
-                    ? "border-emerald-500 text-emerald-600"
-                    : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
-                }`}
-              >
-                Logs
-              </button>
+              <Protected permission="settings.users">
+                <button
+                  onClick={() => setActiveTab("users")}
+                  className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+                    activeTab === "users"
+                      ? "border-emerald-500 text-emerald-600"
+                      : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
+                  }`}
+                >
+                  Users
+                </button>
+              </Protected>
+              <Protected permission="settings.logs">
+                <button
+                  onClick={() => setActiveTab("logs")}
+                  className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+                    activeTab === "logs"
+                      ? "border-emerald-500 text-emerald-600"
+                      : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
+                  }`}
+                >
+                  Logs
+                </button>
+              </Protected>
             </nav>
           </div>
         </div>
@@ -360,70 +366,80 @@ export default function SettingsPage() {
           </div>
         )}
 
-        {activeTab === "users" && (
-          <div className="space-y-6">
-            {(() => {
-              switch (userViewMode) {
-                case "list":
-                  return (
-                    <UserList
-                      key={userRefreshKey}
-                      onViewModeChange={setUserViewMode}
-                      onSelectUser={setSelectedUser}
-                      onRefreshNeeded={refreshUserList}
-                    />
-                  );
-                case "add":
-                  return (
-                    <UserForm
-                      mode="add"
-                      onViewModeChange={setUserViewMode}
-                      onRefreshNeeded={refreshUserList}
-                    />
-                  );
-                case "edit":
-                  return selectedUser ? (
-                    <UserForm
-                      mode="edit"
-                      user={selectedUser}
-                      onViewModeChange={setUserViewMode}
-                      onRefreshNeeded={refreshUserList}
-                    />
-                  ) : (
-                    <UserList
-                      key={userRefreshKey}
-                      onViewModeChange={setUserViewMode}
-                      onSelectUser={setSelectedUser}
-                      onRefreshNeeded={refreshUserList}
-                    />
-                  );
-                case "delete":
-                  return selectedUser ? (
-                    <DeleteConfirmation
-                      user={selectedUser}
-                      onViewModeChange={setUserViewMode}
-                      onRefreshNeeded={refreshUserList}
-                    />
-                  ) : (
-                    <UserList
-                      key={userRefreshKey}
-                      onViewModeChange={setUserViewMode}
-                      onSelectUser={setSelectedUser}
-                      onRefreshNeeded={refreshUserList}
-                    />
-                  );
-                default:
-                  return (
-                    <UserList
-                      onViewModeChange={setUserViewMode}
-                      onSelectUser={setSelectedUser}
-                    />
-                  );
-              }
-            })()}
-          </div>
-        )}
+        <Protected permission="settings.users">
+          {activeTab === "users" && (
+            <div className="space-y-6">
+              {(() => {
+                switch (userViewMode) {
+                  case "list":
+                    return (
+                      <UserList
+                        key={userRefreshKey}
+                        onViewModeChange={setUserViewMode}
+                        onSelectUser={setSelectedUser}
+                        onRefreshNeeded={refreshUserList}
+                      />
+                    );
+                  case "add":
+                    return (
+                      <UserForm
+                        mode="add"
+                        onViewModeChange={setUserViewMode}
+                        onRefreshNeeded={refreshUserList}
+                      />
+                    );
+                  case "edit":
+                    return selectedUser ? (
+                      <UserForm
+                        mode="edit"
+                        user={selectedUser}
+                        onViewModeChange={setUserViewMode}
+                        onRefreshNeeded={refreshUserList}
+                      />
+                    ) : (
+                      <UserList
+                        key={userRefreshKey}
+                        onViewModeChange={setUserViewMode}
+                        onSelectUser={setSelectedUser}
+                        onRefreshNeeded={refreshUserList}
+                      />
+                    );
+                  case "delete":
+                    return selectedUser ? (
+                      <DeleteConfirmation
+                        user={selectedUser}
+                        onViewModeChange={setUserViewMode}
+                        onRefreshNeeded={refreshUserList}
+                      />
+                    ) : (
+                      <UserList
+                        key={userRefreshKey}
+                        onViewModeChange={setUserViewMode}
+                        onSelectUser={setSelectedUser}
+                        onRefreshNeeded={refreshUserList}
+                      />
+                    );
+                  default:
+                    return (
+                      <UserList
+                        onViewModeChange={setUserViewMode}
+                        onSelectUser={setSelectedUser}
+                      />
+                    );
+                }
+              })()}
+            </div>
+          )}
+        </Protected>
       </div>
     </div>
+  );
+}
+
+export default function SettingsPage() {
+  return (
+    <RouteGuard permission="pages.settings">
+      <SettingsPageContent />
+    </RouteGuard>
   );
 }
