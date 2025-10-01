@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { User, UserViewMode } from "./types";
 import {
   CrudLayout,
@@ -6,16 +7,36 @@ import {
   Card,
   Button,
 } from "@/components/shared";
+import apiClient from "@/service/apiClient";
+import { toast } from "react-toastify";
 
 interface DeleteConfirmationProps {
   user: User;
   onViewModeChange: (mode: UserViewMode) => void;
+  onRefreshNeeded?: () => void;
 }
 
 export default function DeleteConfirmation({
   user,
   onViewModeChange,
+  onRefreshNeeded,
 }: DeleteConfirmationProps) {
+  const [loading, setLoading] = useState(false);
+
+  const handleDelete = async () => {
+    setLoading(true);
+    try {
+      await apiClient.delete(`/users/${user.id}`);
+      toast.success("User berhasil dihapus!");
+      if (onRefreshNeeded) onRefreshNeeded();
+      onViewModeChange("list");
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast.error("Gagal menghapus user!");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <CrudLayout>
       <div className="max-w-2xl mx-auto">
@@ -81,18 +102,12 @@ export default function DeleteConfirmation({
             <Button
               variant="secondary"
               onClick={() => onViewModeChange("list")}
+              disabled={loading}
             >
               Batal
             </Button>
-            <Button
-              variant="danger"
-              onClick={() => {
-                // TODO: Implement actual delete logic here
-                console.log("Deleting user:", user);
-                onViewModeChange("list");
-              }}
-            >
-              Ya, Hapus User
+            <Button variant="danger" onClick={handleDelete} disabled={loading}>
+              {loading ? "Menghapus..." : "Ya, Hapus User"}
             </Button>
           </div>
         </Card>

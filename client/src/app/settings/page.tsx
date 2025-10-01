@@ -7,6 +7,7 @@ import { User, UserFormData, UserViewMode } from "@/components/users/types";
 import UserList from "@/components/users/UserList";
 import UserForm from "@/components/users/UserForm";
 import DeleteConfirmation from "@/components/users/DeleteConfirmation";
+import ChangePasswordForm from "@/components/settings/ChangePasswordForm";
 
 type TabType = "general" | "logs" | "users";
 
@@ -29,6 +30,7 @@ export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<TabType>("general");
   const [userViewMode, setUserViewMode] = useState<UserViewMode>("list");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [userRefreshKey, setUserRefreshKey] = useState(0);
 
   // Logs state
   const [logs, setLogs] = useState<LogData[]>([]);
@@ -63,6 +65,10 @@ export default function SettingsPage() {
     } finally {
       setLogsLoading(false);
     }
+  };
+
+  const refreshUserList = () => {
+    setUserRefreshKey((prev) => prev + 1);
   };
 
   const formatDateTime = (dateString: string) => {
@@ -147,15 +153,25 @@ export default function SettingsPage() {
         {/* Tab Content */}
         {activeTab === "general" && (
           <div className="space-y-6">
-            {/* General Settings Card */}
-            <div className="bg-white rounded-xl shadow-md p-6">
-              <h2 className="text-lg font-semibold text-slate-900 mb-4">
+            {/* Page Header */}
+            <div>
+              <h1 className="text-2xl font-bold text-slate-900">
                 General Settings
-              </h2>
-              <div className="text-center py-12">
+              </h1>
+              <p className="text-slate-600 mt-1">
+                Manage your account security and system preferences
+              </p>
+            </div>
+
+            {/* Change Password Section */}
+            <ChangePasswordForm />
+
+            {/* Additional Settings Cards can be added here */}
+            <div className="bg-white rounded-xl shadow-md p-6">
+              <div className="text-center py-8">
                 <div className="text-slate-400 mb-4">
                   <svg
-                    className="w-16 h-16 mx-auto"
+                    className="w-12 h-12 mx-auto"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -175,10 +191,11 @@ export default function SettingsPage() {
                   </svg>
                 </div>
                 <h3 className="text-lg font-medium text-slate-900 mb-2">
-                  General Settings
+                  More Settings Coming Soon
                 </h3>
-                <p className="text-slate-500">
-                  Pengaturan umum sistem akan ditampilkan di sini.
+                <p className="text-slate-500 text-sm">
+                  Additional system preferences and configurations will be
+                  available here.
                 </p>
               </div>
             </div>
@@ -350,13 +367,19 @@ export default function SettingsPage() {
                 case "list":
                   return (
                     <UserList
+                      key={userRefreshKey}
                       onViewModeChange={setUserViewMode}
                       onSelectUser={setSelectedUser}
+                      onRefreshNeeded={refreshUserList}
                     />
                   );
                 case "add":
                   return (
-                    <UserForm mode="add" onViewModeChange={setUserViewMode} />
+                    <UserForm
+                      mode="add"
+                      onViewModeChange={setUserViewMode}
+                      onRefreshNeeded={refreshUserList}
+                    />
                   );
                 case "edit":
                   return selectedUser ? (
@@ -364,11 +387,14 @@ export default function SettingsPage() {
                       mode="edit"
                       user={selectedUser}
                       onViewModeChange={setUserViewMode}
+                      onRefreshNeeded={refreshUserList}
                     />
                   ) : (
                     <UserList
+                      key={userRefreshKey}
                       onViewModeChange={setUserViewMode}
                       onSelectUser={setSelectedUser}
+                      onRefreshNeeded={refreshUserList}
                     />
                   );
                 case "delete":
@@ -376,11 +402,14 @@ export default function SettingsPage() {
                     <DeleteConfirmation
                       user={selectedUser}
                       onViewModeChange={setUserViewMode}
+                      onRefreshNeeded={refreshUserList}
                     />
                   ) : (
                     <UserList
+                      key={userRefreshKey}
                       onViewModeChange={setUserViewMode}
                       onSelectUser={setSelectedUser}
+                      onRefreshNeeded={refreshUserList}
                     />
                   );
                 default:

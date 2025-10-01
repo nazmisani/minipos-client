@@ -13,11 +13,13 @@ import apiClient from "@/service/apiClient";
 interface UserListProps {
   onViewModeChange: (mode: UserViewMode) => void;
   onSelectUser: (user: User) => void;
+  onRefreshNeeded?: () => void;
 }
 
 export default function UserList({
   onViewModeChange,
   onSelectUser,
+  onRefreshNeeded,
 }: UserListProps) {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);

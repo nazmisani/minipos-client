@@ -9,15 +9,18 @@ import {
   Select,
   Button,
 } from "@/components/shared";
+import apiClient from "@/service/apiClient";
+import { toast } from "react-toastify";
 
 interface UserFormProps {
   mode: "add" | "edit";
   user?: User;
   onViewModeChange: (mode: UserViewMode) => void;
+  onRefreshNeeded?: () => void;
 }
 
 const roleOptions = [
-  { value: "staff", label: "Staff" },
+  { value: "cashier", label: "Cashier" },
   { value: "manager", label: "Manager" },
   { value: "admin", label: "Admin" },
 ];
@@ -26,24 +29,52 @@ export default function UserForm({
   mode,
   user,
   onViewModeChange,
+  onRefreshNeeded,
 }: UserFormProps) {
   const [formData, setFormData] = useState<UserFormData>({
     name: user?.name || "",
     email: user?.email || "",
-    role: user?.role || "staff",
+    role: user?.role || "cashier",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email) return;
     if (mode === "add" && !formData.password) return;
 
-    // TODO: Implement actual save logic here
-    console.log("Saving user:", formData);
+    setLoading(true);
+    try {
+      if (mode === "add") {
+        await apiClient.post("/users", {
+          name: formData.name,
+          email: formData.email,
+          role: formData.role,
+          password: formData.password,
+        });
+        toast.success("User berhasil ditambahkan!");
+      } else {
+        // TODO: Implement edit functionality
+        await apiClient.put(`/users/${user?.id}`, {
+          name: formData.name,
+          email: formData.email,
+          role: formData.role,
+        });
+        toast.success("User berhasil diupdate!");
+      }
 
-    // Navigate back to list
-    onViewModeChange("list");
+      // Refresh data and navigate back to list
+      if (onRefreshNeeded) onRefreshNeeded();
+      onViewModeChange("list");
+    } catch (error) {
+      console.error("Error saving user:", error);
+      toast.error(
+        mode === "add" ? "Gagal menambahkan user!" : "Gagal mengupdate user!"
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleInputChange = (
@@ -115,13 +146,18 @@ export default function UserForm({
             </div>
 
             <div className="flex gap-3 pt-4">
-              <Button type="submit">
-                {mode === "edit" ? "Save Changes" : "Add User"}
+              <Button type="submit" disabled={loading}>
+                {loading
+                  ? "Processing..."
+                  : mode === "edit"
+                  ? "Save Changes"
+                  : "Add User"}
               </Button>
               <Button
                 type="button"
                 variant="secondary"
                 onClick={() => onViewModeChange("list")}
+                disabled={loading}
               >
                 Batal
               </Button>
