@@ -30,22 +30,22 @@ export const PERMISSIONS = {
   "categories.delete": ["admin"], // Only Admin can delete
   "categories.manage": ["admin", "manager"], // Admin & Manager can manage categories
 
-  // Transactions (will be extended when you provide more backend info)
-  "transactions.view": ["admin", "manager", "cashier"],
-  "transactions.create": ["admin", "manager", "cashier"],
-  "transactions.edit": ["admin", "manager"],
-  "transactions.delete": ["admin"],
+  // Transactions - Based on actual backend endpoints
+  "transactions.view": ["admin", "manager"], // GET /transactions → Admin, Manager only
+  "transactions.viewDetail": ["admin", "manager", "cashier"], // GET /transactions/:id → Admin, Manager, Cashier
+  "transactions.create": ["admin", "cashier"], // POST /transactions → Admin, Cashier
+  "transactions.delete": ["admin"], // DELETE /transactions/:id → Admin only
 
-  // Customers (assuming similar pattern to products)
-  "customers.view": ["admin", "manager", "cashier"],
-  "customers.create": ["admin", "manager"],
-  "customers.edit": ["admin", "manager"],
-  "customers.delete": ["admin", "manager"],
+  // Customers - Based on actual backend endpoints
+  "customers.view": ["admin", "manager", "cashier"], // GET /customers → Admin, Manager, Cashier
+  "customers.create": ["admin", "manager", "cashier"], // POST /customers → Admin, Manager, Cashier
+  "customers.edit": ["admin", "manager"], // PUT /customers/:id → Admin, Manager
+  "customers.delete": ["admin"], // DELETE /customers/:id → Admin only
 
-  // Settings & System
+  // Settings & System - Based on actual backend endpoints
   "settings.general": ["admin", "manager", "cashier"], // General settings like change password
   "settings.users": ["admin"], // User management settings
-  "settings.logs": ["admin", "manager"], // Activity logs
+  "settings.logs": ["admin"], // GET /logs → Admin only
   "settings.system": ["admin"], // System configurations
 
   // Dashboard & Reports
@@ -57,7 +57,7 @@ export const PERMISSIONS = {
   "pages.users": ["admin"],
   "pages.products": ["admin", "manager", "cashier"],
   "pages.categories": ["admin", "manager", "cashier"],
-  "pages.transactions": ["admin", "manager", "cashier"],
+  "pages.transactions": ["admin", "manager"], // Only admin & manager can access transaction list page
   "pages.customers": ["admin", "manager", "cashier"],
   "pages.settings": ["admin", "manager", "cashier"],
   "pages.dashboard": ["admin", "manager", "cashier"],

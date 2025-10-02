@@ -2,20 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import TransactionForm from "@/components/transactions/TransactionForm";
-import { useAuth } from "@/contexts/authContext";
-import { useEffect } from "react";
 import { toast } from "react-toastify";
+import RouteGuard from "@/components/auth/RouteGuard";
 
-export default function AddTransactionPage() {
+function AddTransactionPageContent() {
   const router = useRouter();
-  const { user } = useAuth();
-
-  useEffect(() => {
-    if (user && !["admin", "manager", "cashier"].includes(user.role)) {
-      router.push("/transactions");
-      return;
-    }
-  }, [user, router]);
 
   const handleBack = () => {
     router.push("/transactions");
@@ -28,11 +19,15 @@ export default function AddTransactionPage() {
     }, 1000);
   };
 
-  if (user && !["admin", "manager", "cashier"].includes(user.role)) {
-    return null;
-  }
-
   return (
     <TransactionForm isEdit={false} onBack={handleBack} onSave={handleSave} />
+  );
+}
+
+export default function AddTransactionPage() {
+  return (
+    <RouteGuard permission="transactions.create">
+      <AddTransactionPageContent />
+    </RouteGuard>
   );
 }

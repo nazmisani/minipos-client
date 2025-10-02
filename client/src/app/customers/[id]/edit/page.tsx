@@ -7,8 +7,9 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Customer } from "@/components/customers/types";
 import apiClient from "@/service/apiClient";
+import RouteGuard from "@/components/auth/RouteGuard";
 
-export default function EditCustomerPage() {
+function EditCustomerPageContent() {
   const router = useRouter();
   const params = useParams();
   const { user } = useAuth();
@@ -163,5 +164,13 @@ export default function EditCustomerPage() {
       onBack={handleBack}
       onSave={handleSave}
     />
+  );
+}
+
+export default function EditCustomerPage() {
+  return (
+    <RouteGuard permission="customers.edit">
+      <EditCustomerPageContent />
+    </RouteGuard>
   );
 }

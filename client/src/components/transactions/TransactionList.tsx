@@ -12,15 +12,23 @@ import { useRouter } from "next/navigation";
 import apiClient from "@/service/apiClient";
 import { toast } from "react-toastify";
 import { useAuth } from "@/contexts/authContext";
+import { usePermissions } from "@/hooks/usePermissions";
+import Protected from "@/components/auth/Protected";
 
 interface TransactionListProps {}
 
 export default function TransactionList({}: TransactionListProps) {
   const router = useRouter();
   const { user } = useAuth();
+  const { hasPermission } = usePermissions();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Check permissions for conditional rendering
+  const canCreate = hasPermission("transactions.create");
+  const canDelete = hasPermission("transactions.delete");
+  const hasAnyActionPermission = canDelete; // Only delete action is available in table
   const [pendingDelete, setPendingDelete] = useState<{
     id: number;
     name: string;
@@ -253,7 +261,11 @@ export default function TransactionList({}: TransactionListProps) {
       <PageHeader
         title="Transaction Management"
         subtitle="Kelola semua transaksi dan riwayat penjualan."
-        action={<Button onClick={handleAdd}>Tambah Transaksi</Button>}
+        action={
+          <Protected permission="transactions.create" fallback={null}>
+            <Button onClick={handleAdd}>Tambah Transaksi</Button>
+          </Protected>
+        }
       />
 
       <SearchBar placeholder="Cari transaksi..." />

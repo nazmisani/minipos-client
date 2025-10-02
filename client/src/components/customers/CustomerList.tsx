@@ -12,6 +12,8 @@ import {
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import apiClient from "@/service/apiClient";
+import { usePermissions } from "@/hooks/usePermissions";
+import Protected from "@/components/auth/Protected";
 
 interface CustomerListProps {
   onViewDetail: (customer: Customer) => void;
@@ -24,9 +26,16 @@ export default function CustomerList({
   onEdit,
   onAdd,
 }: CustomerListProps) {
+  const { hasPermission } = usePermissions();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Check permissions for conditional rendering
+  const canCreate = hasPermission("customers.create");
+  const canEdit = hasPermission("customers.edit");
+  const canDelete = hasPermission("customers.delete");
+  const hasAnyActionPermission = canEdit || canDelete; // View detail is always available for this role
   const [isDeleting, setIsDeleting] = useState(false);
   const [pendingDelete, setPendingDelete] = useState<{
     id: number;
@@ -246,7 +255,11 @@ export default function CustomerList({
       <PageHeader
         title="Customer Management"
         subtitle="Kelola data customer dan lihat riwayat transaksi mereka."
-        action={<Button onClick={onAdd}>Tambah Customer</Button>}
+        action={
+          <Protected permission="customers.create" fallback={null}>
+            <Button onClick={onAdd}>Tambah Customer</Button>
+          </Protected>
+        }
       />
 
       <SearchBar placeholder="Cari customer..." />

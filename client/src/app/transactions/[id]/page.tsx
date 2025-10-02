@@ -7,8 +7,9 @@ import TransactionDetail from "@/components/transactions/TransactionDetail";
 import { useAuth } from "@/contexts/authContext";
 import apiClient from "@/service/apiClient";
 import { toast } from "react-toastify";
+import RouteGuard from "@/components/auth/RouteGuard";
 
-export default function TransactionDetailPage() {
+function TransactionDetailPageContent() {
   const router = useRouter();
   const params = useParams();
   const { user } = useAuth();
@@ -103,4 +104,12 @@ export default function TransactionDetailPage() {
   }
 
   return <TransactionDetail transaction={transaction} onBack={handleBack} />;
+}
+
+export default function TransactionDetailPage() {
+  return (
+    <RouteGuard permission="transactions.viewDetail">
+      <TransactionDetailPageContent />
+    </RouteGuard>
+  );
 }

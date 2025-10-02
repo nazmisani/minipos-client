@@ -46,7 +46,7 @@ function ProductPageContent() {
   const [categories, setCategories] = useState<CategoryData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Check if user has any action permissions
   const canEdit = hasPermission("products.update");
   const canDelete = hasPermission("products.delete");

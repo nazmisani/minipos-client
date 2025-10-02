@@ -209,161 +209,165 @@ function SettingsPageContent() {
         )}
 
         {activeTab === "logs" && (
-          <div className="space-y-6">
-            {/* Activity Logs Card */}
-            <div className="bg-white rounded-xl shadow-md overflow-hidden">
-              <div className="p-6 border-b border-slate-200">
-                <h2 className="text-lg font-semibold text-slate-900">
-                  Activity Logs
-                </h2>
-                <p className="text-slate-600 mt-1">
-                  Riwayat aktivitas pengguna dalam sistem.
-                </p>
-              </div>
+          <Protected permission="settings.logs">
+            <div className="space-y-6">
+              {/* Activity Logs Card */}
+              <div className="bg-white rounded-xl shadow-md overflow-hidden">
+                <div className="p-6 border-b border-slate-200">
+                  <h2 className="text-lg font-semibold text-slate-900">
+                    Activity Logs
+                  </h2>
+                  <p className="text-slate-600 mt-1">
+                    Riwayat aktivitas pengguna dalam sistem.
+                  </p>
+                </div>
 
-              {/* Table Container with horizontal scroll */}
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-slate-50 border-b border-slate-200">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
-                        ID
-                      </th>
-                      <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
-                        User
-                      </th>
-                      <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
-                        Action
-                      </th>
-                      <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
-                        Entity
-                      </th>
-                      <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
-                        Created At
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-200">
-                    {/* Loading State */}
-                    {logsLoading && (
-                      <>
-                        {[...Array(5)].map((_, index) => (
-                          <tr key={index} className="animate-pulse">
-                            <td className="px-6 py-4">
-                              <div className="h-4 w-12 bg-slate-200 rounded"></div>
+                {/* Table Container with horizontal scroll */}
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-slate-50 border-b border-slate-200">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
+                          ID
+                        </th>
+                        <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
+                          User
+                        </th>
+                        <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
+                          Action
+                        </th>
+                        <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
+                          Entity
+                        </th>
+                        <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
+                          Created At
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-200">
+                      {/* Loading State */}
+                      {logsLoading && (
+                        <>
+                          {[...Array(5)].map((_, index) => (
+                            <tr key={index} className="animate-pulse">
+                              <td className="px-6 py-4">
+                                <div className="h-4 w-12 bg-slate-200 rounded"></div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="h-4 w-32 bg-slate-200 rounded"></div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="h-6 w-20 bg-slate-200 rounded-full"></div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="h-4 w-16 bg-slate-200 rounded"></div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="h-4 w-28 bg-slate-200 rounded"></div>
+                              </td>
+                            </tr>
+                          ))}
+                        </>
+                      )}
+
+                      {/* Actual Data */}
+                      {!logsLoading &&
+                        logs.map((log) => (
+                          <tr key={log.id} className="hover:bg-slate-50">
+                            <td className="px-6 py-4 text-sm font-medium text-slate-900">
+                              #{log.id.toString().padStart(3, "0")}
                             </td>
-                            <td className="px-6 py-4">
-                              <div className="h-4 w-32 bg-slate-200 rounded"></div>
+                            <td className="px-6 py-4 text-sm text-slate-900">
+                              <div>
+                                <div className="font-medium">
+                                  {log.user.name}
+                                </div>
+                                <div className="text-xs text-slate-500 capitalize">
+                                  {log.user.role}
+                                </div>
+                              </div>
                             </td>
-                            <td className="px-6 py-4">
-                              <div className="h-6 w-20 bg-slate-200 rounded-full"></div>
+                            <td className="px-6 py-4 text-sm">
+                              <span
+                                className={`px-2 py-1 rounded-full text-xs font-medium ${getActionBadgeColor(
+                                  log.action
+                                )}`}
+                              >
+                                {log.action}
+                              </span>
                             </td>
-                            <td className="px-6 py-4">
-                              <div className="h-4 w-16 bg-slate-200 rounded"></div>
+                            <td className="px-6 py-4 text-sm text-slate-900 capitalize">
+                              {log.entity}
                             </td>
-                            <td className="px-6 py-4">
-                              <div className="h-4 w-28 bg-slate-200 rounded"></div>
+                            <td className="px-6 py-4 text-sm text-slate-500">
+                              {formatDateTime(log.createdAt)}
                             </td>
                           </tr>
                         ))}
-                      </>
-                    )}
+                    </tbody>
+                  </table>
+                </div>
 
-                    {/* Actual Data */}
-                    {!logsLoading &&
-                      logs.map((log) => (
-                        <tr key={log.id} className="hover:bg-slate-50">
-                          <td className="px-6 py-4 text-sm font-medium text-slate-900">
-                            #{log.id.toString().padStart(3, "0")}
-                          </td>
-                          <td className="px-6 py-4 text-sm text-slate-900">
-                            <div>
-                              <div className="font-medium">{log.user.name}</div>
-                              <div className="text-xs text-slate-500 capitalize">
-                                {log.user.role}
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 text-sm">
-                            <span
-                              className={`px-2 py-1 rounded-full text-xs font-medium ${getActionBadgeColor(
-                                log.action
-                              )}`}
-                            >
-                              {log.action}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 text-sm text-slate-900 capitalize">
-                            {log.entity}
-                          </td>
-                          <td className="px-6 py-4 text-sm text-slate-500">
-                            {formatDateTime(log.createdAt)}
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
+                {/* Error State */}
+                {logsError && (
+                  <div className="text-center py-12">
+                    <div className="text-red-400 mb-4">
+                      <svg
+                        className="w-16 h-16 mx-auto"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1}
+                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 18.5c-.77.833.192 2.5 1.732 2.5z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-medium text-slate-900 mb-2">
+                      Error Loading Logs
+                    </h3>
+                    <p className="text-slate-500 mb-4">{logsError}</p>
+                    <button
+                      onClick={fetchLogs}
+                      className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors"
+                    >
+                      Try Again
+                    </button>
+                  </div>
+                )}
+
+                {/* Empty State (jika tidak ada data) */}
+                {!logsLoading && !logsError && logs.length === 0 && (
+                  <div className="text-center py-12">
+                    <div className="text-slate-400 mb-4">
+                      <svg
+                        className="w-16 h-16 mx-auto"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1}
+                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-medium text-slate-900 mb-2">
+                      Belum Ada Log Aktivitas
+                    </h3>
+                    <p className="text-slate-500">
+                      Log aktivitas pengguna akan muncul di sini.
+                    </p>
+                  </div>
+                )}
               </div>
-
-              {/* Error State */}
-              {logsError && (
-                <div className="text-center py-12">
-                  <div className="text-red-400 mb-4">
-                    <svg
-                      className="w-16 h-16 mx-auto"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1}
-                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 18.5c-.77.833.192 2.5 1.732 2.5z"
-                      />
-                    </svg>
-                  </div>
-                  <h3 className="text-lg font-medium text-slate-900 mb-2">
-                    Error Loading Logs
-                  </h3>
-                  <p className="text-slate-500 mb-4">{logsError}</p>
-                  <button
-                    onClick={fetchLogs}
-                    className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors"
-                  >
-                    Try Again
-                  </button>
-                </div>
-              )}
-
-              {/* Empty State (jika tidak ada data) */}
-              {!logsLoading && !logsError && logs.length === 0 && (
-                <div className="text-center py-12">
-                  <div className="text-slate-400 mb-4">
-                    <svg
-                      className="w-16 h-16 mx-auto"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1}
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                      />
-                    </svg>
-                  </div>
-                  <h3 className="text-lg font-medium text-slate-900 mb-2">
-                    Belum Ada Log Aktivitas
-                  </h3>
-                  <p className="text-slate-500">
-                    Log aktivitas pengguna akan muncul di sini.
-                  </p>
-                </div>
-              )}
             </div>
-          </div>
+          </Protected>
         )}
 
         <Protected permission="settings.users">

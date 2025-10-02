@@ -3,8 +3,9 @@
 import { useRouter } from "next/navigation";
 import { Customer } from "@/components/customers/types";
 import CustomerList from "@/components/customers/CustomerList";
+import RouteGuard from "@/components/auth/RouteGuard";
 
-export default function CustomerPage() {
+function CustomerPageContent() {
   const router = useRouter();
 
   const handleViewDetail = (customer: Customer) => {
@@ -25,5 +26,13 @@ export default function CustomerPage() {
       onEdit={handleEdit}
       onAdd={handleAdd}
     />
+  );
+}
+
+export default function CustomerPage() {
+  return (
+    <RouteGuard permission="pages.customers">
+      <CustomerPageContent />
+    </RouteGuard>
   );
 }

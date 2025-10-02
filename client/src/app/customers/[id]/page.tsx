@@ -5,8 +5,9 @@ import { useRouter, useParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { Customer } from "@/components/customers/types";
 import apiClient from "@/service/apiClient";
+import RouteGuard from "@/components/auth/RouteGuard";
 
-export default function CustomerDetailPage() {
+function CustomerDetailPageContent() {
   const router = useRouter();
   const params = useParams();
   const customerId = params.id as string;
@@ -331,5 +332,13 @@ export default function CustomerDetailPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CustomerDetailPage() {
+  return (
+    <RouteGuard permission="customers.view">
+      <CustomerDetailPageContent />
+    </RouteGuard>
   );
 }
