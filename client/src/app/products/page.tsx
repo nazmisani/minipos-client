@@ -46,6 +46,11 @@ function ProductPageContent() {
   const [categories, setCategories] = useState<CategoryData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Check if user has any action permissions
+  const canEdit = hasPermission("products.update");
+  const canDelete = hasPermission("products.delete");
+  const hasAnyActionPermission = canEdit || canDelete;
   const [pendingDelete, setPendingDelete] = useState<{
     id: number;
     name: string;
@@ -556,9 +561,11 @@ function ProductPageContent() {
                   <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
                     Status
                   </th>
-                  <th className="px-6 py-4 text-center text-sm font-semibold text-slate-900">
-                    Actions
-                  </th>
+                  {hasAnyActionPermission && (
+                    <th className="px-6 py-4 text-center text-sm font-semibold text-slate-900">
+                      Actions
+                    </th>
+                  )}
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
@@ -584,12 +591,14 @@ function ProductPageContent() {
                       <td className="px-6 py-4">
                         <div className="h-6 w-16 bg-slate-200 rounded-full"></div>
                       </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center justify-center space-x-2">
-                          <div className="h-8 w-8 bg-slate-200 rounded"></div>
-                          <div className="h-8 w-8 bg-slate-200 rounded"></div>
-                        </div>
-                      </td>
+                      {hasAnyActionPermission && (
+                        <td className="px-6 py-4">
+                          <div className="flex items-center justify-center space-x-2">
+                            <div className="h-8 w-8 bg-slate-200 rounded"></div>
+                            <div className="h-8 w-8 bg-slate-200 rounded"></div>
+                          </div>
+                        </td>
+                      )}
                     </tr>
                   ))
                 ) : error ? (
@@ -685,63 +694,65 @@ function ProductPageContent() {
                             {stockStatus.text}
                           </span>
                         </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center justify-center space-x-2">
-                            {/* Edit Button */}
-                            <Protected
-                              permission="products.update"
-                              fallback={null}
-                            >
-                              <button
-                                onClick={() => handleEdit(product.id)}
-                                className="text-blue-600 hover:text-blue-800 p-1 rounded transition-colors"
-                                title="Edit"
+                        {hasAnyActionPermission && (
+                          <td className="px-6 py-4">
+                            <div className="flex items-center justify-center space-x-2">
+                              {/* Edit Button */}
+                              <Protected
+                                permission="products.update"
+                                fallback={null}
                               >
-                                <svg
-                                  className="w-4 h-4"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  viewBox="0 0 24 24"
+                                <button
+                                  onClick={() => handleEdit(product.id)}
+                                  className="text-blue-600 hover:text-blue-800 p-1 rounded transition-colors"
+                                  title="Edit"
                                 >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                                  />
-                                </svg>
-                              </button>
-                            </Protected>
+                                  <svg
+                                    className="w-4 h-4"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                    />
+                                  </svg>
+                                </button>
+                              </Protected>
 
-                            {/* Delete Button */}
-                            <Protected
-                              permission="products.delete"
-                              fallback={null}
-                            >
-                              <button
-                                className="text-red-600 hover:text-red-800 p-1 rounded transition-colors"
-                                title="Delete"
-                                onClick={() =>
-                                  handleDelete(product.id, product.name)
-                                }
+                              {/* Delete Button */}
+                              <Protected
+                                permission="products.delete"
+                                fallback={null}
                               >
-                                <svg
-                                  className="w-4 h-4"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  viewBox="0 0 24 24"
+                                <button
+                                  className="text-red-600 hover:text-red-800 p-1 rounded transition-colors"
+                                  title="Delete"
+                                  onClick={() =>
+                                    handleDelete(product.id, product.name)
+                                  }
                                 >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                  />
-                                </svg>
-                              </button>
-                            </Protected>
-                          </div>
-                        </td>
+                                  <svg
+                                    className="w-4 h-4"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                    />
+                                  </svg>
+                                </button>
+                              </Protected>
+                            </div>
+                          </td>
+                        )}
                       </tr>
                     );
                   })
