@@ -65,10 +65,23 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  // Decode token to get user role
+  // Decode and validate token
   try {
-    const decoded = jwtDecode(token) as { role: string };
+    const decoded = jwtDecode(token) as { role: string; exp?: number };
+
+    // Check if token is expired
+    if (decoded.exp && decoded.exp < Date.now() / 1000) {
+      console.log("Token expired, redirecting to login");
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
+
     const userRole = decoded.role;
+
+    // Validate role exists
+    if (!userRole) {
+      console.log("No role in token, redirecting to login");
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
 
     // Get required permission for this route
     const requiredPermission = getRequiredPermission(pathname);
@@ -76,20 +89,23 @@ export function middleware(req: NextRequest) {
     // If route requires permission, check it
     if (requiredPermission && !hasPermission(userRole, requiredPermission)) {
       // Redirect to dashboard for unauthorized access
+      console.log(
+        `User ${userRole} lacks permission ${requiredPermission} for ${pathname}`
+      );
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }
 
     return NextResponse.next();
   } catch (error) {
     // Invalid token, redirect to login
-    console.error("Token decode error:", error);
+    console.error("Token decode error in middleware:", error);
     return NextResponse.redirect(new URL("/login", req.url));
   }
 }
 
 export const config = {
   matcher: [
-    // Match all routes except static files and API routes
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+    // Match most routes but let client handle auth for better UX
+    "/((?!api|_next/static|_next/image|favicon.ico|login|register|$).*)",
   ],
 };

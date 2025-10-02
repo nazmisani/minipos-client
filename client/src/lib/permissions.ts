@@ -20,6 +20,7 @@ export const PERMISSIONS = {
   "products.view": ["admin", "manager", "cashier"], // All can read
   "products.create": ["admin", "manager"], // Admin & Manager can create
   "products.edit": ["admin", "manager"], // Admin & Manager can edit
+  "products.update": ["admin", "manager"], // Admin & Manager can update (alias for edit)
   "products.delete": ["admin", "manager"], // Admin & Manager can delete
 
   // Categories Management
@@ -27,6 +28,7 @@ export const PERMISSIONS = {
   "categories.create": ["admin", "manager"], // Admin & Manager can create
   "categories.edit": ["admin", "manager"], // Admin & Manager can edit
   "categories.delete": ["admin"], // Only Admin can delete
+  "categories.manage": ["admin", "manager"], // Admin & Manager can manage categories
 
   // Transactions (will be extended when you provide more backend info)
   "transactions.view": ["admin", "manager", "cashier"],

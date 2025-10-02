@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { usePermissions } from "@/hooks/usePermissions";
+import { useHydration } from "@/hooks/useHydration";
 import { Permission } from "@/lib/permissions";
 
 interface RouteGuardProps {
@@ -39,9 +40,11 @@ export default function RouteGuard({
   redirectTo = "/login",
   role,
   roleLevel,
-  loading = <div>Loading...</div>,
+  loading = null,
 }: RouteGuardProps) {
   const router = useRouter();
+  const isHydrated = useHydration();
+  const [hasChecked, setHasChecked] = useState(false);
   const {
     hasPermission,
     hasAnyPermission,
@@ -49,43 +52,56 @@ export default function RouteGuard({
     hasRole,
     hasRoleLevel,
     isAuthenticated,
+    isLoading,
   } = usePermissions();
 
   useEffect(() => {
-    // Check authentication first
-    if (!isAuthenticated()) {
-      router.push(redirectTo);
+    // Wait for hydration and auth loading to complete
+    if (!isHydrated || isLoading) {
       return;
     }
 
-    // Check role-based access
-    if (role && !hasRole(role)) {
-      router.push("/dashboard"); // Redirect to dashboard instead of login for authenticated users
-      return;
-    }
+    // Add delay to prevent race conditions on refresh
+    const timer = setTimeout(() => {
+      setHasChecked(true);
 
-    if (roleLevel && !hasRoleLevel(roleLevel)) {
-      router.push("/dashboard");
-      return;
-    }
+      // Check authentication first
+      if (!isAuthenticated()) {
+        router.push(redirectTo);
+        return;
+      }
 
-    // Check single permission
-    if (permission && !hasPermission(permission)) {
-      router.push("/dashboard");
-      return;
-    }
+      // Check role-based access
+      if (role && !hasRole(role)) {
+        router.push("/dashboard"); // Redirect to dashboard instead of login for authenticated users
+        return;
+      }
 
-    // Check multiple permissions
-    if (permissions) {
-      const hasAccess = requireAll
-        ? hasAllPermissions(permissions)
-        : hasAnyPermission(permissions);
-
-      if (!hasAccess) {
+      if (roleLevel && !hasRoleLevel(roleLevel)) {
         router.push("/dashboard");
         return;
       }
-    }
+
+      // Check single permission
+      if (permission && !hasPermission(permission)) {
+        router.push("/dashboard");
+        return;
+      }
+
+      // Check multiple permissions
+      if (permissions) {
+        const hasAccess = requireAll
+          ? hasAllPermissions(permissions)
+          : hasAnyPermission(permissions);
+
+        if (!hasAccess) {
+          router.push("/dashboard");
+          return;
+        }
+      }
+    }, 200); // 200ms delay to prevent race conditions
+
+    return () => clearTimeout(timer);
   }, [
     permission,
     permissions,
@@ -100,9 +116,16 @@ export default function RouteGuard({
     hasRole,
     hasRoleLevel,
     isAuthenticated,
+    isLoading,
+    isHydrated,
   ]);
 
-  // Show loading while checking permissions
+  // Show loading while checking permissions, loading auth state, or waiting for checks
+  if (!isHydrated || isLoading || !hasChecked) {
+    return <>{loading}</>;
+  }
+
+  // If not authenticated after checks, show loading (will be redirected by useEffect)
   if (!isAuthenticated()) {
     return <>{loading}</>;
   }

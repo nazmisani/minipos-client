@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { usePermissions } from "@/hooks/usePermissions";
+import { useHydration } from "@/hooks/useHydration";
+import { ButtonSkeleton } from "@/components/auth/LoadingComponents";
 
 interface QuickActionsProps {
   userRole?: string;
@@ -11,7 +13,8 @@ export default function QuickActions({
   userRole = "cashier",
 }: QuickActionsProps) {
   const router = useRouter();
-  const { hasPermission } = usePermissions();
+  const isHydrated = useHydration();
+  const { hasPermission, isLoading } = usePermissions();
 
   // All actions with permission-based access control
   const allActions = [
@@ -83,6 +86,9 @@ export default function QuickActions({
 
   // Filter actions based on permissions
   const getActionsForUser = () => {
+    if (!isHydrated || isLoading) {
+      return []; // Return empty array during SSR or loading to prevent hydration mismatch
+    }
     return allActions
       .filter((action) => hasPermission(action.permission))
       .slice(0, 4); // Limit to 4 actions
@@ -118,36 +124,46 @@ export default function QuickActions({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {actions.map((action, index) => (
-          <button
-            key={index}
-            className={`${action.color} text-white p-6 rounded-xl transition-all duration-300 text-left group hover:scale-105 hover:shadow-xl`}
-            onClick={() => {
-              router.push(action.href);
-            }}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-3xl">{action.icon}</span>
-              <svg
-                className="w-6 h-6 group-hover:translate-x-1 transition-transform"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+        {!isHydrated || isLoading
+          ? // Show loading placeholder during hydration or loading
+            Array.from({ length: 4 }).map((_, index) => (
+              <ButtonSkeleton
+                key={index}
+                width="w-full"
+                height="h-32"
+                className="bg-gray-200 p-6 rounded-xl"
+              />
+            ))
+          : actions.map((action, index) => (
+              <button
+                key={index}
+                className={`${action.color} text-white p-6 rounded-xl transition-all duration-300 text-left group hover:scale-105 hover:shadow-xl`}
+                onClick={() => {
+                  router.push(action.href);
+                }}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </div>
-            <h4 className="font-bold text-lg mb-2">{action.title}</h4>
-            <p className="text-sm opacity-90 leading-relaxed">
-              {action.description}
-            </p>
-          </button>
-        ))}
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-3xl">{action.icon}</span>
+                  <svg
+                    className="w-6 h-6 group-hover:translate-x-1 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </div>
+                <h4 className="font-bold text-lg mb-2">{action.title}</h4>
+                <p className="text-sm opacity-90 leading-relaxed">
+                  {action.description}
+                </p>
+              </button>
+            ))}
       </div>
     </div>
   );

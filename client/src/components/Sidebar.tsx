@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import apiClient from "@/service/apiClient";
 import { usePermissions } from "@/hooks/usePermissions";
+import { useHydration } from "@/hooks/useHydration";
+import { useAuthWithWatcher } from "@/hooks/useTokenWatcher";
 import Protected from "@/components/auth/Protected";
+import { ButtonSkeleton } from "@/components/auth/LoadingComponents";
 
 // Optimized Icons - Only what we need
 const DashboardIcon = () => (
@@ -111,8 +114,13 @@ const LogoutIcon = () => (
 
 export default function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const isHydrated = useHydration();
   const router = useRouter();
   const pathname = usePathname();
+  const { isLoading } = usePermissions();
+
+  // Enable token watching for this component
+  useAuthWithWatcher();
 
   const menuItems = [
     {
@@ -195,34 +203,48 @@ export default function Sidebar() {
 
       {/* Menu */}
       <div className="flex-1 overflow-y-auto p-3">
-        {menuItems.map((item) => {
-          // Enhanced active logic for better route matching
-          let isActive =
-            pathname === item.path || pathname.startsWith(item.path + "/");
+        {!isHydrated || isLoading ? (
+          // Show skeleton/placeholder during hydration or loading
+          <div className="space-y-2">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <ButtonSkeleton
+                key={index}
+                width="w-full"
+                height="h-10"
+                className="bg-slate-600/20"
+              />
+            ))}
+          </div>
+        ) : (
+          menuItems.map((item) => {
+            // Enhanced active logic for better route matching
+            let isActive =
+              pathname === item.path || pathname.startsWith(item.path + "/");
 
-          // Special handling for products menu to include categories
-          if (item.id === "products" && pathname.startsWith("/categories")) {
-            isActive = true;
-          }
+            // Special handling for products menu to include categories
+            if (item.id === "products" && pathname.startsWith("/categories")) {
+              isActive = true;
+            }
 
-          return (
-            <Protected key={item.id} permission={item.permission}>
-              <button
-                onClick={() => handleNavigation(item.path)}
-                className={`w-full flex items-center px-3 py-2 mb-1 rounded-lg text-left transition-colors ${
-                  isActive
-                    ? "bg-emerald-600 text-white"
-                    : "text-slate-300 hover:bg-slate-800 hover:text-white"
-                }`}
-              >
-                <span className="flex-shrink-0">{item.icon}</span>
-                {!isCollapsed && (
-                  <span className="ml-3 text-sm">{item.label}</span>
-                )}
-              </button>
-            </Protected>
-          );
-        })}
+            return (
+              <Protected key={item.id} permission={item.permission}>
+                <button
+                  onClick={() => handleNavigation(item.path)}
+                  className={`w-full flex items-center px-3 py-2 mb-1 rounded-lg text-left transition-colors ${
+                    isActive
+                      ? "bg-emerald-600 text-white"
+                      : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                  }`}
+                >
+                  <span className="flex-shrink-0">{item.icon}</span>
+                  {!isCollapsed && (
+                    <span className="ml-3 text-sm">{item.label}</span>
+                  )}
+                </button>
+              </Protected>
+            );
+          })
+        )}
       </div>
 
       {/* Logout */}

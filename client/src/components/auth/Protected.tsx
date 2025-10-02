@@ -1,5 +1,6 @@
 import React from "react";
 import { usePermissions } from "@/hooks/usePermissions";
+import { useHydration } from "@/hooks/useHydration";
 import { Permission } from "@/lib/permissions";
 
 interface ProtectedProps {
@@ -37,6 +38,7 @@ export default function Protected({
   role,
   roleLevel,
 }: ProtectedProps) {
+  const isHydrated = useHydration();
   const {
     hasPermission,
     hasAnyPermission,
@@ -44,9 +46,21 @@ export default function Protected({
     hasRole,
     hasRoleLevel,
     isAuthenticated,
+    isLoading,
   } = usePermissions();
 
-  // Check authentication first
+  // Multi-stage hydration protection
+  if (!isHydrated) {
+    // Stage 1: Not hydrated yet - show fallback to prevent mismatch
+    return <>{fallback}</>;
+  }
+
+  if (isLoading) {
+    // Stage 2: Hydrated but auth is still loading - show fallback
+    return <>{fallback}</>;
+  }
+
+  // Stage 3: Fully loaded - perform auth checks
   if (!isAuthenticated()) {
     return <>{fallback}</>;
   }
@@ -118,7 +132,13 @@ export function AuthenticatedOnly({
   children: React.ReactNode;
   fallback?: React.ReactNode;
 }) {
-  const { isAuthenticated } = usePermissions();
+  const isHydrated = useHydration();
+  const { isAuthenticated, isLoading } = usePermissions();
+
+  // Multi-stage hydration protection
+  if (!isHydrated || isLoading) {
+    return <>{fallback}</>;
+  }
 
   if (!isAuthenticated()) {
     return <>{fallback}</>;

@@ -13,7 +13,7 @@ import {
  * Built on top of existing authContext - no breaking changes!
  */
 export function usePermissions() {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
 
   /**
    * Check if user has a specific permission
@@ -128,6 +128,9 @@ export function usePermissions() {
 
     // User info
     user: getUserInfo(),
+
+    // Loading state
+    isLoading,
 
     // Utility methods
     can,
