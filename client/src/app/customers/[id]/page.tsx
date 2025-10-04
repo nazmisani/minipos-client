@@ -27,7 +27,7 @@ function CustomerDetailPageContent() {
       } catch (error: any) {
         console.error("Error fetching customer:", error);
         const errorMessage =
-          error?.response?.data?.message || "Gagal memuat data customer";
+          error?.response?.data?.message || "Failed to load customer data";
         setError(errorMessage);
         toast.error(errorMessage);
       } finally {
@@ -145,7 +145,7 @@ function CustomerDetailPageContent() {
               onClick={handleBack}
               className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors"
             >
-              Kembali ke Daftar Customer
+              Back to Customer List
             </button>
           </div>
         </div>
@@ -295,7 +295,7 @@ function CustomerDetailPageContent() {
                     </svg>
                   </div>
                   <h4 className="text-lg font-medium text-slate-900 mb-2">
-                    Belum ada transaksi
+                    No transactions yet
                   </h4>
                   <p className="text-slate-500">
                     Customer ini belum melakukan transaksi apapun.

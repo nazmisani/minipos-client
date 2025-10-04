@@ -42,7 +42,7 @@ export default function CategoriesPage() {
       setCategories(data.data);
     } catch (error) {
       console.log("Categories API Error:", error);
-      setError("Gagal memuat data categories");
+      setError("Failed to load categories data");
     } finally {
       setLoading(false);
     }
@@ -154,11 +154,39 @@ export default function CategoriesPage() {
           <div className="mb-6">
             <div className="bg-red-50 border border-red-200 rounded-lg p-4">
               <p className="text-sm text-gray-800 leading-relaxed mb-4">
-                Are you sure you want to delete{" "}
+                Are you sure you want to delete category{" "}
                 <span className="font-semibold text-red-700">
                   "{categoryName}"
-                </span>{" "}
-                from the system? This action will permanently remove:
+                </span>
+                ?
+              </p>
+              <div className="bg-yellow-50 border border-yellow-200 rounded p-3 mb-3">
+                <div className="flex items-start">
+                  <svg
+                    className="w-4 h-4 text-yellow-600 mt-0.5 mr-2 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                    />
+                  </svg>
+                  <div className="text-sm text-yellow-800">
+                    <p className="font-medium mb-1">Warning:</p>
+                    <p>
+                      Category cannot be deleted if there are products still
+                      using this category. Please reassign or remove the
+                      products first.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <p className="text-sm text-gray-700 mb-3">
+                If successful, this action will permanently remove:
               </p>
               <ul className="ml-4 text-sm text-gray-700 space-y-2">
                 <li className="flex items-center">
@@ -167,7 +195,7 @@ export default function CategoriesPage() {
                 </li>
                 <li className="flex items-center">
                   <span className="w-1.5 h-1.5 bg-red-400 rounded-full mr-3 flex-shrink-0"></span>
-                  Associated products may be affected
+                  Category from system permanently
                 </li>
               </ul>
             </div>

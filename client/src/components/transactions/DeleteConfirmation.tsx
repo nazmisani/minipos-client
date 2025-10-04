@@ -62,7 +62,7 @@ export default function DeleteConfirmation({
               <b>Customer:</b> {transaction.customer?.name || "-"}
             </div>
             <div>
-              <b>Total:</b> Rp {transaction.total.toLocaleString("id-ID")}
+              <b>Total:</b> Rp {transaction.total.toLocaleString("en-US")}
             </div>
           </div>
           <div className="flex gap-3 justify-center">

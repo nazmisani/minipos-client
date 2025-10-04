@@ -163,7 +163,7 @@ function ProductPageContent() {
       setProducts(data.data);
     } catch (error) {
       console.log("Products API Error:", error);
-      setError("Gagal memuat data products");
+      setError("Failed to load products data");
     } finally {
       setLoading(false);
     }

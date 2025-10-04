@@ -27,7 +27,7 @@ export default function CustomerForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim()) {
-      toast.error("Nama customer harus diisi");
+      toast.error("Customer name is required");
       return;
     }
 
@@ -40,10 +40,10 @@ export default function CustomerForm({
 
       if (isEdit && customer) {
         await apiClient.put(`/customers/${customer.id}`, customerData);
-        toast.success("Customer berhasil diupdate");
+        toast.success("Customer successfully updated");
       } else {
         await apiClient.post("/customers", customerData);
-        toast.success("Customer berhasil ditambahkan");
+        toast.success("Customer successfully added");
       }
 
       onSave();
@@ -51,7 +51,7 @@ export default function CustomerForm({
       console.error("Error saving customer:", error);
       const errorMessage =
         error?.response?.data?.message ||
-        `Gagal ${isEdit ? "mengupdate" : "menambahkan"} customer`;
+        `Failed to ${isEdit ? "update" : "add"} customer`;
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -88,17 +88,17 @@ export default function CustomerForm({
                   d="M15 19l-7-7 7-7"
                 />
               </svg>
-              Kembali ke Customer
+              Back to Customer
             </button>
           </div>
           <div>
             <h1 className="text-3xl lg:text-4xl font-bold text-slate-900">
-              {isEdit ? "Edit Customer" : "Tambah Customer"}
+              {isEdit ? "Edit Customer" : "Add Customer"}
             </h1>
             <p className="text-slate-600 mt-2">
               {isEdit
-                ? "Ubah informasi customer yang dipilih"
-                : "Tambahkan customer baru ke dalam sistem"}
+                ? "Update the selected customer information"
+                : "Add a new customer to the system"}
             </p>
           </div>
         </div>
@@ -108,7 +108,7 @@ export default function CustomerForm({
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
-                Nama Customer *
+                Customer Name *
               </label>
               <input
                 type="text"
@@ -116,7 +116,7 @@ export default function CustomerForm({
                 value={formData.name}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                placeholder="Masukkan nama customer"
+                placeholder="Enter customer name"
                 required
                 disabled={isSubmitting}
               />
@@ -124,7 +124,7 @@ export default function CustomerForm({
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
-                Nomor Telepon
+                Phone Number
               </label>
               <input
                 type="tel"
@@ -132,7 +132,7 @@ export default function CustomerForm({
                 value={formData.phone}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                placeholder="Masukkan nomor telepon (opsional)"
+                placeholder="Enter phone number (optional)"
                 disabled={isSubmitting}
               />
             </div>
@@ -168,12 +168,12 @@ export default function CustomerForm({
                         d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       ></path>
                     </svg>
-                    {isEdit ? "Menyimpan..." : "Menambahkan..."}
+                    {isEdit ? "Saving..." : "Adding..."}
                   </div>
                 ) : isEdit ? (
-                  "Simpan Perubahan"
+                  "Save Changes"
                 ) : (
-                  "Tambah Customer"
+                  "Add Customer"
                 )}
               </button>
               <button

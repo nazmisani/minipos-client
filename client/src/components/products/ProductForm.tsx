@@ -173,7 +173,7 @@ export default function ProductForm({
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                placeholder="Masukkan nama produk"
+                placeholder="Enter product name"
                 required
               />
               <Input
@@ -182,7 +182,7 @@ export default function ProductForm({
                 name="price"
                 value={formData.price}
                 onChange={handleInputChange}
-                placeholder="Masukkan harga produk"
+                placeholder="Enter product price"
                 required
               />
             </div>
@@ -219,7 +219,7 @@ export default function ProductForm({
                 name="stock"
                 value={formData.stock}
                 onChange={handleInputChange}
-                placeholder="Masukkan jumlah stok"
+                placeholder="Enter stock quantity"
                 required
               />
             </div>

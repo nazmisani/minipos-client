@@ -54,7 +54,7 @@ export default function CustomerList({
       setCustomers(data.data);
     } catch (error) {
       console.log("Customers API Error:", error);
-      setError("Gagal memuat data customers");
+      setError("Failed to load customers data");
     } finally {
       setLoading(false);
     }
@@ -254,15 +254,15 @@ export default function CustomerList({
     <CrudLayout>
       <PageHeader
         title="Customer Management"
-        subtitle="Kelola data customer dan lihat riwayat transaksi mereka."
+        subtitle="Manage customer data and view their transaction history."
         action={
           <Protected permission="customers.create" fallback={null}>
-            <Button onClick={onAdd}>Tambah Customer</Button>
+            <Button onClick={onAdd}>Add Customer</Button>
           </Protected>
         }
       />
 
-      <SearchBar placeholder="Cari customer..." />
+      <SearchBar placeholder="Search customer..." />
 
       <Card>
         {loading ? (

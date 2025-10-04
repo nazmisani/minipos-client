@@ -53,7 +53,7 @@ export default function UserForm({
           role: formData.role,
           password: formData.password,
         });
-        toast.success("User berhasil ditambahkan!");
+        toast.success("User successfully added!");
       } else {
         // TODO: Implement edit functionality
         await apiClient.put(`/users/${user?.id}`, {
@@ -61,7 +61,7 @@ export default function UserForm({
           email: formData.email,
           role: formData.role,
         });
-        toast.success("User berhasil diupdate!");
+        toast.success("User successfully updated!");
       }
 
       // Refresh data and navigate back to list
@@ -70,7 +70,7 @@ export default function UserForm({
     } catch (error) {
       console.error("Error saving user:", error);
       toast.error(
-        mode === "add" ? "Gagal menambahkan user!" : "Gagal mengupdate user!"
+        mode === "add" ? "Failed to add user!" : "Failed to update user!"
       );
     } finally {
       setLoading(false);
@@ -108,7 +108,7 @@ export default function UserForm({
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Input
-                label="Nama User"
+                label="User Name"
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}

@@ -63,7 +63,7 @@ function SettingsPageContent() {
       setLogs(data.data);
     } catch (error) {
       console.log("Logs API Error:", error);
-      setLogsError("Gagal memuat data logs");
+      setLogsError("Failed to load logs data");
     } finally {
       setLogsLoading(false);
     }
@@ -110,7 +110,7 @@ function SettingsPageContent() {
             Settings
           </h1>
           <p className="text-slate-600 mt-2">
-            Kelola pengaturan sistem dan pantau aktivitas pengguna.
+            Manage system settings and monitor user activity.
           </p>
         </div>
 
@@ -358,7 +358,7 @@ function SettingsPageContent() {
                       </svg>
                     </div>
                     <h3 className="text-lg font-medium text-slate-900 mb-2">
-                      Belum Ada Log Aktivitas
+                      No Activity Log Yet
                     </h3>
                     <p className="text-slate-500">
                       Log aktivitas pengguna akan muncul di sini.

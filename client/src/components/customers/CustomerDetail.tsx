@@ -62,7 +62,7 @@ export default function CustomerDetail({
                   d="M15 19l-7-7 7-7"
                 />
               </svg>
-              Kembali ke Customer
+              Back to Customer
             </button>
           </div>
           <div>
@@ -91,7 +91,7 @@ export default function CustomerDetail({
                     Phone
                   </label>
                   <p className="text-slate-900 mt-1">
-                    {customer.phone || "Tidak ada"}
+                    {customer.phone || "Not available"}
                   </p>
                 </div>
                 <div>

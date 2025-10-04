@@ -27,12 +27,12 @@ export default function DeleteConfirmation({
     setLoading(true);
     try {
       await apiClient.delete(`/users/${user.id}`);
-      toast.success("User berhasil dihapus!");
+      toast.success("User successfully deleted!");
       if (onRefreshNeeded) onRefreshNeeded();
       onViewModeChange("list");
     } catch (error) {
       console.error("Error deleting user:", error);
-      toast.error("Gagal menghapus user!");
+      toast.error("Failed to delete user!");
     } finally {
       setLoading(false);
     }
@@ -44,12 +44,12 @@ export default function DeleteConfirmation({
           <div className="mb-4">
             <BackButton
               onClick={() => onViewModeChange("list")}
-              label="Kembali ke User Management"
+              label="Back to User Management"
             />
           </div>
           <PageHeader
-            title="Hapus User"
-            subtitle="Konfirmasi penghapusan data user dari sistem"
+            title="Delete User"
+            subtitle="Confirm deletion of user data from system"
           />
         </div>
 
@@ -71,18 +71,18 @@ export default function DeleteConfirmation({
               </svg>
             </div>
             <h2 className="text-xl font-semibold text-slate-900 mb-3">
-              Apakah Anda yakin ingin menghapus user ini?
+              Are you sure you want to delete this user?
             </h2>
             <p className="text-slate-600">
-              Anda akan menghapus user <strong>{user.name}</strong>. Tindakan
-              ini tidak dapat dibatalkan.
+              You are about to delete user <strong>{user.name}</strong>. This
+              action cannot be undone.
             </p>
           </div>
 
           <div className="bg-slate-50 rounded-lg p-6 mb-8">
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
-                <span className="text-slate-600">Nama:</span>
+                <span className="text-slate-600">Name:</span>
                 <span className="font-medium text-slate-900">{user.name}</span>
               </div>
               <div className="flex justify-between">
@@ -107,7 +107,7 @@ export default function DeleteConfirmation({
               Batal
             </Button>
             <Button variant="danger" onClick={handleDelete} disabled={loading}>
-              {loading ? "Menghapus..." : "Ya, Hapus User"}
+              {loading ? "Deleting..." : "Yes, Delete User"}
             </Button>
           </div>
         </Card>

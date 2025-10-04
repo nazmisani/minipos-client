@@ -39,13 +39,13 @@ export default function UserTable({ users, onEdit, onDelete }: UserTableProps) {
   };
 
   if (users.length === 0) {
-    return <EmptyState message="Tidak ada data user" />;
+    return <EmptyState message="No user data available" />;
   }
 
   return (
     <DataTable>
       <TableHeader>
-        <TableHeaderCell>Nama</TableHeaderCell>
+        <TableHeaderCell>Name</TableHeaderCell>
         <TableHeaderCell>Email</TableHeaderCell>
         <TableHeaderCell>Role</TableHeaderCell>
         <TableHeaderCell>Created At</TableHeaderCell>

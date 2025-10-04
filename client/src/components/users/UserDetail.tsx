@@ -40,7 +40,7 @@ export default function UserDetail({
           <div className="mb-4">
             <BackButton
               onClick={() => onViewModeChange("list")}
-              label="Kembali ke User Management"
+              label="Back to User Management"
             />
           </div>
           <PageHeader
@@ -66,7 +66,7 @@ export default function UserDetail({
 
             <div>
               <label className="block text-sm font-medium text-slate-600 mb-1">
-                Nama
+                Name
               </label>
               <p className="text-slate-900 font-medium">{user.name}</p>
             </div>
@@ -131,7 +131,7 @@ export default function UserDetail({
               </svg>
             </div>
             <h3 className="text-lg font-medium text-slate-900 mb-2">
-              Belum Ada Log Aktivitas
+              No Activity Log Yet
             </h3>
             <p className="text-slate-500">
               Log aktivitas user akan ditampilkan di sini.

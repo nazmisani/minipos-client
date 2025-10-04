@@ -38,7 +38,7 @@ export default function UserList({
       setUsers(data.users);
     } catch (error) {
       console.log("Users API Error:", error);
-      setError("Gagal memuat data users");
+      setError("Failed to load users data");
     } finally {
       setLoading(false);
     }

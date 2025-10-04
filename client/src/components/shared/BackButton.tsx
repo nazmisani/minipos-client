@@ -5,7 +5,7 @@ interface BackButtonProps {
 
 export default function BackButton({
   onClick,
-  label = "Kembali",
+  label = "Back",
 }: BackButtonProps) {
   return (
     <button

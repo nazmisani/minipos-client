@@ -250,7 +250,7 @@ export default function TransactionList({}: TransactionListProps) {
       setTransactions(data.data);
     } catch (error) {
       console.log("Transactions API Error:", error);
-      setError("Gagal memuat data transaksi");
+      setError("Failed to load transactions data");
     } finally {
       setLoading(false);
     }
@@ -260,15 +260,15 @@ export default function TransactionList({}: TransactionListProps) {
     <CrudLayout>
       <PageHeader
         title="Transaction Management"
-        subtitle="Kelola semua transaksi dan riwayat penjualan."
+        subtitle="Manage all transactions and sales history."
         action={
           <Protected permission="transactions.create" fallback={null}>
-            <Button onClick={handleAdd}>Tambah Transaksi</Button>
+            <Button onClick={handleAdd}>Add Transaction</Button>
           </Protected>
         }
       />
 
-      <SearchBar placeholder="Cari transaksi..." />
+      <SearchBar placeholder="Search transactions..." />
 
       <Card>
         {loading ? (

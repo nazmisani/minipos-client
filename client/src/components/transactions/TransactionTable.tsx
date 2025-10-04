@@ -33,7 +33,7 @@ export default function TransactionTable({
   const hasAnyActionPermission = canViewDetail || canDelete;
 
   if (transactions.length === 0) {
-    return <EmptyState message="Belum ada transaksi." />;
+    return <EmptyState message="No transactions yet." />;
   }
 
   return (
@@ -43,7 +43,7 @@ export default function TransactionTable({
         <TableHeaderCell>User</TableHeaderCell>
         <TableHeaderCell>Customer</TableHeaderCell>
         <TableHeaderCell>Total</TableHeaderCell>
-        <TableHeaderCell>Tanggal</TableHeaderCell>
+        <TableHeaderCell>Date</TableHeaderCell>
         {hasAnyActionPermission && <TableHeaderCell>Actions</TableHeaderCell>}
       </TableHeader>
       <TableBody>
@@ -54,7 +54,7 @@ export default function TransactionTable({
             <TableCell>{transaction.customer?.name || "-"}</TableCell>
             <TableCell>
               <span className="font-semibold text-emerald-600">
-                Rp {transaction.total.toLocaleString("id-ID")}
+                Rp {transaction.total.toLocaleString("en-US")}
               </span>
             </TableCell>
             <TableCell className="text-slate-500">

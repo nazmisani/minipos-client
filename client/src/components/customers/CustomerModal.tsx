@@ -59,11 +59,11 @@ export default function CustomerModal({
     const newErrors: Record<string, string> = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = "Nama customer wajib diisi";
+      newErrors.name = "Customer name is required";
     }
 
     if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Format email tidak valid";
+      newErrors.email = "Invalid email format";
     }
 
     setErrors(newErrors);
@@ -101,12 +101,12 @@ export default function CustomerModal({
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-xl font-semibold">
-                {mode === "add" ? "Tambah Customer Baru" : "Edit Customer"}
+                {mode === "add" ? "Add New Customer" : "Edit Customer"}
               </h3>
               <p className="text-emerald-100 text-sm mt-1">
                 {mode === "add"
-                  ? "Masukkan informasi customer baru"
-                  : "Perbarui informasi customer"}
+                  ? "Enter new customer information"
+                  : "Update customer information"}
               </p>
             </div>
             <button
@@ -139,7 +139,7 @@ export default function CustomerModal({
                 htmlFor="name"
                 className="block text-sm font-semibold text-slate-700"
               >
-                Nama Customer <span className="text-red-500">*</span>
+                Customer Name <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -152,7 +152,7 @@ export default function CustomerModal({
                     ? "border-red-300 bg-red-50"
                     : "border-slate-300 hover:border-slate-400"
                 }`}
-                placeholder="Masukkan nama lengkap customer"
+                placeholder="Enter customer full name"
               />
               {errors.name && (
                 <p className="text-sm text-red-600 flex items-center">
@@ -180,7 +180,7 @@ export default function CustomerModal({
                 htmlFor="phone"
                 className="block text-sm font-semibold text-slate-700"
               >
-                Nomor Telepon
+                Phone Number
               </label>
               <input
                 type="tel"

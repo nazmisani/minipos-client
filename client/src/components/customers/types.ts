@@ -7,7 +7,8 @@ export type Transaction = {
 export type Customer = {
   id: number;
   name: string;
-  phone: string;
+  phone?: string;
+  email?: string;
   transactions: Transaction[];
   _count: {
     transactions: number;

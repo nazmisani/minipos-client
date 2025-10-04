@@ -41,18 +41,18 @@ export default function ProductTable({
   };
 
   if (products.length === 0) {
-    return <EmptyState message="Tidak ada data product" />;
+    return <EmptyState message="No product data available" />;
   }
 
   return (
     <DataTable>
       <TableHeader>
-        <TableHeaderCell>Produk</TableHeaderCell>
-        <TableHeaderCell>Kategori</TableHeaderCell>
-        <TableHeaderCell>Harga</TableHeaderCell>
-        <TableHeaderCell>Stok</TableHeaderCell>
+        <TableHeaderCell>Product</TableHeaderCell>
+        <TableHeaderCell>Category</TableHeaderCell>
+        <TableHeaderCell>Price</TableHeaderCell>
+        <TableHeaderCell>Stock</TableHeaderCell>
         <TableHeaderCell>Created At</TableHeaderCell>
-        <TableHeaderCell>Aksi</TableHeaderCell>
+        <TableHeaderCell>Actions</TableHeaderCell>
       </TableHeader>
       <TableBody>
         {products.map((product) => (

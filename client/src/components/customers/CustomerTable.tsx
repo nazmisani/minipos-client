@@ -39,7 +39,7 @@ export default function CustomerTable({
               ID
             </th>
             <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
-              Nama
+              Name
             </th>
             <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
               Phone
@@ -173,7 +173,7 @@ export default function CustomerTable({
 
       {customers.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-slate-500">Tidak ada data customer</p>
+          <p className="text-slate-500">No customer data available</p>
         </div>
       )}
     </div>

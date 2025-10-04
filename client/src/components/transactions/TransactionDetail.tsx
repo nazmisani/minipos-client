@@ -84,12 +84,12 @@ export default function TransactionDetail({
                   Total
                 </label>
                 <p className="text-lg font-semibold text-emerald-600">
-                  Rp {transaction.total.toLocaleString("id-ID")}
+                  Rp {transaction.total.toLocaleString("en-US")}
                 </p>
               </div>
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-slate-600 mb-1">
-                  Tanggal Dibuat
+                  Date Created
                 </label>
                 <p className="text-lg text-slate-900">
                   {transaction.createdAt}
@@ -126,12 +126,12 @@ export default function TransactionDetail({
                       </div>
                     </TableCell>
                     <TableCell>
-                      Rp {detail.product.price.toLocaleString("id-ID")}
+                      Rp {detail.product.price.toLocaleString("en-US")}
                     </TableCell>
                     <TableCell>{detail.quantity}</TableCell>
                     <TableCell>
                       <span className="font-semibold text-emerald-600">
-                        Rp {detail.subTotal.toLocaleString("id-ID")}
+                        Rp {detail.subTotal.toLocaleString("en-US")}
                       </span>
                     </TableCell>
                   </TableRow>

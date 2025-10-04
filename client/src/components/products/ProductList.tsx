@@ -24,15 +24,13 @@ export default function ProductList({
     <CrudLayout>
       <PageHeader
         title="Product Management"
-        subtitle="Kelola data produk dan inventory."
+        subtitle="Manage product data and inventory."
         action={
-          <Button onClick={() => onViewModeChange("add")}>
-            Tambah Product
-          </Button>
+          <Button onClick={() => onViewModeChange("add")}>Add Product</Button>
         }
       />
 
-      <SearchBar placeholder="Cari product..." />
+      <SearchBar placeholder="Search product..." />
 
       <Card>
         <ProductTable

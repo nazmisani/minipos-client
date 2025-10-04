@@ -41,7 +41,7 @@ function EditCustomerPageContent() {
     } catch (error: any) {
       console.error("Error fetching customer:", error);
       const errorMessage =
-        error?.response?.data?.message || "Gagal memuat data customer";
+        error?.response?.data?.message || "Failed to load customer data";
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {
@@ -149,7 +149,7 @@ function EditCustomerPageContent() {
               onClick={handleBack}
               className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors"
             >
-              Kembali ke Daftar Customer
+              Back to Customer List
             </button>
           </div>
         </div>
