@@ -46,6 +46,10 @@ function ProductPageContent() {
   const [categories, setCategories] = useState<CategoryData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const limit = 10;
 
   // Check if user has any action permissions
   const canEdit = hasPermission("products.update");
@@ -151,16 +155,92 @@ function ProductPageContent() {
   }, [searchParams]);
 
   useEffect(() => {
-    fetchProducts();
     fetchCategories();
+    // Initial load - check if there are filters
+    const hasActiveFilters = searchTerm || selectedCategory !== "All";
+    if (hasActiveFilters) {
+      fetchAllProducts();
+    } else {
+      fetchProducts(1);
+    }
   }, []);
 
-  const fetchProducts = async () => {
+  // When filters change, refetch data
+  useEffect(() => {
+    const hasActiveFilters = searchTerm || selectedCategory !== "All";
+    if (hasActiveFilters) {
+      // Fetch all products when filtering
+      fetchAllProducts();
+    } else {
+      // Use pagination when no filters
+      fetchProducts(1);
+    }
+  }, [searchTerm, selectedCategory]);
+
+  const fetchAllProducts = async () => {
     try {
       setLoading(true);
       setError(null);
       const { data } = await apiClient.get("/products");
       setProducts(data.data);
+      setTotalPages(1);
+      setTotalItems(data.data.length);
+      setCurrentPage(1);
+    } catch (error) {
+      console.log("Products API Error:", error);
+      setError("Failed to load products data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchProducts = async (page: number = currentPage) => {
+    try {
+      setLoading(true);
+      setError(null);
+      console.log("Fetching products for page:", page);
+      const { data } = await apiClient.get(
+        `/products?page=${page}&limit=${limit}`
+      );
+      console.log("API Response:", data);
+
+      // Handle different API response formats
+      if (data.data && Array.isArray(data.data)) {
+        setProducts(data.data);
+
+        // Check if pagination object exists
+        if (data.pagination) {
+          setTotalPages(data.pagination.totalPages || 1);
+          setTotalItems(data.pagination.totalCount || data.data.length);
+          setCurrentPage(data.pagination.currentPage || page);
+        } else {
+          // Fallback if no pagination object
+          setTotalPages(
+            data.totalPages ||
+              Math.ceil((data.total || data.data.length) / limit)
+          );
+          setTotalItems(data.total || data.data.length);
+          setCurrentPage(page);
+        }
+      } else if (Array.isArray(data)) {
+        // Fallback if API returns array directly
+        setProducts(data);
+        setTotalPages(Math.ceil(data.length / limit));
+        setTotalItems(data.length);
+        setCurrentPage(1);
+      } else {
+        console.error("Unexpected API response format:", data);
+        setError("Invalid API response format");
+      }
+
+      console.log(
+        "Updated state - totalPages:",
+        totalPages,
+        "totalItems:",
+        totalItems,
+        "currentPage:",
+        page
+      );
     } catch (error) {
       console.log("Products API Error:", error);
       setError("Failed to load products data");
@@ -210,9 +290,20 @@ function ProductPageContent() {
 
   const handleSave = () => {
     // Refresh the product list after successful save
-    fetchProducts();
+    fetchProducts(currentPage);
     setCurrentView("list");
     setSelectedProduct(null);
+  };
+
+  const handlePageChange = (page: number) => {
+    console.log("Page change to:", page);
+    console.log(
+      "Current state - currentPage:",
+      currentPage,
+      "totalPages:",
+      totalPages
+    );
+    fetchProducts(page);
   };
 
   const handleDelete = (productId: number, productName: string) => {
@@ -392,7 +483,7 @@ function ProductPageContent() {
         `Product "${productName}" has been removed from the system`
       );
 
-      fetchProducts(); // Refresh the product list
+      fetchProducts(currentPage); // Refresh the product list
       setPendingDelete(null);
     } catch (error: any) {
       console.error("Delete product error:", error);
@@ -625,7 +716,7 @@ function ProductPageContent() {
                       </h3>
                       <p className="text-slate-500 mb-4">{error}</p>
                       <button
-                        onClick={fetchProducts}
+                        onClick={() => fetchProducts(currentPage)}
                         className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors"
                       >
                         Try Again
@@ -765,20 +856,32 @@ function ProductPageContent() {
           <div className="px-6 py-4 bg-slate-50 border-t border-slate-200">
             <div className="flex items-center justify-between">
               <p className="text-sm text-slate-600">
-                Showing {filteredProducts.length} of {products.length} products
-                {(searchTerm || selectedCategory !== "All") && " (filtered)"}
+                {searchTerm || selectedCategory !== "All"
+                  ? `Showing ${filteredProducts.length} of ${products.length} products (filtered)`
+                  : `Showing ${products.length} of ${totalItems} products`}
               </p>
-              <div className="flex items-center space-x-2">
-                <button className="px-3 py-1 border border-slate-300 rounded text-sm text-slate-600 hover:bg-slate-100 transition-colors">
-                  Previous
-                </button>
-                <span className="px-3 py-1 bg-emerald-600 text-white rounded text-sm">
-                  1
-                </span>
-                <button className="px-3 py-1 border border-slate-300 rounded text-sm text-slate-600 hover:bg-slate-100 transition-colors">
-                  Next
-                </button>
-              </div>
+              {/* Only show pagination when no filters are active */}
+              {!searchTerm && selectedCategory === "All" && (
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="px-3 py-1 border border-slate-300 rounded text-sm text-slate-600 hover:bg-slate-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Previous
+                  </button>
+                  <span className="px-3 py-1 bg-emerald-600 text-white rounded text-sm">
+                    {currentPage}
+                  </span>
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="px-3 py-1 border border-slate-300 rounded text-sm text-slate-600 hover:bg-slate-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
