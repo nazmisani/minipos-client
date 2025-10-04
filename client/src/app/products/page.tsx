@@ -861,22 +861,88 @@ function ProductPageContent() {
                   : `Showing ${products.length} of ${totalItems} products`}
               </p>
               {/* Only show pagination when no filters are active */}
-              {!searchTerm && selectedCategory === "All" && (
-                <div className="flex items-center space-x-2">
+              {!searchTerm && selectedCategory === "All" && totalPages > 1 && (
+                <div className="flex items-center space-x-1">
+                  {/* Previous Button */}
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="px-3 py-1 border border-slate-300 rounded text-sm text-slate-600 hover:bg-slate-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                      currentPage === 1
+                        ? "bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200"
+                        : "bg-white text-gray-700 border border-gray-300 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-300 shadow-sm"
+                    }`}
                   >
                     Previous
                   </button>
-                  <span className="px-3 py-1 bg-emerald-600 text-white rounded text-sm">
-                    {currentPage}
-                  </span>
+
+                  {/* Page Numbers */}
+                  <div className="flex items-center space-x-1">
+                    {/* First Page */}
+                    {currentPage > 3 && (
+                      <>
+                        <button
+                          onClick={() => handlePageChange(1)}
+                          className="px-3 py-2 rounded-lg text-sm font-medium bg-white text-gray-700 border border-gray-300 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-300 transition-all duration-200 shadow-sm"
+                        >
+                          1
+                        </button>
+                        {currentPage > 4 && (
+                          <span className="px-2 py-2 text-gray-400">...</span>
+                        )}
+                      </>
+                    )}
+
+                    {/* Previous Page */}
+                    {currentPage > 1 && (
+                      <button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        className="px-3 py-2 rounded-lg text-sm font-medium bg-white text-gray-700 border border-gray-300 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-300 transition-all duration-200 shadow-sm"
+                      >
+                        {currentPage - 1}
+                      </button>
+                    )}
+
+                    {/* Current Page */}
+                    <button className="px-3 py-2 rounded-lg text-sm font-medium bg-emerald-600 text-white border border-emerald-600 shadow-md">
+                      {currentPage}
+                    </button>
+
+                    {/* Next Page */}
+                    {currentPage < totalPages && (
+                      <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        className="px-3 py-2 rounded-lg text-sm font-medium bg-white text-gray-700 border border-gray-300 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-300 transition-all duration-200 shadow-sm"
+                      >
+                        {currentPage + 1}
+                      </button>
+                    )}
+
+                    {/* Last Page */}
+                    {currentPage < totalPages - 2 && (
+                      <>
+                        {currentPage < totalPages - 3 && (
+                          <span className="px-2 py-2 text-gray-400">...</span>
+                        )}
+                        <button
+                          onClick={() => handlePageChange(totalPages)}
+                          className="px-3 py-2 rounded-lg text-sm font-medium bg-white text-gray-700 border border-gray-300 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-300 transition-all duration-200 shadow-sm"
+                        >
+                          {totalPages}
+                        </button>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Next Button */}
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className="px-3 py-1 border border-slate-300 rounded text-sm text-slate-600 hover:bg-slate-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                      currentPage === totalPages
+                        ? "bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200"
+                        : "bg-white text-gray-700 border border-gray-300 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-300 shadow-sm"
+                    }`}
                   >
                     Next
                   </button>
