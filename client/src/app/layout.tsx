@@ -4,7 +4,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { AuthProvider } from "@/contexts/authContext"; //
+import { AuthProvider } from "@/contexts/authContext";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,6 +43,10 @@ export default function RootLayout({
           pauseOnHover
           theme="light"
         />
+
+        {/* Vercel Monitoring */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
