@@ -12,14 +12,19 @@ export class AuthUtils {
     rememberMe: boolean = false
   ): Promise<void> {
     // Calculate expiration time
-    const maxAge = rememberMe ? 30 * 24 * 60 * 60 : 24 * 60 * 60; // 30 days or 1 day
+    const maxAge = rememberMe ? 30 * 24 * 60 * 60 : 7 * 24 * 60 * 60; // 30 days or 7 days
 
-    // Set cookie with appropriate options
+    // CRITICAL FIX: For cross-domain, use sameSite=none with secure
+    const isProduction =
+      process.env.NODE_ENV === "production" ||
+      (typeof window !== "undefined" && window.location.protocol === "https:");
+
+    // Set cookie with appropriate options for cross-domain
     CookieManager.set("token", token, {
       maxAge,
       path: "/",
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
     });
 
     // Notify all tabs about auth change

@@ -22,8 +22,34 @@ export default function LoginPage() {
       });
 
       if (data.token) {
+        // CRITICAL FIX: Manually set cookie for cross-domain
+        // Backend cannot set cookie due to cross-origin restrictions
+        const isProduction =
+          process.env.NODE_ENV === "production" ||
+          window.location.protocol === "https:";
+        const sameSite = isProduction ? "none" : "lax";
+        const secure = isProduction ? "; secure" : "";
+
+        document.cookie = `token=${data.token}; path=/; max-age=${
+          7 * 24 * 60 * 60
+        }${secure}; samesite=${sameSite}`;
+
+        // Notify other tabs/windows about auth change
+        if (typeof localStorage !== "undefined") {
+          localStorage.setItem("auth_changed", Date.now().toString());
+          localStorage.removeItem("auth_changed");
+        }
+
         toast.success("Login Success!");
-        router.push("/");
+
+        // Small delay to ensure cookie is set before redirect
+        await new Promise((resolve) => setTimeout(resolve, 150));
+
+        // Redirect to dashboard (not root)
+        router.push("/dashboard");
+
+        // Force a full page reload to ensure auth context picks up the cookie
+        router.refresh();
       }
     } catch (error: unknown) {
       const errorMessage =

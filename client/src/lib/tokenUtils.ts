@@ -245,13 +245,19 @@ export class CookieManager {
       cookieString += `; domain=${options.domain}`;
     }
 
-    if (options.secure) {
+    // CRITICAL FIX: For production cross-domain, always use secure
+    // For localhost development, skip secure to allow HTTP
+    const isProduction =
+      process.env.NODE_ENV === "production" ||
+      (typeof window !== "undefined" && window.location.protocol === "https:");
+
+    if (options.secure || isProduction) {
       cookieString += `; secure`;
     }
 
-    if (options.sameSite) {
-      cookieString += `; samesite=${options.sameSite}`;
-    }
+    // CRITICAL FIX: Default to 'none' for cross-domain, fallback to 'lax' for same-domain
+    const sameSite = options.sameSite || (isProduction ? "none" : "lax");
+    cookieString += `; samesite=${sameSite}`;
 
     document.cookie = cookieString;
   }

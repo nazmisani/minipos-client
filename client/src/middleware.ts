@@ -54,6 +54,11 @@ export function middleware(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
   const pathname = req.nextUrl.pathname;
 
+  // Debug logging for cookie check (only in development)
+  if (process.env.NODE_ENV === "development") {
+    console.log(`[Middleware] ${pathname} - Token exists:`, !!token);
+  }
+
   // Public routes that don't need authentication
   const publicRoutes = ["/", "/login", "/register"];
   if (publicRoutes.includes(pathname)) {
@@ -62,6 +67,9 @@ export function middleware(req: NextRequest) {
 
   // Check authentication
   if (!token) {
+    console.log(
+      `[Middleware] No token found, redirecting to login from ${pathname}`
+    );
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
