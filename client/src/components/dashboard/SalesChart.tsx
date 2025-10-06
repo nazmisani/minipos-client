@@ -33,7 +33,7 @@ export default function SalesChart() {
         data?.data?.map((item: unknown) => {
           const itemObj = item as Record<string, unknown>;
           return {
-            date: String(itemObj?.date || ''),
+            date: String(itemObj?.date || ""),
             amount: Number(itemObj?.totalSales || 0),
           };
         }) || [];
@@ -155,7 +155,9 @@ export default function SalesChart() {
               tick={{ fontSize: 12, fill: "#64748b" }}
               axisLine={{ stroke: "#cbd5e1" }}
               tickLine={{ stroke: "#cbd5e1" }}
-              tickFormatter={(value: unknown) => `${(Number(value) / 1000000).toFixed(1)}M`}
+              tickFormatter={(value: unknown) =>
+                `${(Number(value) / 1000000).toFixed(1)}M`
+              }
             />
             <Tooltip
               contentStyle={{

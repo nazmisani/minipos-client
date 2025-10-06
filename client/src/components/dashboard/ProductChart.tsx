@@ -37,7 +37,7 @@ export default function ProductChart({ data }: { data?: ProductData[] }) {
           const product = itemObj.product as Record<string, unknown>;
           const sum = itemObj._sum as Record<string, unknown>;
           return {
-            name: String(product?.name || ''),
+            name: String(product?.name || ""),
             quantity: Number(sum?.quantity || 0),
             subTotal: Number(sum?.subTotal || 0),
           };
