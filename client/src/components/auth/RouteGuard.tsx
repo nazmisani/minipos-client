@@ -61,7 +61,7 @@ export default function RouteGuard({
       return;
     }
 
-    // Add delay to prevent race conditions on refresh
+    // Add minimal delay to prevent race conditions on refresh
     const timer = setTimeout(() => {
       setHasChecked(true);
 
@@ -99,7 +99,7 @@ export default function RouteGuard({
           return;
         }
       }
-    }, 200); // 200ms delay to prevent race conditions
+    }, 50); // Reduced to 50ms for faster redirect
 
     return () => clearTimeout(timer);
   }, [

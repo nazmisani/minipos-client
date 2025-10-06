@@ -6,6 +6,7 @@ import apiClient from "@/service/apiClient";
 import { usePermissions } from "@/hooks/usePermissions";
 import { useHydration } from "@/hooks/useHydration";
 import { useAuthWithWatcher } from "@/hooks/useTokenWatcher";
+import { useAuth } from "@/contexts/authContext";
 import Protected from "@/components/auth/Protected";
 import { ButtonSkeleton } from "@/components/auth/LoadingComponents";
 
@@ -118,6 +119,7 @@ export default function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
   const { isLoading } = usePermissions();
+  const { logout } = useAuth();
 
   // Enable token watching for this component
   useAuthWithWatcher();
@@ -166,10 +168,15 @@ export default function Sidebar() {
 
   async function handleLogout() {
     try {
+      // Call backend logout endpoint
       await apiClient.post("/auth/logout");
-      handleNavigation("/");
+
+      // Clear auth context and redirect to login
+      logout();
     } catch (error) {
       console.log(error);
+      // Even if backend fails, clear local auth and redirect
+      logout();
     }
   }
 

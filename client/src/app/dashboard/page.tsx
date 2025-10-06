@@ -7,6 +7,7 @@ import ProductChart from "@/components/dashboard/ProductChart";
 import QuickActions from "@/components/dashboard/QuickActions";
 import UserProfile from "@/components/dashboard/UserProfile";
 import CashierHelpers from "@/components/dashboard/CashierHelpers";
+import RouteGuard from "@/components/auth/RouteGuard";
 import apiClient from "@/service/apiClient";
 
 export default function DashboardPage() {
@@ -113,118 +114,122 @@ export default function DashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 lg:p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="animate-pulse">
-            {/* Header Skeleton */}
-            <div className="mb-8">
-              <div className="h-8 bg-slate-200 rounded-lg w-64 mb-2"></div>
-              <div className="h-4 bg-slate-200 rounded w-96"></div>
-            </div>
-
-            {/* Summary Cards Skeleton */}
-            <div className="mb-10">
-              <div className="h-6 bg-slate-200 rounded w-48 mb-6"></div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="bg-slate-200 rounded-xl h-32"></div>
-                ))}
-              </div>
-            </div>
-
-            {/* Content Section Skeleton */}
-            <div className="mb-8">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-                <div className="h-7 bg-slate-200 rounded-lg w-48 mb-2 sm:mb-0"></div>
-                <div className="h-4 bg-slate-200 rounded w-64"></div>
+      <RouteGuard>
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 lg:p-6">
+          <div className="max-w-7xl mx-auto">
+            <div className="animate-pulse">
+              {/* Header Skeleton */}
+              <div className="mb-8">
+                <div className="h-8 bg-slate-200 rounded-lg w-64 mb-2"></div>
+                <div className="h-4 bg-slate-200 rounded w-96"></div>
               </div>
 
-              {/* Generic Grid Skeleton */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="bg-slate-200 rounded-xl h-96"></div>
-                <div className="bg-slate-200 rounded-xl h-96"></div>
+              {/* Summary Cards Skeleton */}
+              <div className="mb-10">
+                <div className="h-6 bg-slate-200 rounded w-48 mb-6"></div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {[...Array(4)].map((_, i) => (
+                    <div key={i} className="bg-slate-200 rounded-xl h-32"></div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Content Section Skeleton */}
+              <div className="mb-8">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+                  <div className="h-7 bg-slate-200 rounded-lg w-48 mb-2 sm:mb-0"></div>
+                  <div className="h-4 bg-slate-200 rounded w-64"></div>
+                </div>
+
+                {/* Generic Grid Skeleton */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="bg-slate-200 rounded-xl h-96"></div>
+                  <div className="bg-slate-200 rounded-xl h-96"></div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </RouteGuard>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 lg:p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-8 space-y-4 lg:space-y-0">
-          <div>
-            <h1 className="text-3xl lg:text-4xl font-bold text-slate-900">
-              Dashboard
-            </h1>
-            <p className="text-slate-600 mt-2">
-              Welcome back! Here&apos;s a summary of your store today.
-            </p>
-          </div>
-          <UserProfile user={userProfile} />
-        </div>
-
-        {/* Summary Cards */}
-        <div className="mb-6">
-          <h2 className="text-lg font-semibold text-slate-900 mb-6">
-            Today&apos;s Summary
-          </h2>
-          <SummaryCards data={summary} />
-        </div>
-
-        {/* Conditional Content Based on Role */}
-        {userProfile?.role?.toLowerCase() === "cashier" ? (
-          // Cashier-specific content
-          <div className="mb-8">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-              <h2 className="text-xl font-bold text-slate-900 mb-2 sm:mb-0">
-                Work Overview
-              </h2>
-              <p className="text-sm text-slate-500">
-                Recent transactions and inventory alerts
+    <RouteGuard>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 lg:p-6">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-8 space-y-4 lg:space-y-0">
+            <div>
+              <h1 className="text-3xl lg:text-4xl font-bold text-slate-900">
+                Dashboard
+              </h1>
+              <p className="text-slate-600 mt-2">
+                Welcome back! Here&apos;s a summary of your store today.
               </p>
             </div>
-
-            <CashierHelpers />
+            <UserProfile user={userProfile} />
           </div>
-        ) : (
-          // Admin & Manager analytics content
-          <div className="mb-8">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-              <h2 className="text-xl font-bold text-slate-900 mb-2 sm:mb-0">
-                Analytics Overview
-              </h2>
-              <p className="text-sm text-slate-500">
-                Real-time insights and performance metrics
-              </p>
-            </div>
 
-            {/* Charts Grid - Responsive Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Sales Chart Container */}
-              <div className="w-full">
-                <SalesChart />
+          {/* Summary Cards */}
+          <div className="mb-6">
+            <h2 className="text-lg font-semibold text-slate-900 mb-6">
+              Today&apos;s Summary
+            </h2>
+            <SummaryCards data={summary} />
+          </div>
+
+          {/* Conditional Content Based on Role */}
+          {userProfile?.role?.toLowerCase() === "cashier" ? (
+            // Cashier-specific content
+            <div className="mb-8">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+                <h2 className="text-xl font-bold text-slate-900 mb-2 sm:mb-0">
+                  Work Overview
+                </h2>
+                <p className="text-sm text-slate-500">
+                  Recent transactions and inventory alerts
+                </p>
               </div>
 
-              {/* Product Chart Container */}
-              <div className="w-full">
-                <ProductChart />
+              <CashierHelpers />
+            </div>
+          ) : (
+            // Admin & Manager analytics content
+            <div className="mb-8">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+                <h2 className="text-xl font-bold text-slate-900 mb-2 sm:mb-0">
+                  Analytics Overview
+                </h2>
+                <p className="text-sm text-slate-500">
+                  Real-time insights and performance metrics
+                </p>
+              </div>
+
+              {/* Charts Grid - Responsive Layout */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Sales Chart Container */}
+                <div className="w-full">
+                  <SalesChart />
+                </div>
+
+                {/* Product Chart Container */}
+                <div className="w-full">
+                  <ProductChart />
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Quick Actions */}
-        <div className="mb-6">
-          <h2 className="text-lg font-semibold text-slate-900 mb-6">
-            Quick Actions
-          </h2>
-          <QuickActions userRole={userProfile?.role || "cashier"} />
+          {/* Quick Actions */}
+          <div className="mb-6">
+            <h2 className="text-lg font-semibold text-slate-900 mb-6">
+              Quick Actions
+            </h2>
+            <QuickActions userRole={userProfile?.role || "cashier"} />
+          </div>
         </div>
       </div>
-    </div>
+    </RouteGuard>
   );
 }

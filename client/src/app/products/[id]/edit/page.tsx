@@ -5,6 +5,7 @@ import ProductForm from "@/components/products/ProductForm";
 import { useAuth } from "@/contexts/authContext";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import RouteGuard from "@/components/auth/RouteGuard";
 import apiClient from "@/service/apiClient";
 
 interface ProductData {
@@ -128,11 +129,13 @@ export default function EditProductPage() {
   }
 
   return (
-    <ProductForm
-      product={product}
-      isEdit={true}
-      onBack={handleBack}
-      onSave={handleSave}
-    />
+    <RouteGuard permission="products.edit">
+      <ProductForm
+        product={product}
+        isEdit={true}
+        onBack={handleBack}
+        onSave={handleSave}
+      />
+    </RouteGuard>
   );
 }

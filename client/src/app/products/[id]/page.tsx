@@ -4,6 +4,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useAuth } from "@/contexts/authContext";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import RouteGuard from "@/components/auth/RouteGuard";
 import apiClient from "@/service/apiClient";
 
 interface ProductData {
@@ -131,129 +132,135 @@ export default function ProductDetailPage() {
   const stockStatus = getStockStatus(product.stock);
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={handleBack}
-              className="p-2 hover:bg-slate-200 rounded-lg transition-colors"
-              title="Back to Products"
-            >
-              <svg
-                className="w-5 h-5 text-slate-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+    <RouteGuard permission="products.view">
+      <div className="min-h-screen bg-slate-50 p-6">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={handleBack}
+                className="p-2 hover:bg-slate-200 rounded-lg transition-colors"
+                title="Back to Products"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-            </button>
-            <div>
-              <h1 className="text-3xl font-bold text-slate-900">
-                Product Details
-              </h1>
-              <p className="text-slate-600 mt-1">View product information</p>
-            </div>
-          </div>
-          {user && ["admin", "manager"].includes(user.role) && (
-            <button
-              onClick={handleEdit}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
-            >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                />
-              </svg>
-              <span>Edit Product</span>
-            </button>
-          )}
-        </div>
-
-        {/* Product Details Card */}
-        <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">
-                Product Name
-              </label>
-              <p className="text-lg font-semibold text-slate-900">
-                {product.name}
-              </p>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">
-                Category
-              </label>
-              <p className="text-lg text-slate-900">{product.category.name}</p>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">
-                Price
-              </label>
-              <p className="text-lg font-semibold text-emerald-600">
-                {formatCurrency(product.price)}
-              </p>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">
-                Stock
-              </label>
-              <div className="flex items-center space-x-2">
-                <p className="text-lg font-semibold text-slate-900">
-                  {product.stock}
-                </p>
-                <span
-                  className={`px-2 py-1 rounded-full text-xs font-medium ${stockStatus.color}`}
+                <svg
+                  className="w-5 h-5 text-slate-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  {stockStatus.text}
-                </span>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </button>
+              <div>
+                <h1 className="text-3xl font-bold text-slate-900">
+                  Product Details
+                </h1>
+                <p className="text-slate-600 mt-1">View product information</p>
               </div>
             </div>
+            {user && ["admin", "manager"].includes(user.role) && (
+              <button
+                onClick={handleEdit}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
+                <span>Edit Product</span>
+              </button>
+            )}
+          </div>
 
-            <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">
-                Created By
-              </label>
-              <p className="text-lg text-slate-900">{product.createdBy.name}</p>
-              <p className="text-sm text-slate-500">
-                {product.createdBy.email}
-              </p>
-            </div>
+          {/* Product Details Card */}
+          <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-slate-600 mb-1">
+                  Product Name
+                </label>
+                <p className="text-lg font-semibold text-slate-900">
+                  {product.name}
+                </p>
+              </div>
 
-            <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">
-                Created At
-              </label>
-              <p className="text-lg text-slate-900">
-                {new Date(product.createdAt).toLocaleDateString("id-ID", {
-                  day: "2-digit",
-                  month: "long",
-                  year: "numeric",
-                })}
-              </p>
+              <div>
+                <label className="block text-sm font-medium text-slate-600 mb-1">
+                  Category
+                </label>
+                <p className="text-lg text-slate-900">
+                  {product.category.name}
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-600 mb-1">
+                  Price
+                </label>
+                <p className="text-lg font-semibold text-emerald-600">
+                  {formatCurrency(product.price)}
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-600 mb-1">
+                  Stock
+                </label>
+                <div className="flex items-center space-x-2">
+                  <p className="text-lg font-semibold text-slate-900">
+                    {product.stock}
+                  </p>
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${stockStatus.color}`}
+                  >
+                    {stockStatus.text}
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-600 mb-1">
+                  Created By
+                </label>
+                <p className="text-lg text-slate-900">
+                  {product.createdBy.name}
+                </p>
+                <p className="text-sm text-slate-500">
+                  {product.createdBy.email}
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-600 mb-1">
+                  Created At
+                </label>
+                <p className="text-lg text-slate-900">
+                  {new Date(product.createdAt).toLocaleDateString("id-ID", {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </RouteGuard>
   );
 }
