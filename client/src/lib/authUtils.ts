@@ -1,4 +1,4 @@
-import { CookieManager } from "./tokenUtils";
+import { CookieManager, TokenValidator } from "./tokenUtils";
 
 /**
  * Enhanced authentication utilities for improved login/logout flow
@@ -72,12 +72,11 @@ export class AuthUtils {
   /**
    * Get current user from token without context
    */
-  static getCurrentUser(): any | null {
+  static getCurrentUser(): unknown | null {
     const token = CookieManager.get("token");
     if (!token) return null;
 
     try {
-      const { TokenValidator } = require("./tokenUtils");
       const validation = TokenValidator.validate(token);
       return validation.isValid ? validation.user : null;
     } catch {
@@ -140,7 +139,6 @@ export class AuthUtils {
     if (!token) return false;
 
     try {
-      const { TokenValidator } = require("./tokenUtils");
       return TokenValidator.isCloseToExpiration(token, minutesThreshold);
     } catch {
       return false;

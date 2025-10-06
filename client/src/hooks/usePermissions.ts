@@ -27,7 +27,7 @@ export function usePermissions() {
     }
 
     const allowedRoles = PERMISSIONS[permission as Permission];
-    return allowedRoles ? allowedRoles.includes(user.role as any) : false;
+    return allowedRoles ? (allowedRoles as readonly Role[]).includes(user.role as Role) : false;
   };
 
   /**
@@ -159,7 +159,7 @@ export function withPermissions(requiredPermissions: (Permission | string)[]) {
  * Hook for protecting routes with permissions
  */
 export function useRouteProtection() {
-  const { hasPermission, isAuthenticated } = usePermissions();
+  const { hasPermission, hasAnyPermission, isAuthenticated } = usePermissions();
 
   const requireAuth = (): boolean => {
     return isAuthenticated();
@@ -172,7 +172,6 @@ export function useRouteProtection() {
   const requireAnyPermission = (
     permissions: (Permission | string)[]
   ): boolean => {
-    const { hasAnyPermission } = usePermissions();
     return hasAnyPermission(permissions);
   };
 

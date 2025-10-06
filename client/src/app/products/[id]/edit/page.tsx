@@ -47,6 +47,7 @@ export default function EditProductPage() {
     if (productId && user && ["admin", "manager"].includes(user.role)) {
       fetchProduct();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productId, user]);
 
   const fetchProduct = async () => {
@@ -55,7 +56,7 @@ export default function EditProductPage() {
       setError(null);
       const { data } = await apiClient.get(`/products/${productId}`);
       setProduct(data.data);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to fetch product:", error);
       setError("Failed to load product data");
       toast.error("Failed to load product data");

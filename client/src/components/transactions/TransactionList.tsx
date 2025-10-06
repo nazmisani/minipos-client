@@ -15,11 +15,11 @@ import { useAuth } from "@/contexts/authContext";
 import { usePermissions } from "@/hooks/usePermissions";
 import Protected from "@/components/auth/Protected";
 
-interface TransactionListProps {}
+type TransactionListProps = Record<string, never>
 
 export default function TransactionList({}: TransactionListProps) {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user: _user } = useAuth();
   const { hasPermission } = usePermissions();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);

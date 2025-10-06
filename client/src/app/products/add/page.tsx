@@ -2,8 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import ProductForm from "@/components/products/ProductForm";
-import { useAuth } from "@/contexts/authContext";
-import { useEffect } from "react";
 import { toast } from "react-toastify";
 import RouteGuard from "@/components/auth/RouteGuard";
 

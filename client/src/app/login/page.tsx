@@ -25,8 +25,14 @@ export default function LoginPage() {
         toast.success("Login Success!");
         router.push("/");
       }
-    } catch (error: any) {
-      toast.error(error.response.data.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error && 'response' in error && 
+        typeof error.response === 'object' && error.response !== null &&
+        'data' in error.response && typeof error.response.data === 'object' &&
+        error.response.data !== null && 'message' in error.response.data
+          ? String(error.response.data.message)
+          : "Login failed";
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }

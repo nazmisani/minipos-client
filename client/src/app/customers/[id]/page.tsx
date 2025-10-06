@@ -24,10 +24,14 @@ function CustomerDetailPageContent() {
         setLoading(true);
         const { data } = await apiClient.get(`/customers/${customerId}`);
         setCustomer(data.data);
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("Error fetching customer:", error);
-        const errorMessage =
-          error?.response?.data?.message || "Failed to load customer data";
+        const errorMessage = error instanceof Error && 'response' in error && 
+          typeof error.response === 'object' && error.response !== null &&
+          'data' in error.response && typeof error.response.data === 'object' &&
+          error.response.data !== null && 'message' in error.response.data
+            ? String(error.response.data.message)
+            : "Failed to load customer data";
         setError(errorMessage);
         toast.error(errorMessage);
       } finally {

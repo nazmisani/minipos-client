@@ -39,6 +39,7 @@ export default function ProductDetailPage() {
     if (productId) {
       fetchProduct();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productId]);
 
   const fetchProduct = async () => {
@@ -47,7 +48,7 @@ export default function ProductDetailPage() {
       setError(null);
       const { data } = await apiClient.get(`/products/${productId}`);
       setProduct(data.data);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to fetch product:", error);
       setError("Failed to load product data");
       toast.error("Failed to load product data");

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import apiClient from "@/service/apiClient";
 import { usePermissions } from "@/hooks/usePermissions";

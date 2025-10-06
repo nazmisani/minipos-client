@@ -2,7 +2,7 @@ import { jwtDecode } from "jwt-decode";
 
 export interface TokenValidationResult {
   isValid: boolean;
-  user: any | null;
+  user: unknown | null;
   error?: string;
   expiresIn?: number; // seconds until expiration
 }
@@ -69,9 +69,19 @@ export class TokenValidator {
   /**
    * Validate token structure and required fields
    */
-  private static validateTokenStructure(decoded: any): TokenValidationResult {
+  private static validateTokenStructure(decoded: unknown): TokenValidationResult {
+    // Type guard to check if decoded is an object with the required structure
+    if (!decoded || typeof decoded !== 'object') {
+      return {
+        isValid: false,
+        user: null,
+        error: 'Invalid token structure',
+      };
+    }
+
+    const decodedObj = decoded as Record<string, unknown>;
     const requiredFields = ["id", "email", "role"];
-    const missingFields = requiredFields.filter((field) => !decoded[field]);
+    const missingFields = requiredFields.filter((field) => !decodedObj[field]);
 
     if (missingFields.length > 0) {
       return {
@@ -83,11 +93,11 @@ export class TokenValidator {
 
     // Validate role
     const validRoles = ["admin", "manager", "cashier"];
-    if (!validRoles.includes(decoded.role)) {
+    if (!validRoles.includes(String(decodedObj.role))) {
       return {
         isValid: false,
         user: null,
-        error: `Invalid role: ${decoded.role}`,
+        error: `Invalid role: ${String(decodedObj.role)}`,
       };
     }
 
@@ -160,7 +170,7 @@ export class TokenValidator {
   /**
    * Extract user info from token without validation
    */
-  static extractUser(token: string): any | null {
+  static extractUser(token: string): unknown | null {
     try {
       const decoded = jwtDecode(token) as DecodedToken;
       return {

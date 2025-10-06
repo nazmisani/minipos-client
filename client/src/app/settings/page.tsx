@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import apiClient from "@/service/apiClient";
-import { User, UserFormData, UserViewMode } from "@/components/users/types";
+import { User, UserViewMode } from "@/components/users/types";
 import UserList from "@/components/users/UserList";
 import UserForm from "@/components/users/UserForm";
 import DeleteConfirmation from "@/components/users/DeleteConfirmation";

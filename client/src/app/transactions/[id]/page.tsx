@@ -12,7 +12,7 @@ import RouteGuard from "@/components/auth/RouteGuard";
 function TransactionDetailPageContent() {
   const router = useRouter();
   const params = useParams();
-  const { user } = useAuth();
+  const { user: _user } = useAuth();
   const [transaction, setTransaction] = useState<Transaction | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -23,6 +23,7 @@ function TransactionDetailPageContent() {
     if (transactionId) {
       fetchTransaction();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transactionId]);
 
   const fetchTransaction = async () => {
@@ -31,10 +32,14 @@ function TransactionDetailPageContent() {
       setError(null);
       const { data } = await apiClient.get(`/transactions/${transactionId}`);
       setTransaction(data.data);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error fetching transaction:", error);
-      const errorMessage =
-        error.response?.data?.message || "Failed to load transaction";
+      const errorMessage = error instanceof Error && 'response' in error && 
+        typeof error.response === 'object' && error.response !== null &&
+        'data' in error.response && typeof error.response.data === 'object' &&
+        error.response.data !== null && 'message' in error.response.data
+          ? String(error.response.data.message)
+          : "Failed to load transaction";
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {

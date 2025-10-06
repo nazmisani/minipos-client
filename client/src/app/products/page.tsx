@@ -38,8 +38,9 @@ function ProductPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { hasPermission } = usePermissions();
-  const [currentView, setCurrentView] = useState<ProductViewMode>("list");
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [_currentView, setCurrentView] = useState<ProductViewMode>("list");
+  const [_selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [products, setProducts] = useState<ProductData[]>([]);
@@ -55,12 +56,12 @@ function ProductPageContent() {
   const canEdit = hasPermission("products.update");
   const canDelete = hasPermission("products.delete");
   const hasAnyActionPermission = canEdit || canDelete;
-  const [pendingDelete, setPendingDelete] = useState<{
+  const [_pendingDelete, setPendingDelete] = useState<{
     id: number;
     name: string;
   } | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const { user } = useAuth();
+  const { user: _user } = useAuth();
 
   // Professional toast utility with elegant styling
   const showProfessionalToast = (
@@ -163,6 +164,7 @@ function ProductPageContent() {
     } else {
       fetchProducts(1);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // When filters change, refetch data
@@ -175,6 +177,7 @@ function ProductPageContent() {
       // Use pagination when no filters
       fetchProducts(1);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm, selectedCategory]);
 
   const fetchAllProducts = async () => {
@@ -283,12 +286,12 @@ function ProductPageContent() {
     router.push(`/products/${productId}/edit`);
   };
 
-  const handleBack = () => {
+  const _handleBack = () => {
     setCurrentView("list");
     setSelectedProduct(null);
   };
 
-  const handleSave = () => {
+  const _handleSave = () => {
     // Refresh the product list after successful save
     fetchProducts(currentPage);
     setCurrentView("list");
@@ -352,7 +355,7 @@ function ProductPageContent() {
               <p className="text-sm text-gray-800 leading-relaxed mb-4">
                 Are you sure you want to delete{" "}
                 <span className="font-semibold text-red-700">
-                  "{productName}"
+                  &quot;{productName}&quot;
                 </span>{" "}
                 from the system? This action will permanently remove:
               </p>
@@ -485,10 +488,14 @@ function ProductPageContent() {
 
       fetchProducts(currentPage); // Refresh the product list
       setPendingDelete(null);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Delete product error:", error);
-      const errorMessage =
-        error.response?.data?.message || "Failed to delete product";
+      const errorMessage = error instanceof Error && 'response' in error && 
+        typeof error.response === 'object' && error.response !== null &&
+        'data' in error.response && typeof error.response.data === 'object' &&
+        error.response.data !== null && 'message' in error.response.data
+          ? String(error.response.data.message)
+          : "Failed to delete product";
 
       showProfessionalToast("error", "Delete Failed", errorMessage);
 

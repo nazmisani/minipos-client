@@ -2,8 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import CustomerForm from "@/components/customers/CustomerForm";
-import { useAuth } from "@/contexts/authContext";
-import { useEffect } from "react";
 import RouteGuard from "@/components/auth/RouteGuard";
 
 function AddCustomerPageContent() {

@@ -95,11 +95,14 @@ export default function CategoriesPage() {
       setCategoryName("");
       setEditingCategory(null);
       fetchCategories(); // Refresh the list
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Category operation error:", error);
-      const errorMessage =
-        error.response?.data?.message ||
-        `Failed to ${editingCategory ? "update" : "create"} category`;
+      const errorMessage = error instanceof Error && 'response' in error && 
+        typeof error.response === 'object' && error.response !== null &&
+        'data' in error.response && typeof error.response.data === 'object' &&
+        error.response.data !== null && 'message' in error.response.data
+          ? String(error.response.data.message)
+          : `Failed to ${editingCategory ? "update" : "create"} category`;
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -156,7 +159,7 @@ export default function CategoriesPage() {
               <p className="text-sm text-gray-800 leading-relaxed mb-4">
                 Are you sure you want to delete category{" "}
                 <span className="font-semibold text-red-700">
-                  "{categoryName}"
+                  &quot;{categoryName}&quot;
                 </span>
                 ?
               </p>
@@ -303,7 +306,7 @@ export default function CategoriesPage() {
     );
   };
 
-  const confirmDelete = async (categoryId: number, categoryName: string) => {
+  const confirmDelete = async (categoryId: number, _categoryName: string) => {
     setIsDeleting(true);
 
     try {
@@ -313,10 +316,14 @@ export default function CategoriesPage() {
 
       fetchCategories(); // Refresh the category list
       setPendingDelete(null);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Delete category error:", error);
-      const errorMessage =
-        error.response?.data?.message || "Failed to delete category";
+      const errorMessage = error instanceof Error && 'response' in error && 
+        typeof error.response === 'object' && error.response !== null &&
+        'data' in error.response && typeof error.response.data === 'object' &&
+        error.response.data !== null && 'message' in error.response.data
+          ? String(error.response.data.message)
+          : "Failed to delete category";
 
       toast.error(errorMessage);
 

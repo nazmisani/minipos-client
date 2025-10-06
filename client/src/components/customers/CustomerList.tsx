@@ -106,7 +106,7 @@ export default function CustomerList({
               <p className="text-sm text-gray-800 leading-relaxed mb-4">
                 Are you sure you want to delete{" "}
                 <span className="font-semibold text-red-700">
-                  "{customerName}"
+                  &quot;{customerName}&quot;
                 </span>{" "}
                 from the system? This action will permanently remove:
               </p>

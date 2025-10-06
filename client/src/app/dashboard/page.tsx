@@ -161,7 +161,7 @@ export default function DashboardPage() {
               Dashboard
             </h1>
             <p className="text-slate-600 mt-2">
-              Welcome back! Here's a summary of your store today.
+              Welcome back! Here&apos;s a summary of your store today.
             </p>
           </div>
           <UserProfile user={userProfile} />
@@ -170,7 +170,7 @@ export default function DashboardPage() {
         {/* Summary Cards */}
         <div className="mb-6">
           <h2 className="text-lg font-semibold text-slate-900 mb-6">
-            Today's Summary
+            Today&apos;s Summary
           </h2>
           <SummaryCards data={summary} />
         </div>
