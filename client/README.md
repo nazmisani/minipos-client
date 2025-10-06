@@ -2,7 +2,27 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+### 1. Environment Setup
+
+First, copy the environment file and configure your API URL:
+
+```bash
+cp .env.example .env.local
+```
+
+Edit `.env.local` and set your backend API URL:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Run Development Server
 
 ```bash
 npm run dev
@@ -15,6 +35,26 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Environment Variables
+
+| Variable              | Description          | Default                 | Required |
+| --------------------- | -------------------- | ----------------------- | -------- |
+| `NEXT_PUBLIC_API_URL` | Backend API base URL | `http://localhost:8000` | Yes      |
+
+### Development
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+### Production (Vercel)
+
+Set this in your Vercel dashboard:
+
+```env
+NEXT_PUBLIC_API_URL=https://your-backend-api.com
+```
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
