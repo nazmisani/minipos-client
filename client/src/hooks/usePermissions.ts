@@ -27,7 +27,9 @@ export function usePermissions() {
     }
 
     const allowedRoles = PERMISSIONS[permission as Permission];
-    return allowedRoles ? (allowedRoles as readonly Role[]).includes(user.role as Role) : false;
+    return allowedRoles
+      ? (allowedRoles as readonly Role[]).includes(user.role as Role)
+      : false;
   };
 
   /**

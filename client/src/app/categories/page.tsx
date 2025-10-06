@@ -97,10 +97,15 @@ export default function CategoriesPage() {
       fetchCategories(); // Refresh the list
     } catch (error: unknown) {
       console.error("Category operation error:", error);
-      const errorMessage = error instanceof Error && 'response' in error && 
-        typeof error.response === 'object' && error.response !== null &&
-        'data' in error.response && typeof error.response.data === 'object' &&
-        error.response.data !== null && 'message' in error.response.data
+      const errorMessage =
+        error instanceof Error &&
+        "response" in error &&
+        typeof error.response === "object" &&
+        error.response !== null &&
+        "data" in error.response &&
+        typeof error.response.data === "object" &&
+        error.response.data !== null &&
+        "message" in error.response.data
           ? String(error.response.data.message)
           : `Failed to ${editingCategory ? "update" : "create"} category`;
       toast.error(errorMessage);
@@ -318,10 +323,15 @@ export default function CategoriesPage() {
       setPendingDelete(null);
     } catch (error: unknown) {
       console.error("Delete category error:", error);
-      const errorMessage = error instanceof Error && 'response' in error && 
-        typeof error.response === 'object' && error.response !== null &&
-        'data' in error.response && typeof error.response.data === 'object' &&
-        error.response.data !== null && 'message' in error.response.data
+      const errorMessage =
+        error instanceof Error &&
+        "response" in error &&
+        typeof error.response === "object" &&
+        error.response !== null &&
+        "data" in error.response &&
+        typeof error.response.data === "object" &&
+        error.response.data !== null &&
+        "message" in error.response.data
           ? String(error.response.data.message)
           : "Failed to delete category";
 

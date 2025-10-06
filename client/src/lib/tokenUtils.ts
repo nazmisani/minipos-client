@@ -69,13 +69,15 @@ export class TokenValidator {
   /**
    * Validate token structure and required fields
    */
-  private static validateTokenStructure(decoded: unknown): TokenValidationResult {
+  private static validateTokenStructure(
+    decoded: unknown
+  ): TokenValidationResult {
     // Type guard to check if decoded is an object with the required structure
-    if (!decoded || typeof decoded !== 'object') {
+    if (!decoded || typeof decoded !== "object") {
       return {
         isValid: false,
         user: null,
-        error: 'Invalid token structure',
+        error: "Invalid token structure",
       };
     }
 

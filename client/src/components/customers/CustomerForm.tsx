@@ -49,10 +49,15 @@ export default function CustomerForm({
       onSave();
     } catch (error: unknown) {
       console.error("Error saving customer:", error);
-      const errorMessage = error instanceof Error && 'response' in error && 
-        typeof error.response === 'object' && error.response !== null &&
-        'data' in error.response && typeof error.response.data === 'object' &&
-        error.response.data !== null && 'message' in error.response.data
+      const errorMessage =
+        error instanceof Error &&
+        "response" in error &&
+        typeof error.response === "object" &&
+        error.response !== null &&
+        "data" in error.response &&
+        typeof error.response.data === "object" &&
+        error.response.data !== null &&
+        "message" in error.response.data
           ? String(error.response.data.message)
           : `Failed to ${isEdit ? "update" : "add"} customer`;
       toast.error(errorMessage);
