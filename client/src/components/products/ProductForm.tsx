@@ -17,7 +17,7 @@ interface Category {
 }
 
 interface ProductFormProps {
-  product?: Product | any; // Allow any product structure for flexibility
+  product?: unknown; // Allow flexible product structure
   isEdit: boolean;
   onBack: () => void;
   onSave: () => void;
@@ -32,14 +32,15 @@ export default function ProductForm({
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    name: product?.name || "",
-    price: product?.price?.toString() || "",
-    categoryId:
-      product?.categoryId?.toString() ||
-      product?.category?.id?.toString() ||
-      "",
-    stock: product?.stock?.toString() || "",
+  const [formData, setFormData] = useState(() => {
+    const productObj = product as Record<string, unknown>;
+    const category = productObj?.category as Record<string, unknown>;
+    return {
+      name: String(productObj?.name || ""),
+      price: String(productObj?.price || ""),
+      categoryId: String(productObj?.categoryId || category?.id || ""),
+      stock: String(productObj?.stock || ""),
+    };
   });
 
   useEffect(() => {
@@ -49,14 +50,13 @@ export default function ProductForm({
   // Update form data when product prop changes (for edit mode)
   useEffect(() => {
     if (product && isEdit) {
+      const productObj = product as Record<string, unknown>;
+      const category = productObj?.category as Record<string, unknown>;
       setFormData({
-        name: product.name || "",
-        price: product.price?.toString() || "",
-        categoryId:
-          product.categoryId?.toString() ||
-          product.category?.id?.toString() ||
-          "",
-        stock: product.stock?.toString() || "",
+        name: String(productObj?.name || ""),
+        price: String(productObj?.price || ""),
+        categoryId: String(productObj?.categoryId || category?.id || ""),
+        stock: String(productObj?.stock || ""),
       });
     }
   }, [product, isEdit]);
@@ -128,9 +128,10 @@ export default function ProductForm({
         categoryId: parseInt(formData.categoryId),
       };
 
-      if (isEdit && product?.id) {
+      const productObj = product as Record<string, unknown>;
+      if (isEdit && productObj?.id) {
         // Update existing product (if needed later)
-        await apiClient.put(`/products/${product.id}`, requestData);
+        await apiClient.put(`/products/${productObj.id}`, requestData);
         toast.success("Product updated successfully!");
       } else {
         // Create new product
@@ -140,13 +141,15 @@ export default function ProductForm({
 
       // Call the onSave callback to trigger parent component actions (like navigation)
       onSave();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("API Error:", error);
-      if (error.response?.data?.message) {
-        toast.error(error.response.data.message);
-      } else {
-        toast.error("Failed to save product. Please try again.");
-      }
+      const errorMessage = error instanceof Error && 'response' in error && 
+        typeof error.response === 'object' && error.response !== null &&
+        'data' in error.response && typeof error.response.data === 'object' &&
+        error.response.data !== null && 'message' in error.response.data
+          ? String(error.response.data.message)
+          : "Failed to save product. Please try again.";
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

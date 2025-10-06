@@ -32,11 +32,16 @@ export default function ProductChart({ data }: { data?: ProductData[] }) {
 
       // Transform API response to match ProductData interface
       const transformedData =
-        data?.data?.map((item: any) => ({
-          name: item.product.name,
-          quantity: item._sum.quantity,
-          subTotal: item._sum.subTotal,
-        })) || [];
+        data?.data?.map((item: unknown) => {
+          const itemObj = item as Record<string, unknown>;
+          const product = itemObj.product as Record<string, unknown>;
+          const sum = itemObj._sum as Record<string, unknown>;
+          return {
+            name: String(product?.name || ''),
+            quantity: Number(sum?.quantity || 0),
+            subTotal: Number(sum?.subTotal || 0),
+          };
+        }) || [];
 
       setProductData(transformedData);
     } catch (error) {
@@ -160,7 +165,7 @@ export default function ProductChart({ data }: { data?: ProductData[] }) {
                 name === "quantity" ? `${value} units` : formatCurrency(value),
                 name === "quantity" ? "Sold" : "Revenue",
               ]}
-              labelFormatter={(label: any) => `Product: ${label}`}
+              labelFormatter={(label: unknown) => `Product: ${String(label)}`}
               labelStyle={{ color: "#334155", fontWeight: 500 }}
             />
             <Bar

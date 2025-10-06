@@ -91,7 +91,7 @@ export function hasRoleHierarchy(
  */
 export function getPermissionsForRole(role: string): string[] {
   return Object.entries(PERMISSIONS)
-    .filter(([, roles]) => roles.includes(role as any))
+    .filter(([, roles]) => (roles as readonly string[]).includes(role))
     .map(([permission]) => permission);
 }
 

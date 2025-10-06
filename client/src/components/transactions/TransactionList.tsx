@@ -89,7 +89,7 @@ export default function TransactionList({}: TransactionListProps) {
               <p className="text-sm text-gray-800 leading-relaxed mb-4">
                 Are you sure you want to delete{" "}
                 <span className="font-semibold text-red-700">
-                  "Transaction #{transactionName}"
+                  &quot;Transaction #{transactionName}&quot;
                 </span>{" "}
                 from the system? This action will permanently remove:
               </p>
@@ -221,10 +221,14 @@ export default function TransactionList({}: TransactionListProps) {
 
       fetchTransactions(); // Refresh the transaction list
       setPendingDelete(null);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Delete transaction error:", error);
-      const errorMessage =
-        error.response?.data?.message || "Failed to delete transaction";
+      const errorMessage = error instanceof Error && 'response' in error && 
+        typeof error.response === 'object' && error.response !== null &&
+        'data' in error.response && typeof error.response.data === 'object' &&
+        error.response.data !== null && 'message' in error.response.data
+          ? String(error.response.data.message)
+          : "Failed to delete transaction";
 
       toast.error(errorMessage);
 

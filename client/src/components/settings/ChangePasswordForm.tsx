@@ -84,10 +84,14 @@ export default function ChangePasswordForm() {
         newPassword: "",
         confirmPassword: "",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error changing password:", error);
-      const errorMessage =
-        error?.response?.data?.message || "Failed to change password";
+      const errorMessage = error instanceof Error && 'response' in error && 
+        typeof error.response === 'object' && error.response !== null &&
+        'data' in error.response && typeof error.response.data === 'object' &&
+        error.response.data !== null && 'message' in error.response.data
+          ? String(error.response.data.message)
+          : "Failed to change password";
       toast.error(errorMessage);
     } finally {
       setLoading(false);

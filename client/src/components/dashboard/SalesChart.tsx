@@ -30,10 +30,13 @@ export default function SalesChart() {
       const { data } = await apiClient.get("/reports/sales");
 
       const transformedData =
-        data?.data?.map((item: any) => ({
-          date: item.date,
-          amount: item.totalSales,
-        })) || [];
+        data?.data?.map((item: unknown) => {
+          const itemObj = item as Record<string, unknown>;
+          return {
+            date: String(itemObj?.date || ''),
+            amount: Number(itemObj?.totalSales || 0),
+          };
+        }) || [];
 
       setSalesData(transformedData);
     } catch (error) {
@@ -152,7 +155,7 @@ export default function SalesChart() {
               tick={{ fontSize: 12, fill: "#64748b" }}
               axisLine={{ stroke: "#cbd5e1" }}
               tickLine={{ stroke: "#cbd5e1" }}
-              tickFormatter={(value: any) => `${(value / 1000000).toFixed(1)}M`}
+              tickFormatter={(value: unknown) => `${(Number(value) / 1000000).toFixed(1)}M`}
             />
             <Tooltip
               contentStyle={{
@@ -162,7 +165,7 @@ export default function SalesChart() {
                 boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
               }}
               formatter={(value: number) => [formatCurrency(value), "Revenue"]}
-              labelFormatter={(label: any) => `Date: ${label}`}
+              labelFormatter={(label: unknown) => `Date: ${String(label)}`}
               labelStyle={{ color: "#334155", fontWeight: 500 }}
             />
             <Line
