@@ -28,7 +28,7 @@ export default function ProductChart({ data }: { data?: ProductData[] }) {
       setIsLoading(true);
       setError(null);
 
-      const { data } = await apiClient.get("reports/products/top");
+      const { data } = await apiClient.get("/reports/products/top");
 
       // Transform API response to match ProductData interface
       const transformedData =
