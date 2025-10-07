@@ -113,8 +113,7 @@ export class TokenValidator {
     decoded: DecodedToken
   ): TokenValidationResult & { expiresIn?: number } {
     if (!decoded.exp) {
-      // Token without expiration - assume valid but warn
-      console.warn("Token has no expiration date");
+      // Token without expiration - assume valid
       return { isValid: true, user: null };
     }
 
@@ -128,11 +127,6 @@ export class TokenValidator {
         user: null,
         error: "Token has expired",
       };
-    }
-
-    // Warn if token expires within 5 minutes
-    if (expiresIn <= 300) {
-      console.warn(`Token expires in ${expiresIn} seconds`);
     }
 
     return {

@@ -54,11 +54,6 @@ export function middleware(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
   const pathname = req.nextUrl.pathname;
 
-  // Debug logging for cookie check (only in development)
-  if (process.env.NODE_ENV === "development") {
-    console.log(`[Middleware] ${pathname} - Token exists:`, !!token);
-  }
-
   // Public routes that don't need authentication
   const publicRoutes = ["/", "/login", "/register"];
   if (publicRoutes.includes(pathname)) {
@@ -67,9 +62,6 @@ export function middleware(req: NextRequest) {
 
   // Check authentication
   if (!token) {
-    console.log(
-      `[Middleware] No token found, redirecting to login from ${pathname}`
-    );
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
@@ -79,7 +71,6 @@ export function middleware(req: NextRequest) {
 
     // Check if token is expired
     if (decoded.exp && decoded.exp < Date.now() / 1000) {
-      console.log("Token expired, redirecting to login");
       return NextResponse.redirect(new URL("/login", req.url));
     }
 
@@ -87,7 +78,6 @@ export function middleware(req: NextRequest) {
 
     // Validate role exists
     if (!userRole) {
-      console.log("No role in token, redirecting to login");
       return NextResponse.redirect(new URL("/login", req.url));
     }
 
@@ -97,16 +87,12 @@ export function middleware(req: NextRequest) {
     // If route requires permission, check it
     if (requiredPermission && !hasPermission(userRole, requiredPermission)) {
       // Redirect to dashboard for unauthorized access
-      console.log(
-        `User ${userRole} lacks permission ${requiredPermission} for ${pathname}`
-      );
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }
 
     return NextResponse.next();
-  } catch (error) {
+  } catch {
     // Invalid token, redirect to login
-    console.error("Token decode error in middleware:", error);
     return NextResponse.redirect(new URL("/login", req.url));
   }
 }

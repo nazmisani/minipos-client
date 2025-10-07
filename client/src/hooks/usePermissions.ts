@@ -22,7 +22,6 @@ export function usePermissions() {
     if (!user) return false;
 
     if (!isValidPermission(permission)) {
-      console.warn(`Invalid permission: ${permission}`);
       return false;
     }
 

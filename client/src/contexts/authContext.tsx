@@ -35,7 +35,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const validation = TokenValidator.validate(token);
 
     if (!validation.isValid) {
-      console.warn("Token validation failed:", validation.error);
       return null;
     }
 

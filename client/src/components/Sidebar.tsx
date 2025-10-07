@@ -173,13 +173,11 @@ export default function Sidebar() {
 
       // Clear auth context and redirect to login
       logout();
-    } catch (error) {
-      console.log(error);
+    } catch {
       // Even if backend fails, clear local auth and redirect
       logout();
     }
   }
-
   return (
     <div
       className={`h-screen bg-slate-900 border-r border-slate-700 transition-all duration-300 flex flex-col ${
