@@ -1,10 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import apiClient from "@/service/apiClient";
-import { Product, ProductViewMode } from "@/components/products/types";
-import { useAuth } from "@/contexts/authContext";
 import { toast } from "react-toastify";
 import Protected from "@/components/auth/Protected";
 import RouteGuard from "@/components/auth/RouteGuard";
@@ -35,11 +33,8 @@ interface CategoryData {
 }
 
 function ProductPageContent() {
-  const searchParams = useSearchParams();
   const router = useRouter();
   const { hasPermission } = usePermissions();
-  const [_currentView, setCurrentView] = useState<ProductViewMode>("list");
-  const [_selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -56,12 +51,7 @@ function ProductPageContent() {
   const canEdit = hasPermission("products.update");
   const canDelete = hasPermission("products.delete");
   const hasAnyActionPermission = canEdit || canDelete;
-  const [_pendingDelete, setPendingDelete] = useState<{
-    id: number;
-    name: string;
-  } | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const { user: _user } = useAuth();
 
   // Professional toast utility with elegant styling
   const showProfessionalToast = (
@@ -147,13 +137,6 @@ function ProductPageContent() {
       }
     );
   };
-
-  useEffect(() => {
-    const newParam = searchParams.get("new");
-    if (newParam === "true") {
-      setCurrentView("add");
-    }
-  }, [searchParams]);
 
   useEffect(() => {
     fetchCategories();
@@ -286,32 +269,12 @@ function ProductPageContent() {
     router.push(`/products/${productId}/edit`);
   };
 
-  const _handleBack = () => {
-    setCurrentView("list");
-    setSelectedProduct(null);
-  };
-
-  const _handleSave = () => {
-    // Refresh the product list after successful save
-    fetchProducts(currentPage);
-    setCurrentView("list");
-    setSelectedProduct(null);
-  };
-
   const handlePageChange = (page: number) => {
-    console.log("Page change to:", page);
-    console.log(
-      "Current state - currentPage:",
-      currentPage,
-      "totalPages:",
-      totalPages
-    );
     fetchProducts(page);
   };
 
   const handleDelete = (productId: number, productName: string) => {
     // Show elegant professional confirmation
-    setPendingDelete({ id: productId, name: productName });
 
     toast(
       ({ closeToast }) => (
@@ -377,7 +340,6 @@ function ProductPageContent() {
             <button
               onClick={() => {
                 closeToast();
-                setPendingDelete(null);
               }}
               className="w-full sm:w-auto sm:min-w-[120px] inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200 ease-in-out whitespace-nowrap"
             >
@@ -487,7 +449,6 @@ function ProductPageContent() {
       );
 
       fetchProducts(currentPage); // Refresh the product list
-      setPendingDelete(null);
     } catch (error: unknown) {
       console.error("Delete product error:", error);
       const errorMessage =
@@ -503,8 +464,6 @@ function ProductPageContent() {
           : "Failed to delete product";
 
       showProfessionalToast("error", "Delete Failed", errorMessage);
-
-      setPendingDelete(null);
     } finally {
       setIsDeleting(false);
     }

@@ -6,10 +6,8 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Button,
   EmptyState,
 } from "@/components/shared";
-import { useAuth } from "@/contexts/authContext";
 import { usePermissions } from "@/hooks/usePermissions";
 import Protected from "@/components/auth/Protected";
 
@@ -24,7 +22,6 @@ export default function TransactionTable({
   onViewDetail,
   onDelete,
 }: TransactionTableProps) {
-  const { user } = useAuth();
   const { hasPermission } = usePermissions();
 
   // Check permissions for conditional rendering

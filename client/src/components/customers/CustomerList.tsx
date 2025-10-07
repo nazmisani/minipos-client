@@ -12,7 +12,6 @@ import {
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import apiClient from "@/service/apiClient";
-import { usePermissions } from "@/hooks/usePermissions";
 import Protected from "@/components/auth/Protected";
 
 interface CustomerListProps {
@@ -26,21 +25,12 @@ export default function CustomerList({
   onEdit,
   onAdd,
 }: CustomerListProps) {
-  const { hasPermission } = usePermissions();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // Check permissions for conditional rendering
-  const canCreate = hasPermission("customers.create");
-  const canEdit = hasPermission("customers.edit");
-  const canDelete = hasPermission("customers.delete");
-  const hasAnyActionPermission = canEdit || canDelete; // View detail is always available for this role
   const [isDeleting, setIsDeleting] = useState(false);
-  const [pendingDelete, setPendingDelete] = useState<{
-    id: number;
-    name: string;
-  } | null>(null);
 
   useEffect(() => {
     fetchCustomers();
@@ -62,7 +52,6 @@ export default function CustomerList({
 
   const handleDelete = (customerId: number, customerName: string) => {
     // Show elegant professional confirmation
-    setPendingDelete({ id: customerId, name: customerName });
 
     toast(
       ({ closeToast }) => (
@@ -128,7 +117,6 @@ export default function CustomerList({
             <button
               onClick={() => {
                 closeToast();
-                setPendingDelete(null);
               }}
               className="w-full sm:w-auto sm:min-w-[120px] inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200 ease-in-out whitespace-nowrap"
             >
@@ -150,7 +138,7 @@ export default function CustomerList({
             <button
               onClick={() => {
                 closeToast();
-                confirmDelete(customerId, customerName);
+                confirmDelete(customerId);
               }}
               disabled={isDeleting}
               className={`w-full sm:w-auto sm:min-w-[140px] inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-200 ease-in-out whitespace-nowrap ${
@@ -225,7 +213,7 @@ export default function CustomerList({
     );
   };
 
-  const confirmDelete = async (customerId: number, customerName: string) => {
+  const confirmDelete = async (customerId: number) => {
     setIsDeleting(true);
     try {
       await apiClient.delete(`/customers/${customerId}`);
@@ -251,7 +239,6 @@ export default function CustomerList({
       toast.error(errorMessage);
     } finally {
       setIsDeleting(false);
-      setPendingDelete(null);
     }
   };
 

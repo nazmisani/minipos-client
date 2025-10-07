@@ -11,28 +11,17 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import apiClient from "@/service/apiClient";
 import { toast } from "react-toastify";
-import { useAuth } from "@/contexts/authContext";
-import { usePermissions } from "@/hooks/usePermissions";
 import Protected from "@/components/auth/Protected";
 
 type TransactionListProps = Record<string, never>;
 
 export default function TransactionList({}: TransactionListProps) {
   const router = useRouter();
-  const { user: _user } = useAuth();
-  const { hasPermission } = usePermissions();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // Check permissions for conditional rendering
-  const canCreate = hasPermission("transactions.create");
-  const canDelete = hasPermission("transactions.delete");
-  const hasAnyActionPermission = canDelete; // Only delete action is available in table
-  const [pendingDelete, setPendingDelete] = useState<{
-    id: number;
-    name: string;
-  } | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
@@ -45,7 +34,6 @@ export default function TransactionList({}: TransactionListProps) {
 
   const handleDelete = (transactionId: number, transactionName: string) => {
     // Show elegant professional confirmation
-    setPendingDelete({ id: transactionId, name: transactionName });
 
     toast(
       ({ closeToast }) => (
@@ -111,7 +99,6 @@ export default function TransactionList({}: TransactionListProps) {
             <button
               onClick={() => {
                 closeToast();
-                setPendingDelete(null);
               }}
               className="w-full sm:w-auto sm:min-w-[120px] inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200 ease-in-out whitespace-nowrap"
             >
@@ -133,7 +120,7 @@ export default function TransactionList({}: TransactionListProps) {
             <button
               onClick={() => {
                 closeToast();
-                confirmDelete(transactionId, transactionName);
+                confirmDelete(transactionId);
               }}
               disabled={isDeleting}
               className={`w-full sm:w-auto sm:min-w-[140px] inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-200 ease-in-out whitespace-nowrap ${
@@ -208,10 +195,7 @@ export default function TransactionList({}: TransactionListProps) {
     );
   };
 
-  const confirmDelete = async (
-    transactionId: number,
-    transactionName: string
-  ) => {
+  const confirmDelete = async (transactionId: number) => {
     setIsDeleting(true);
 
     try {
@@ -220,7 +204,6 @@ export default function TransactionList({}: TransactionListProps) {
       toast.success("Transaction deleted successfully!");
 
       fetchTransactions(); // Refresh the transaction list
-      setPendingDelete(null);
     } catch (error: unknown) {
       console.error("Delete transaction error:", error);
       const errorMessage =
@@ -236,8 +219,6 @@ export default function TransactionList({}: TransactionListProps) {
           : "Failed to delete transaction";
 
       toast.error(errorMessage);
-
-      setPendingDelete(null);
     } finally {
       setIsDeleting(false);
     }

@@ -7,7 +7,6 @@ import {
   TableRow,
   TableCell,
   EmptyState,
-  Button,
 } from "@/components/shared";
 import Protected from "@/components/auth/Protected";
 

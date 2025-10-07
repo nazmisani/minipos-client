@@ -237,7 +237,7 @@ export default function CategoriesPage() {
             <button
               onClick={() => {
                 closeToast();
-                confirmDelete(categoryId, categoryName);
+                confirmDelete(categoryId);
               }}
               disabled={isDeleting}
               className={`w-full sm:w-auto sm:min-w-[140px] inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-200 ease-in-out whitespace-nowrap ${
@@ -312,7 +312,7 @@ export default function CategoriesPage() {
     );
   };
 
-  const confirmDelete = async (categoryId: number, _categoryName: string) => {
+  const confirmDelete = async (categoryId: number) => {
     setIsDeleting(true);
 
     try {

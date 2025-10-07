@@ -27,18 +27,6 @@ export default function CustomerDetail({
     });
   };
 
-  // Calculate total spent from transactions
-  const totalSpent = customer.transactions.reduce(
-    (sum, transaction) => sum + transaction.total,
-    0
-  );
-
-  // Get latest transaction date
-  const latestTransaction =
-    customer.transactions.length > 0
-      ? customer.transactions[0].createdAt
-      : null;
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 lg:p-6">
       <div className="max-w-6xl mx-auto">

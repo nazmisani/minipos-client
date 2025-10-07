@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { Transaction } from "@/components/transactions/types";
 import TransactionDetail from "@/components/transactions/TransactionDetail";
-import { useAuth } from "@/contexts/authContext";
 import apiClient from "@/service/apiClient";
 import { toast } from "react-toastify";
 import RouteGuard from "@/components/auth/RouteGuard";
@@ -12,7 +11,6 @@ import RouteGuard from "@/components/auth/RouteGuard";
 function TransactionDetailPageContent() {
   const router = useRouter();
   const params = useParams();
-  const { user: _user } = useAuth();
   const [transaction, setTransaction] = useState<Transaction | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

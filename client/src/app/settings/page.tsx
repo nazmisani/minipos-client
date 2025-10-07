@@ -32,7 +32,7 @@ function SettingsPageContent() {
   const [activeTab, setActiveTab] = useState<TabType>("general");
   const [userViewMode, setUserViewMode] = useState<UserViewMode>("list");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [userRefreshKey, setUserRefreshKey] = useState(0);
+  const userRefreshKey = 0;
 
   // Logs state
   const [logs, setLogs] = useState<LogData[]>([]);
@@ -67,10 +67,6 @@ function SettingsPageContent() {
     } finally {
       setLogsLoading(false);
     }
-  };
-
-  const refreshUserList = () => {
-    setUserRefreshKey((prev) => prev + 1);
   };
 
   const formatDateTime = (dateString: string) => {
@@ -381,16 +377,11 @@ function SettingsPageContent() {
                         key={userRefreshKey}
                         onViewModeChange={setUserViewMode}
                         onSelectUser={setSelectedUser}
-                        onRefreshNeeded={refreshUserList}
                       />
                     );
                   case "add":
                     return (
-                      <UserForm
-                        mode="add"
-                        onViewModeChange={setUserViewMode}
-                        onRefreshNeeded={refreshUserList}
-                      />
+                      <UserForm mode="add" onViewModeChange={setUserViewMode} />
                     );
                   case "edit":
                     return selectedUser ? (
@@ -398,14 +389,12 @@ function SettingsPageContent() {
                         mode="edit"
                         user={selectedUser}
                         onViewModeChange={setUserViewMode}
-                        onRefreshNeeded={refreshUserList}
                       />
                     ) : (
                       <UserList
                         key={userRefreshKey}
                         onViewModeChange={setUserViewMode}
                         onSelectUser={setSelectedUser}
-                        onRefreshNeeded={refreshUserList}
                       />
                     );
                   case "delete":
@@ -413,14 +402,12 @@ function SettingsPageContent() {
                       <DeleteConfirmation
                         user={selectedUser}
                         onViewModeChange={setUserViewMode}
-                        onRefreshNeeded={refreshUserList}
                       />
                     ) : (
                       <UserList
                         key={userRefreshKey}
                         onViewModeChange={setUserViewMode}
                         onSelectUser={setSelectedUser}
-                        onRefreshNeeded={refreshUserList}
                       />
                     );
                   default:

@@ -74,7 +74,6 @@ interface AuthLoadingProps {
  * Enhanced loading component for auth-dependent content
  */
 export function AuthLoading({
-  children: _children,
   fallback,
   showSpinner = false,
 }: AuthLoadingProps) {
@@ -106,8 +105,6 @@ interface ProtectedWithLoadingProps {
 
 export function ProtectedWithLoading({
   children,
-  permission: _permission,
-  fallback: _fallback = null,
   loadingFallback,
   showLoadingSpinner = false,
 }: ProtectedWithLoadingProps) {

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Product } from "./types";
 import {
   CrudLayout,
   BackButton,
