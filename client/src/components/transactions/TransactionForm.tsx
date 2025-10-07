@@ -59,6 +59,15 @@ export default function TransactionForm({
   const [selectedProductId, setSelectedProductId] = useState<number>(-1);
   const [quantity, setQuantity] = useState<number>(1);
 
+  // Format currency to Rupiah
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(amount);
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -314,7 +323,7 @@ export default function TransactionForm({
                   <option value={-1}>Select a product</option>
                   {products.map((product) => (
                     <option key={product.id} value={product.id}>
-                      {product.name} - ${product.price}{" "}
+                      {product.name} - {formatCurrency(product.price)}{" "}
                       {product.stock !== undefined
                         ? `(Stock: ${product.stock})`
                         : ""}
@@ -387,7 +396,7 @@ export default function TransactionForm({
                           {item.product.name}
                         </td>
                         <td className="px-4 py-4 text-sm text-gray-900">
-                          ${item.price.toFixed(2)}
+                          {formatCurrency(item.price)}
                         </td>
                         <td className="px-4 py-4 text-sm text-gray-900">
                           <input
@@ -405,7 +414,7 @@ export default function TransactionForm({
                           />
                         </td>
                         <td className="px-4 py-4 text-sm text-gray-900">
-                          ${item.subTotal.toFixed(2)}
+                          {formatCurrency(item.subTotal)}
                         </td>
                         <td className="px-4 py-4 text-sm">
                           <button
@@ -429,7 +438,7 @@ export default function TransactionForm({
                 <div className="flex justify-between items-center text-lg font-semibold">
                   <span>Total:</span>
                   <span className="text-emerald-600">
-                    ${calculateTotal().toFixed(2)}
+                    {formatCurrency(calculateTotal())}
                   </span>
                 </div>
               </div>

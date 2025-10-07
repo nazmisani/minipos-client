@@ -43,10 +43,14 @@ export function TableHeader({ children }: TableHeaderProps) {
 }
 
 export function TableHeaderCell({ children, className = "" }: TableCellProps) {
+  const baseClasses = "px-6 py-3 text-sm font-medium text-slate-600";
+  const alignmentClass =
+    className.includes("text-center") || className.includes("text-right")
+      ? ""
+      : "text-left";
+
   return (
-    <th
-      className={`px-6 py-3 text-left text-sm font-medium text-slate-600 ${className}`}
-    >
+    <th className={`${baseClasses} ${alignmentClass} ${className}`}>
       {children}
     </th>
   );

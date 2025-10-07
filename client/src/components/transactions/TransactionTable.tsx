@@ -38,28 +38,32 @@ export default function TransactionTable({
       <TableHeader>
         <TableHeaderCell>ID</TableHeaderCell>
         <TableHeaderCell>User</TableHeaderCell>
-        <TableHeaderCell>Customer</TableHeaderCell>
-        <TableHeaderCell>Total</TableHeaderCell>
-        <TableHeaderCell>Date</TableHeaderCell>
-        {hasAnyActionPermission && <TableHeaderCell>Actions</TableHeaderCell>}
+        <TableHeaderCell className="text-center">Customer</TableHeaderCell>
+        <TableHeaderCell className="text-center">Total</TableHeaderCell>
+        <TableHeaderCell className="text-center">Date</TableHeaderCell>
+        {hasAnyActionPermission && (
+          <TableHeaderCell className="text-center">Actions</TableHeaderCell>
+        )}
       </TableHeader>
       <TableBody>
         {transactions.map((transaction) => (
           <TableRow key={transaction.id}>
             <TableCell className="font-medium">#{transaction.id}</TableCell>
             <TableCell>{transaction.user.name}</TableCell>
-            <TableCell>{transaction.customer?.name || "-"}</TableCell>
-            <TableCell>
+            <TableCell className="text-center">
+              {transaction.customer?.name || "-"}
+            </TableCell>
+            <TableCell className="text-center">
               <span className="font-semibold text-emerald-600">
                 Rp {transaction.total.toLocaleString("en-US")}
               </span>
             </TableCell>
-            <TableCell className="text-slate-500">
+            <TableCell className="text-slate-500 text-center">
               {transaction.createdAt}
             </TableCell>
             {hasAnyActionPermission && (
-              <TableCell>
-                <div className="flex gap-2">
+              <TableCell className="text-center">
+                <div className="flex gap-2 justify-center">
                   <Protected
                     permission="transactions.viewDetail"
                     fallback={null}

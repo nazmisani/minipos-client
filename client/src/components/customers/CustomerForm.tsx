@@ -190,7 +190,7 @@ export default function CustomerForm({
                 disabled={isSubmitting}
                 className="bg-slate-200 hover:bg-slate-300 text-slate-700 px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50"
               >
-                Batal
+                Cancel
               </button>
             </div>
           </form>

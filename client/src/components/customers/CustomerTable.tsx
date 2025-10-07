@@ -41,18 +41,18 @@ export default function CustomerTable({
             <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
               Name
             </th>
-            <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
+            <th className="px-6 py-3 text-center text-sm font-medium text-slate-600">
               Phone
             </th>
-            <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
-              Transaksi
+            <th className="px-6 py-3 text-center text-sm font-medium text-slate-600">
+              Transactions
             </th>
             <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
-              Total Belanja
+              Total Spent
             </th>
             {hasAnyActionPermission && (
-              <th className="px-6 py-3 text-left text-sm font-medium text-slate-600">
-                Aksi
+              <th className="px-6 py-3 text-center text-sm font-medium text-slate-600">
+                Actions
               </th>
             )}
           </tr>
@@ -75,23 +75,20 @@ export default function CustomerTable({
                     {customer.name}
                   </div>
                 </td>
-                <td className="px-6 py-4 text-sm text-slate-900">
+                <td className="px-6 py-4 text-sm text-slate-900 text-center">
                   {customer.phone || "-"}
                 </td>
-                <td className="px-6 py-4 text-sm text-slate-900">
-                  <div className="flex flex-col">
-                    <span className="font-medium">
-                      {customer._count.transactions}
-                    </span>
-                    <span className="text-xs text-slate-500">transactions</span>
-                  </div>
+                <td className="px-6 py-4 text-sm text-slate-900 text-center">
+                  <span className="font-medium">
+                    {customer._count.transactions}
+                  </span>
                 </td>
                 <td className="px-6 py-4 text-sm text-slate-900">
                   {formatCurrency(totalSpent)}
                 </td>
                 {hasAnyActionPermission && (
                   <td className="px-6 py-4 text-sm">
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 justify-center">
                       {/* View Detail button - always available for customers.view */}
                       <button
                         onClick={() => onViewDetail(customer)}
