@@ -34,12 +34,10 @@ export default function ProductChart({ data }: { data?: ProductData[] }) {
       const transformedData =
         data?.data?.map((item: unknown) => {
           const itemObj = item as Record<string, unknown>;
-          const product = itemObj.product as Record<string, unknown>;
-          const sum = itemObj._sum as Record<string, unknown>;
           return {
-            name: String(product?.name || ""),
-            quantity: Number(sum?.quantity || 0),
-            subTotal: Number(sum?.subTotal || 0),
+            name: String(itemObj?.name || ""),
+            quantity: Number(itemObj?.total_quantity || 0),
+            subTotal: Number(itemObj?.total_revenue || 0),
           };
         }) || [];
 
