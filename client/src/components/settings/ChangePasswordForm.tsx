@@ -2,11 +2,20 @@ import { useState } from "react";
 import { Card, Input, Button } from "@/components/shared";
 import apiClient from "@/service/apiClient";
 import { toast } from "react-toastify";
+import { AxiosError } from "axios";
 
 interface PasswordFormData {
   currentPassword: string;
   newPassword: string;
   confirmPassword: string;
+}
+
+interface ApiErrorResponse {
+  message?: string;
+}
+
+interface AxiosErrorWithUserMessage extends AxiosError<ApiErrorResponse> {
+  userMessage?: string;
 }
 
 export default function ChangePasswordForm() {
@@ -105,33 +114,29 @@ export default function ChangePasswordForm() {
       console.error("=== ERROR CHANGING PASSWORD ===");
       console.error("Full error:", error);
 
-      if (error instanceof Error && "response" in error) {
-        const axiosError = error as any;
-        console.error("Status:", axiosError.response?.status);
-        console.error("Data:", axiosError.response?.data);
+      const axiosError = error as AxiosErrorWithUserMessage;
+
+      if (axiosError.response) {
+        console.error("Status:", axiosError.response.status);
+        console.error("Data:", axiosError.response.data);
       }
       console.error("==============================");
 
       // Get error message with better fallback handling
       let errorMessage = "Failed to change password";
 
-      if (error instanceof Error && "response" in error) {
-        const axiosError = error as any;
-
-        // Backend error message
-        if (axiosError.response?.data?.message) {
-          errorMessage = axiosError.response.data.message;
-        }
-        // Interceptor user message
-        else if (axiosError.userMessage) {
-          errorMessage = axiosError.userMessage;
-        }
-        // Status-based message
-        else if (axiosError.response?.status === 400) {
-          errorMessage = "Invalid password data. Please check all fields.";
-        } else if (axiosError.response?.status === 401) {
-          errorMessage = "Current password is incorrect.";
-        }
+      if (axiosError.response?.data?.message) {
+        errorMessage = axiosError.response.data.message;
+      }
+      // Interceptor user message
+      else if (axiosError.userMessage) {
+        errorMessage = axiosError.userMessage;
+      }
+      // Status-based message
+      else if (axiosError.response?.status === 400) {
+        errorMessage = "Invalid password data. Please check all fields.";
+      } else if (axiosError.response?.status === 401) {
+        errorMessage = "Current password is incorrect.";
       }
 
       toast.error(errorMessage);

@@ -4,6 +4,15 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { Customer } from "./types";
 import apiClient from "@/service/apiClient";
+import { AxiosError } from "axios";
+
+interface ApiErrorResponse {
+  message?: string;
+}
+
+interface AxiosErrorWithUserMessage extends AxiosError<ApiErrorResponse> {
+  userMessage?: string;
+}
 
 interface CustomerFormProps {
   customer?: Customer;
@@ -48,18 +57,26 @@ export default function CustomerForm({
 
       onSave();
     } catch (error: unknown) {
-      console.error("Error saving customer:", error);
-      const errorMessage =
-        error instanceof Error &&
-        "response" in error &&
-        typeof error.response === "object" &&
-        error.response !== null &&
-        "data" in error.response &&
-        typeof error.response.data === "object" &&
-        error.response.data !== null &&
-        "message" in error.response.data
-          ? String(error.response.data.message)
-          : `Failed to ${isEdit ? "update" : "add"} customer`;
+      console.error("=== ERROR SAVING CUSTOMER ===");
+      console.error("Full error:", error);
+
+      const axiosError = error as AxiosErrorWithUserMessage;
+
+      if (axiosError.response) {
+        console.error("Status:", axiosError.response.status);
+        console.error("Data:", axiosError.response.data);
+      }
+      console.error("==============================");
+
+      // Get error message with priority
+      let errorMessage = `Failed to ${isEdit ? "update" : "add"} customer`;
+
+      if (axiosError.response?.data?.message) {
+        errorMessage = axiosError.response.data.message;
+      } else if (axiosError.userMessage) {
+        errorMessage = axiosError.userMessage;
+      }
+
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
