@@ -37,6 +37,7 @@ export default function ChangePasswordForm() {
   };
 
   const validatePasswords = () => {
+    // Check all fields filled
     if (
       !formData.currentPassword ||
       !formData.newPassword ||
@@ -46,18 +47,33 @@ export default function ChangePasswordForm() {
       return false;
     }
 
+    // Check minimum length
     if (formData.newPassword.length < 6) {
       toast.error("New password must be at least 6 characters long");
       return false;
     }
 
+    // Check password not same as current
     if (formData.currentPassword === formData.newPassword) {
       toast.error("New password must be different from current password");
       return false;
     }
 
+    // Check passwords match
     if (formData.newPassword !== formData.confirmPassword) {
       toast.error("New password and confirmation do not match");
+      return false;
+    }
+
+    // Check password strength (matching backend requirements)
+    const hasUpperCase = /[A-Z]/.test(formData.newPassword);
+    const hasLowerCase = /[a-z]/.test(formData.newPassword);
+    const hasNumber = /\d/.test(formData.newPassword);
+
+    if (!hasUpperCase || !hasLowerCase || !hasNumber) {
+      toast.error(
+        "Password must contain at least one uppercase letter, lowercase letter, and number"
+      );
       return false;
     }
 
@@ -74,6 +90,7 @@ export default function ChangePasswordForm() {
       await apiClient.put("/auth/change-password", {
         currentPassword: formData.currentPassword,
         newPassword: formData.newPassword,
+        confirmPassword: formData.confirmPassword, // ✅ Add this field!
       });
 
       toast.success("Password changed successfully!");
@@ -85,18 +102,38 @@ export default function ChangePasswordForm() {
         confirmPassword: "",
       });
     } catch (error: unknown) {
-      console.error("Error changing password:", error);
-      const errorMessage =
-        error instanceof Error &&
-        "response" in error &&
-        typeof error.response === "object" &&
-        error.response !== null &&
-        "data" in error.response &&
-        typeof error.response.data === "object" &&
-        error.response.data !== null &&
-        "message" in error.response.data
-          ? String(error.response.data.message)
-          : "Failed to change password";
+      console.error("=== ERROR CHANGING PASSWORD ===");
+      console.error("Full error:", error);
+
+      if (error instanceof Error && "response" in error) {
+        const axiosError = error as any;
+        console.error("Status:", axiosError.response?.status);
+        console.error("Data:", axiosError.response?.data);
+      }
+      console.error("==============================");
+
+      // Get error message with better fallback handling
+      let errorMessage = "Failed to change password";
+
+      if (error instanceof Error && "response" in error) {
+        const axiosError = error as any;
+
+        // Backend error message
+        if (axiosError.response?.data?.message) {
+          errorMessage = axiosError.response.data.message;
+        }
+        // Interceptor user message
+        else if (axiosError.userMessage) {
+          errorMessage = axiosError.userMessage;
+        }
+        // Status-based message
+        else if (axiosError.response?.status === 400) {
+          errorMessage = "Invalid password data. Please check all fields.";
+        } else if (axiosError.response?.status === 401) {
+          errorMessage = "Current password is incorrect.";
+        }
+      }
+
       toast.error(errorMessage);
     } finally {
       setLoading(false);
@@ -299,6 +336,83 @@ export default function ChangePasswordForm() {
                 </svg>
               )}
             </button>
+          </div>
+
+          {/* Password Requirements Info Box */}
+          <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="flex items-start space-x-2">
+              <svg
+                className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <div className="flex-1">
+                <p className="text-sm font-medium text-blue-900 mb-1">
+                  Password Requirements:
+                </p>
+                <ul className="text-xs text-blue-800 space-y-1">
+                  <li
+                    className={`flex items-center space-x-2 ${
+                      formData.newPassword.length >= 6
+                        ? "line-through opacity-60"
+                        : ""
+                    }`}
+                  >
+                    <span>•</span>
+                    <span>At least 6 characters long</span>
+                  </li>
+                  <li
+                    className={`flex items-center space-x-2 ${
+                      /[A-Z]/.test(formData.newPassword)
+                        ? "line-through opacity-60"
+                        : ""
+                    }`}
+                  >
+                    <span>•</span>
+                    <span>At least one uppercase letter (A-Z)</span>
+                  </li>
+                  <li
+                    className={`flex items-center space-x-2 ${
+                      /[a-z]/.test(formData.newPassword)
+                        ? "line-through opacity-60"
+                        : ""
+                    }`}
+                  >
+                    <span>•</span>
+                    <span>At least one lowercase letter (a-z)</span>
+                  </li>
+                  <li
+                    className={`flex items-center space-x-2 ${
+                      /\d/.test(formData.newPassword)
+                        ? "line-through opacity-60"
+                        : ""
+                    }`}
+                  >
+                    <span>•</span>
+                    <span>At least one number (0-9)</span>
+                  </li>
+                  <li
+                    className={`flex items-center space-x-2 ${
+                      formData.newPassword &&
+                      formData.currentPassword !== formData.newPassword
+                        ? "line-through opacity-60"
+                        : ""
+                    }`}
+                  >
+                    <span>•</span>
+                    <span>Different from current password</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           {/* Password Strength Indicator */}
